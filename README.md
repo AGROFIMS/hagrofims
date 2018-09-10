@@ -26,7 +26,7 @@ Funding for AgroFIMS was provided by the Bill and Melinda Gates Foundation’s O
 
 Thanks to:
 
-- Platform for Big Data in Agriculture
+- CGIAR Platform for Big Data in Agriculture
 - CIAT
 - IFPRI
 - CIP
