@@ -1,0 +1,86 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r, echo = FALSE}
+lc <- check.rcbd(traits[i], geno, rep, data)
+at <- suppressWarnings(aov.rcbd(traits[i], geno, rep, data, maxp))
+model <- aov(data[, traits[i]] ~ data[, geno] + data[, rep])
+```
+
+## {{i+1}}.1. ANOVA
+
+You have fitted a linear model for a RCBD. The ANOVA table for your model is:
+
+```{r, echo = FALSE}
+at
+```
+
+`r if(lc$c4 == 0) paste("You have some missing values (", format(lc$pmis * 100, digits = 3), "%) and they have been estimated before running ANOVA.", sep = "")`
+
+The coefficient of variation for this experiment is `r format(agricolae::cv.model(model), digits = 4)`%.
+The p-value for genotypes is `r format(at[1, 5], digits = 4)`
+`r if(at[1, 5] < 0.05) {"which is significant at the 5% level."} else {"which is not significant at the 5% level."}`
+
+## {{i+1}}.2. Assumptions
+
+Don't forget the assumptions of the model. It is supposed that the errors are independent with a normal distribution and with the same variance for all the genotypes. The following plots must help you evaluate this:
+
+```{r, echo = FALSE, fig.height = 5, fig.width = 10}
+par(mfrow = c(1, 2))
+
+plot(model, which = 1)
+plot(model, which = 2)
+```
+
+Any trend in the residuals in the left plot would violate the assumption of independence while a trend in the variability of the residuals --for instance a funnel shape-- suggests heterogeneity of variances. Departures from the theoretical normal line on the right plot are symptoms of lack of normality.
+
+## {{i+1}}.3. Genotype means
+
+`r if(at[1, 5] < 0.05) {"Below are the sorted means for each genotype with letters indicating if there are significant differences using the least significance difference method and the multiple comparisons method of Tukey, both at the 5% level."} else {"Because the effect of genotypes was not significant in the ANOVA, multiple comparison tests are not presented. The means of your genotypes are:"}`
+
+`r if (at[1, 5] < 0.05) {paste("### ", {{i+1}}, ".3.1. LSD test", sep = "")}`
+
+```{r, echo = FALSE}
+if (at[1, 5] < 0.05)
+  agricolae::LSD.test(data[, traits[i]], data[, geno], at[3, 1], at[3, 3])$groups
+```
+
+`r if (at[1, 5] < 0.05) {paste("### ", {{i+1}}, ".3.2. Tukey test", sep = "")}`
+
+```{r, echo = FALSE}
+if (at[1, 5] < 0.05)
+  agricolae::HSD.test(data[, traits[i]], data[, geno], at[3, 1], at[3, 3])$groups
+```
+
+```{r, echo = FALSE}
+if (at[1, 5] > 0.05)
+    tapply(data[, traits[i]], data[, geno], mean)
+```
+
+`r if (lc$nt < 10 & at[1, 5] < 0.05) {paste("### ", {{i+1}}, ".3.3. Plot of means", sep = "")}`
+
+`r if(lc$nt < 10) {"It is always good to have some visualization of the data. Because the number of genotypes in your experiment is not so big, we can plot the data for each genotype:"}`
+
+```{r, echo = FALSE}
+if (lc$nt < 10) msdplot(traits[i], geno, data, conf = 1)
+```
+
+## {{i+1}}.4. Variance components
+
+Below are the variance components for this model, under the assumption that genotypes and blocks are random. Here the model is fitted using REML and missing values are not estimated.
+
+```{r, echo = FALSE}
+y <- data[, traits[i]]
+fg <- data[, geno]
+fr <- data[, rep]
+ff <- as.formula(y ~ (1|fg) + (1|fr))
+model <- lme4::lmer(ff)
+vc <- data.frame(lme4::VarCorr(model))
+vc[vc[, 1] == "fg", 1] <- geno
+vc[vc[, 1] == "fr", 1] <- rep
+rownames(vc) <- vc[, 1]
+vc <- vc[, c(4, 5)]
+colnames(vc) <- c("Variance", "Std.Dev.")
+vc
+```

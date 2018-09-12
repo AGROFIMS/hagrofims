@@ -1,0 +1,22 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r, echo = FALSE}
+lc <- check.2f(traits[i], geno, env, rep, data)
+```
+
+`r if (lc$c2 == 0) {"There is only one replication. Analysis is not possible with one replication."}`
+
+`r if (lc$c2 == 1 & lc$c3 == 0) {"There is more than one datum for at least one combination of the genotypes and environments in at least one replication. This could be the result of a mislabeling for the levels of the factors. The table below shows the frequencies of valid data for each genotype and environment in each replication. Solve this to proceed."}`
+
+`r if (lc$c1 == 0 & lc$c2 == 1 & lc$c3 == 1) {"There is at least one genotype without data in at least one environment. The table below shows the frequencies of valid data for each genotype in each environment. A MET analysis cannot be produced if there are combination of genotypes and environments without data. Solve this to proceed."}`
+
+`r if (lc$pmis > maxp & lc$c1 == 1 & lc$c2 == 1 & lc$c3 == 1) paste("There are too many missing values (", format(lc$pmis * 100, digits = 3), "%). The table below shows the frequencies of valid data for each genotype in each environment. This procedure estimates up to 10%. Solve this to proceed.", sep = "")`
+
+```{r, echo = FALSE}
+if (lc$c2 == 1 & lc$c3 == 1)
+  lc$tfreq
+if (lc$c2 == 1 & lc$c3 == 0)
+  lc$tfreqr
+```

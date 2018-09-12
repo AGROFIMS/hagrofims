@@ -1,0 +1,18 @@
+---
+title: "Report for unknown object"
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+params: 
+  x: "no data"
+  author: "no data"
+---
+
+I am sorry, this object is not in my list.

@@ -1,0 +1,62 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r, echo = FALSE}
+lc <- check.abd(traits[i], geno, rep, data)
+
+if (lc$nt.check.0 > 0) {
+    cond <- !(data[, geno] %in% lc$check.0) & !is.na(data[, traits[i]])
+    temp <- subset(data, cond)
+  } else {
+    cond <- !is.na(data[, traits[i]])
+    temp <- subset(data, cond)
+  }
+
+if (lc$nt.check.1 > 0){
+  cond <- !(temp[, geno] %in% lc$check.1)
+  temp <- subset(temp, cond)
+}
+
+y <- temp[, traits[i]]
+model <- agricolae::DAU.test(temp[, rep], temp[, geno], y)
+```
+
+## {{i+1}}.1. General setting
+
+`r if(lc$nmis.new == 0 & lc$nmis.check == 0) {"For this trait there is no missing values."}`
+`r if(lc$nmis.new == 1) {"There is one genotype with missing value. This genotype has been removed."}`
+`r if(lc$nmis.new > 1) paste("There are", lc$nmis.new, "genotypes with missing values. These genotypes have been removed.")`
+`r if(lc$nmis.new > 0) paste("Therefore, there are", lc$nt.new - lc$nmis.new, "genotypes included in the analysis.")`
+
+`r if(lc$nt.check.0 == 1) paste("There is one check without data: ", lc$check.0, ". This check has been removed.", sep = "")`
+`r if(lc$nt.check.0 > 1) paste("There are ", lc$nt.check.0, " checks without data: ", sep = "")`
+```{r, echo = FALSE}
+if(lc$nt.check.0 > 1) lc$check.0
+```
+`r if(lc$nt.check.0 > 1) {"These checks have been removed."}`
+
+`r if(lc$nt.check.1 == 1) paste("There is one check with data in only one block: ", lc$check.1, ". Checks need at least two replications so this check has been removed.", sep = "")`
+`r if(lc$nt.check.1 > 1) paste("There are ", lc$nt.check.1, " checks with data in only one block: ", sep = "")`
+```{r, echo = FALSE}
+if(lc$nt.check.1 > 1) lc$check.1
+```
+`r if(lc$nt.check.1 > 1) {"Checks need at least two replications so these checks have been removed."}`
+
+## {{i+1}}.2. Adjusted means
+
+```{r, echo = FALSE}
+model$means
+```
+
+## {{i+1}}.3. Overall mean and CV
+
+```{r, echo = FALSE}
+model$statistics
+```
+
+## {{i+1}}.4. LSD test
+
+```{r, echo = FALSE}
+model$groups
+```

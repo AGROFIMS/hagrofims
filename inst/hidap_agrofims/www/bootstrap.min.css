@@ -1,0 +1,70 @@
+/*@import url("https://fonts.googleapis.com/css?family=Ubuntu:400,700");
+*/
+
+/* navbar (rest of the header) */
+/*
+.skin-blue .main-header .navbar {
+                      background-color: #f4b943;
+                      }
+*/
+
+/* main sidebar
+.skin-yellow .main-sidebar {
+                      background-color: #454545;
+                      }
+
+/* active selected tab in the sidebarmenu
+.skin-yellow .main-sidebar .sidebar .sidebar-menu .active a{
+                      background-color: #454545;
+                      }
+
+/* other links in the sidebarmenu
+.skin-blue .main-sidebar .sidebar .sidebar-menu a{
+                      background-color: #454545;
+                      color: #ffffff;
+                      }
+
+/* other links in the sidebarmenu when hovered
+ .skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+                      /* background-color: #ff69b4;
+                      background-color: #454545;
+                      }
+/* toggle button when hovered
+ .skin-blue .main-header .navbar .sidebar-toggle:hover{
+                      background-color: #000;
+                      }
+
+
+
+
+.tooltip-inner {
+    background-color: #FFD700;
+    color: #0000CD;
+}
+
+.tooltip.top .tooltip-arrow {
+    border-top-color: #00acd6;
+}
+
+.tooltip.right .tooltip-arrow {
+    border-right-color: #00acd6;
+}
+
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: #00acd6;
+}
+
+.tooltip.left .tooltip-arrow {
+    border-left-color: #00acd6;
+}
+
+*/
+
+.nav-tabs-custom .nav-tabs li.active:hover a, .nav-tabs-custom .nav-tabs li.active a {
+     background-color: transparent;
+     border-color: #cccccc;
+}
+
+.nav-tabs-custom .nav-tabs li.active {
+     background-color: #cccccc;
+}

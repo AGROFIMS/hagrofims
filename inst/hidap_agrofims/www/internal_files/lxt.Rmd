@@ -1,0 +1,47 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+    toc: true
+    toc_depth: 3
+params: 
+  traits: "no data"
+  lines: "no data"
+  testers: "no data"
+  rep: "no data"
+  data: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+library(knitr)
+
+traits <- params$traits
+lines <- params$lines
+testers <- params$testers
+rep <- params$rep
+data <- params$data
+```
+
+```{r, include = FALSE}
+out <- NULL
+
+for (i in 1:length(traits))
+  out <- c(out, knit_expand('child_lxt.Rmd'))
+```
+
+`r paste(knit(text = out), collapse = '\n')`

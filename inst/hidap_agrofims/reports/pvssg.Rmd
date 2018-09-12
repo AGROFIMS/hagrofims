@@ -1,0 +1,59 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    toc: true
+    toc_depth: 3
+    highlight: "tango"
+params:
+  traits: "no data"
+  data: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo=FALSE}
+
+## Data
+
+traits <- params$traits
+data <- params$data
+rownames(data) <- data[, "INSTN"]
+data <- data[, traits]
+
+## Determine traits with missing values
+
+lit <- map(data, anyNA) %>% unlist()
+lgc_lit <- lit %>% as.vector()
+lgc_val <- any(lgc_lit == TRUE)
+names_trait <- names(lit[lgc_lit])
+msg <- paste(names_trait, collapse = ", ") %>% paste("The next traits have missing values: ",., sep = "")
+```
+
+`r if(lgc_val)   {"There are missing values in some traits. For this reason, we could not perform a principal components analysis"}`
+```{r conditional, echo = FALSE, eval=  lgc_val, echo = FALSE}
+cat(msg)
+```
+
+`r if(!lgc_val) { "A principal components analysis is shown to see the associations among the genotypes and some attributes."} `
+
+
+```{r echo = FALSE, eval= !lgc_val , fig.height = 6, fig.width = 6}
+princip <- prcomp(data, center = T, scale = T)
+summary(princip)
+print(princip$x)
+factoextra::fviz_pca(princip, repel = T,
+                     title = "Biplot of genotypes and attributes")
+```

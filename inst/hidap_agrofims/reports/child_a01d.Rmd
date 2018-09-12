@@ -1,0 +1,43 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r, echo = FALSE, results = 'hide'}
+y <- data[, traits[i]]
+n_geno <- length(unique(data[, geno]))
+
+data[, block] <- factor(data[, block])
+data[, geno] <- factor(data[, geno])
+data[, rep] <- factor(data[, rep])
+
+
+
+if(n_geno>=50){
+  model <- pepa::PBIB.test.mod(data[, block], data[, geno], data[, rep], y, k, method = "VC")
+} else {
+  model <- agricolae::PBIB.test(data[, block], data[, geno], data[, rep], y, k, method = "VC")
+}
+```
+
+## {{i+1}}.1. ANOVA
+
+```{r, echo = FALSE}
+model$ANOVA
+model$statistics
+```
+
+## {{i+1}}.2. Adjusted means
+
+```{r, echo = FALSE}
+model$means
+```
+
+## {{i+1}}.3. LSD test
+
+```{r, echo = FALSE}
+if(n_geno>= 50){
+  model$groups[,-3]
+} else {
+  model$groups
+}
+```

@@ -1,0 +1,69 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r, echo = FALSE}
+nt <- nlevels(as.factor(data[, geno]))
+model <- aov(data[, traits[i]] ~ data[, geno])
+model$terms[[2]] <- traits[i]
+at <- anova(model)
+rownames(at)[1] <- geno
+```
+
+## {{i+1}}.1. ANOVA
+
+You have fitted a linear model for a CRD. The ANOVA table for your model is:
+
+```{r, echo = FALSE}
+at
+```
+
+The coefficient of variation for this experiment is `r format(agricolae::cv.model(model), digits = 4)`%.
+The p-value for genotypes is `r format(at[1, 5], digits = 4)`
+`r if(at[1, 5] < 0.05) {"which is significant at the 5% level."} else {"which is not significant at the 5% level."}`
+
+## {{i+1}}.2. Assumptions
+
+Don't forget the assumptions of the model. It is supposed that the errors are independent with a normal distribution and with the same variance for all the genotypes. The following residuals plots must help you evaluate this:
+
+```{r, echo = FALSE, fig.height = 5, fig.width = 10}
+par(mfrow = c(1, 2))
+plot(model, which = 1)
+plot(model, which = 2)
+```
+
+Any trend in the residuals in the left plot would violate the assumption of independence while a trend in the variability of the residuals --for instance a funnel shape-- suggests heterogeneity of variances. Departures from the theoretical normal line on the right plot are symptoms of lack of normality.
+
+## {{i+1}}.3. Genotype means
+
+`r if(at[1, 5] < 0.05) {"Below are the sorted means for each genotype with letters indicating if there are significant differences using the multiple comparisons method of Tukey at the 5% level."} else {"The means of your genotypes are:"}`
+
+```{r, echo = FALSE}
+if (at[1, 5] < 0.05)
+  agricolae::HSD.test(data[, traits[i]], data[, geno], at[2, 1], at[2, 3])$groups else
+    tapply(data[, traits[i]], data[, geno], mean, na.rm = TRUE)
+```
+
+`r if(nt < 10) {"It is always good to have some visualization of the data. Because the number of genotypes in your experiment is not so big, we can plot the data for each genotypes:"}`
+
+```{r, echo = FALSE}
+if (nt < 10) msdplot(traits[i], geno, data, conf = 1)
+```
+
+## {{i+1}}.4. Variance components
+
+Below are the variance components for this model, under the assumption that genotypes are random. Here the model is fitted using REML.
+
+```{r, echo = FALSE}
+y <- data[, traits[i]]
+fg <- data[, geno]
+ff <- as.formula(y ~ (1|fg))
+model <- lme4::lmer(ff)
+vc <- data.frame(lme4::VarCorr(model))
+vc[1, 1] <- geno
+rownames(vc) <- vc[, 1]
+vc <- vc[, c(4, 5)]
+colnames(vc) <- c("Variance", "Std.Dev.")
+vc
+```
+

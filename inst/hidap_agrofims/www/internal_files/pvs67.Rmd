@@ -1,0 +1,133 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    toc: true
+    toc_depth: 3
+    highlight: "tango"
+params:
+  data: "no data"
+  form: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo=FALSE}
+
+## Data
+
+data <- params$data
+colnames(data)[2:4] <- c("Appe", "Tast", "Text")
+
+## Count number of men and women
+
+temp <- data[data$Sex == "M" | data$Sex == "Male", ]
+nm <- nlevels(factor(temp$PanelNo))
+temp <- data[data$Sex == "F" | data$Sex == "Female", ]
+nw <- nlevels(factor(temp$PanelNo))
+
+## Aggregate data for principal components
+
+adg <- docomp("sum", c("Appe", "Tast", "Text"), "INSTN", data = data)
+temp <- docomp("sum", c("Appe", "Tast", "Text"), c("INSTN", "Sex"), data = data)
+adm <- temp[temp$Sex == "M" | temp$Sex == "Male", ]
+adf <- temp[temp$Sex == "F" | temp$Sex == "Female", ]
+colnames(adm)[3:5] <- c("Appe-M", "Tast-M", "Text-M")
+colnames(adf)[3:5] <- c("Appe-F", "Tast-F", "Text-F")
+ads <- cbind(adm[, c(1, 3:5)], adf[, 3:5])
+
+rownames(ads) <- ads$INSTN
+rownames(adg) <- adg$INSTN
+
+ads <- ads[, -1]
+adg <- adg[, -1]
+
+```
+
+# 1. Gathering of data
+
+Samples of all genotypes are boiled and presented on plates. Each genotype is evaluated about appearance and taste with the options:
+
+- 5 excellent,
+- 3 fair,
+- 1 poor,
+
+and about texture with:
+
+- 5 mealy or floury,
+- 3 intermediate,
+- 1 soggy or watery.
+
+For the graphs below, the following abbreviations are used:
+
+- `Appe`: Appearance.
+- `Tast`: Taste.
+- `Text`: Texture.
+- `Appe-M`: Men opinion on appearance.
+- `Tast-M`: Men opinion on taste.
+- `Text-M`: Men opinion on texture.
+- `Appe-W`: Women opinion on appearance.
+- `Tast-W`: Women opinion on taste.
+- `Text-W`: Women opinion on texture.
+
+# 2. Results
+
+A principal components analysis is shown to see the associations among the genotypes and the attributes, first with all the panelists together and then with panelists opinions differentiated by gender.
+
+```{r echo = FALSE, fig.height = 6, fig.width = 6}
+princip <- prcomp(adg, center = T, scale. = T)
+summary(princip)
+factoextra::fviz_pca(princip, repel = T,
+                     title = "Biplot of genotypes and attributes")
+```
+
+```{r echo = FALSE, fig.height = 6, fig.width = 6}
+princip <- prcomp(ads, center = T, scale. = T)
+summary(princip)
+factoextra::fviz_pca(princip, repel = T,
+                     title = "Biplot of genotypes and attributes by gender")
+```
+
+# 3. Friedman test for genotypes
+
+## 3.1. Analysis for appearance
+
+```{r echo = FALSE}
+ft <- with(data, friedman(PanelNo, INSTN, Appe, group = T)) 
+ft$statistics
+ft$groups
+ft <- with(data, friedman(PanelNo, INSTN, Appe, group = F)) 
+ft$comparison
+```
+
+## 3.2. Analysis for taste
+
+```{r echo = FALSE}
+ft <- with(data, friedman(PanelNo, INSTN, Tast, group = T)) 
+ft$statistics
+ft$groups
+ft <- with(data, friedman(PanelNo, INSTN, Tast, group = F)) 
+ft$comparison
+```
+
+## 3.3. Analysis for texture
+
+```{r echo = FALSE}
+ft <- with(data, friedman(PanelNo, INSTN, Text, group = T)) 
+ft$statistics
+ft$groups
+ft <- with(data, friedman(PanelNo, INSTN, Text, group = F)) 
+ft$comparison
+```

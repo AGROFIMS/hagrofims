@@ -1,0 +1,219 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    toc: true
+    toc_depth: 3
+    highlight: "tango"
+params:
+  data: "no data"
+  form: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo=FALSE}
+
+## Data
+
+data <- params$data
+data <- data[, c("PHASE", "IDENTIFIED_CRITERIA", "SCORE_MEN", "SCORE_WOMEN", "SCORE_GLOBAL")]
+data$IDENTIFIED_CRITERIA <- as.character(data$IDENTIFIED_CRITERIA)
+colnames(data) <- c("phase", "Criteria", "Men", "Women", "Global")
+data <- tidyr::gather(data, group, value, Men:Global)
+
+## Split by phase
+
+flow <- data[data$phase == "Flowering", ]
+harv <- data[data$phase == "Harvest", ]
+stor <- data[data$phase == "Storage", ]
+
+## Sort by number of votes
+
+temp <- flow[flow$group == "Global", c("Criteria", "value")]
+orden <- temp$Criteria[sort(temp$value, decreasing = T, index.return = T)$ix]
+flow$Criteria <- factor(flow$Criteria, levels = orden)
+
+temp <- harv[harv$group == "Global", c("Criteria", "value")]
+orden <- temp$Criteria[sort(temp$value, decreasing = T, index.return = T)$ix]
+harv$Criteria <- factor(harv$Criteria, levels = orden)
+
+temp <- stor[stor$group == "Global", c("Criteria", "value")]
+orden <- temp$Criteria[sort(temp$value, decreasing = T, index.return = T)$ix]
+stor$Criteria <- factor(stor$Criteria, levels = orden)
+
+## Count number of votes
+
+nvmflow <- sum(flow[flow$group == "Men", "value"], na.rm = T)
+nvmharv <- sum(harv[harv$group == "Men", "value"], na.rm = T)
+nvmstor <- sum(stor[stor$group == "Men", "value"], na.rm = T)
+
+nvwflow <- sum(flow[flow$group == "Women", "value"], na.rm = T)
+nvwharv <- sum(harv[harv$group == "Women", "value"], na.rm = T)
+nvwstor <- sum(stor[stor$group == "Women", "value"], na.rm = T)
+
+## Count number of voters
+
+nmflow <- round(nvmflow / 6)
+nmharv <- round(nvmharv / 6)
+nmstor <- round(nvmstor / 6)
+
+nwflow <- round(nvwflow / 6)
+nwharv <- round(nvwharv / 6)
+nwstor <- round(nvwstor / 6)
+
+## Compute percentage adjusted by gender
+
+flowp <- flow[flow$group == "Global", ]
+flowp$value <- flowp$value / (nvmflow + nvwflow)
+temp <- flow[flow$group != "Global", ]
+temp[temp$group == "Men", "value"] <- temp[temp$group == "Men", "value"] / nvmflow / 2
+temp[temp$group == "Women", "value"] <- temp[temp$group == "Women", "value"] / nvwflow / 2
+temp <- docomp("sum", "value", "Criteria", "phase", temp)
+temp$group <- "Global adjusted"
+flowp <- rbind(flowp, temp)
+flowp$value <- round(flowp$value * 100, 1)
+
+harvp <- harv[harv$group == "Global", ]
+harvp$value <- harvp$value / (nvmharv + nvwharv)
+temp <- harv[harv$group != "Global", ]
+temp[temp$group == "Men", "value"] <- temp[temp$group == "Men", "value"] / nvmharv / 2
+temp[temp$group == "Women", "value"] <- temp[temp$group == "Women", "value"] / nvwharv / 2
+temp <- docomp("sum", "value", "Criteria", "phase", temp)
+temp$group <- "Global adjusted"
+harvp <- rbind(harvp, temp)
+harvp$value <- round(harvp$value * 100, 1)
+
+storp <- stor[stor$group == "Global", ]
+storp$value <- storp$value / (nvmstor + nvwstor)
+temp <- stor[stor$group != "Global", ]
+temp[temp$group == "Men", "value"] <- temp[temp$group == "Men", "value"] / nvmstor / 2
+temp[temp$group == "Women", "value"] <- temp[temp$group == "Women", "value"] / nvwstor / 2
+temp <- docomp("sum", "value", "Criteria", "phase", temp)
+temp$group <- "Global adjusted"
+storp <- rbind(storp, temp)
+storp$value <- round(storp$value * 100, 1)
+
+```
+
+# 1. Identification of selection criteria and voting process
+
+A group of farmers, men and women, and other stakeholders are gathered and, after explanation of the overall objectives of the trial, they are asked: What do you look for in a new variety of potato when the crop is at the flowering/harvest/post-harvest stage? In other words: When do you say that a variety is good or bad, when evaluating at this stage?
+
+A list is compiled of all the criteria mentioned by the different participants (i.e. free listing). Each criterium is listed and written on a paper bag (or card with accompanying container). Then, in order to select the most important traits for farmers a voting process is conducted.
+
+Farmers are requested to select the three criteria that each considers the most important with the following scheme. They can give:
+
+- Three votes for the most important characteristic.
+- Two votes for the second most important characteristic.
+- One vote for the third most important characteristic.
+
+Votes are recorded for men and women.
+
+# 2. Selection criteria at flowering
+
+`r if (nrow(flow) == 0) {"There were no data for selection criteria at flowering."}`
+`r if (all(is.na(flow$Criteria))) {"There were no data for selection criteria at flowering."}`
+
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+if (nrow(flow) > 0 && !all(is.na(flow$Criteria)) ){
+  ggplot(flow, aes(x = group, y = value, fill = Criteria)) +
+    geom_bar(stat = "identity", position = "dodge", color = "black") +
+    labs(title = "Voting for selection criteria of new varieties at flowering stage",
+         x = "Group", y = "Number of votes") +
+    geom_text(aes(label = value), vjust = 1.6, color = "white",
+              position = position_dodge(0.9), size = 3)
+}
+```
+
+`r if (nrow(flow) > 0  && !all(is.na(flow$Criteria)) ) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
+
+
+
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+if (nrow(flow) > 0  && !all(is.na(flow$Criteria)) ) {
+  ggplot(flowp, aes(x = group, y = value, fill = Criteria)) +
+    geom_bar(stat = "identity", position = "dodge", color = "black") + 
+    labs(title = "Voting for selection criteria of new varieties at flowering stage",
+         subtitle = "Percentages unadjusted and adjusted by gender",
+         x = "Group", y = "Percentage of votes") +
+    geom_text(aes(label = value), vjust = 1.6, color = "white",
+              position = position_dodge(0.9), size = 3)
+}
+```
+
+# 3. Selection criteria at harvest
+
+`r if (nrow(harv) == 0) {"There were no data for selection criteria at harvest."}`
+`r if (all(is.na(harv$Criteria))) {"There were no data for selection criteria at harvest."}`
+
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+if (nrow(harv) > 0   && !all(is.na(harv$Criteria)) ) {
+  ggplot(harv, aes(x = group, y = value, fill = Criteria)) +
+    geom_bar(stat = "identity", position = "dodge", color = "black") + 
+    labs(title = "Voting for selection criteria of new varieties at harvest stage", 
+         x = "Group", y = "Number of votes") +
+    geom_text(aes(label = value), vjust = 1.6, color = "white",
+              position = position_dodge(0.9), size = 3)
+}
+```
+
+`r if (nrow(harv) > 0  && !all(is.na(harv$Criteria)) ) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+if (nrow(harv) > 0  && !all(is.na(harv$Criteria)) ) {
+  ggplot(harvp, aes(x = group, y = value, fill = Criteria)) +
+    geom_bar(stat = "identity", position = "dodge", color = "black") + 
+    labs(title = "Voting for selection criteria of new varieties at harvest stage",
+         subtitle = "Percentages unadjusted and adjusted by gender",
+         x = "Group", y = "Percentage of votes") +
+    geom_text(aes(label = value), vjust = 1.6, color = "white",
+              position = position_dodge(0.9), size = 3)  
+}
+```
+
+# 4. Selection criteria at post-harvest (storage)
+
+`r if (nrow(stor) == 0) {"There were no data for selection criteria at post-harvest."}`
+`r if (all(is.na(stor$Criteria))) {"There were no data for selection criteria at post-harvest."}`
+
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+if (nrow(stor) > 0  && !all(is.na(stor$Criteria)) ) {
+  ggplot(stor, aes(x = group, y = value, fill = Criteria)) +
+    geom_bar(stat = "identity", position = "dodge", color = "black") + 
+    labs(title = "Voting for selection criteria of new varieties at post-harvest stage", 
+         x = "Group", y = "Number of votes") +
+    geom_text(aes(label = value), vjust = 1.6, color = "white",
+              position = position_dodge(0.9), size = 3)
+}
+```
+
+`r if (nrow(stor) > 0  && !all(is.na(stor$Criteria)) ) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+if (nrow(stor) > 0  && !all(is.na(stor$Criteria)) ) {
+  ggplot(storp, aes(x = group, y = value, fill = Criteria)) +
+    geom_bar(stat = "identity", position = "dodge", color = "black") + 
+    labs(title = "Voting for selection criteria of new varieties at post-harvest stage",
+         subtitle = "Percentages unadjusted and adjusted by gender",
+         x = "Group", y = "Percentage of votes") +
+    geom_text(aes(label = value), vjust = 1.6, color = "white",
+              position = position_dodge(0.9), size = 3)
+}
+```

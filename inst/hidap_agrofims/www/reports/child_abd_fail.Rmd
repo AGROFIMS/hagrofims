@@ -1,0 +1,7 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r, echo = FALSE}
+warning("You need at least two checks with at least two valid replications to run ABD.")
+```

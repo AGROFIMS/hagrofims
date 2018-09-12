@@ -1,0 +1,71 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+    toc: true
+    toc_depth: 3
+params: 
+  traits: "no data"
+  geno: "no data"
+  rep: "no data"
+  data: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+library(knitr)
+
+traits <- params$traits
+geno <- params$geno
+rep <- params$rep
+data <- params$data
+
+lc <- check.abd(traits[1], geno, rep, data)
+```
+
+# 1. Model specification and data description
+
+There are data for `r lc$nt.new` genotypes tested using an augmented block design with `r lc$nr` blocks and `r lc$nt.check` checks in each block. The statistical model is
+$$
+y_{ij} = \mu + \tau_i + \beta_j + \epsilon_{ij}
+$$
+where
+
+* $y_{ij}$ is the observed response with genotype $i$ and block $j$.
+* $\mu$ is the mean response over all genotypes and blocks.
+* $\tau_i$ is the effect for genotype $i$.
+* $\beta_j$ is the effect for block $j$.
+* $\epsilon_{ij}$ is the error term.
+
+In this model we assume that the errors are independent and have a normal distribution with common variance, that is, $\epsilon_{ij} \sim N(0,\sigma_{\epsilon}^2)$.
+
+```{r, include = FALSE}
+out <- NULL
+
+for (i in 1:length(traits)) {
+  
+  lc <- check.abd(traits[i], geno, rep, data)
+
+  if (lc$nt.check.2 > 1) {
+    out <- c(out, knit_expand('child_abd.Rmd'))
+  } else {
+    out <- c(out, knit_expand('child_abd_fail.Rmd'))
+  }
+}
+```
+
+`r paste(knit(text = out), collapse = '\n')`

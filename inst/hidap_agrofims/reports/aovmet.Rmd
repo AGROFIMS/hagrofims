@@ -1,0 +1,71 @@
+---
+title: "ANOVA for a MET with a RCBD"
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+params: 
+  trait: "no data"
+  geno: "no data"
+  env: "no data"
+  rep: "no data"
+  data: "no data"
+  maxp: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+trait <- params$trait
+geno <- params$geno
+env <- params$env
+rep <- params$rep
+data <- params$data
+maxp <- params$maxp
+
+lc <- check.2f(trait, geno, env, rep, data)
+at <- suppressWarnings(aov.met(trait, geno, env, rep, data, maxp))
+if (lc$c4 == 0)
+  data[, trait] <- mve.met(trait, geno, env, rep, data, maxp)[, 5]
+model <- aov(data[, trait] ~ data[, geno] + data[, env]
+             + data[, rep] %in% data[, env] + data[, geno]:data[, env])
+```
+
+`r if(lc$c1 == 1 & lc$c2 == 1) {"You have fitted a linear model for a multi environment trial (MET) with a RCBD in each environment. The ANOVA table for your model is:"}`
+
+```{r, echo = FALSE}
+at
+```
+
+`r if(lc$c4 == 0) paste("You have some missing values (", format(lc$pmis * 100, digits = 3), "%) and they have been estimated before running ANOVA.")`
+
+The p-values for your model are:
+
+- `r format(at[1, 5], digits = 4)` for genotypes `r if(at[1, 5] < 0.05) {"which is significant at the 5% level."} else {"which is not significant at the 5% level."}`
+- `r format(at[2, 5], digits = 4)` for environments `r if(at[2, 5] < 0.05) {"which is significant at the 5% level."} else {"which is not significant at the 5% level."}`
+- `r format(at[4, 5], digits = 4)` for the genotypes by environments interaction `r if(at[4, 5] < 0.05) {"which is significant at the 5% level."} else {"which is not significant at the 5% level."}`
+
+`r if(at[4, 5] < 0.05) {"Because interaction is significant you should want to run a stability analysis. Keep also in mind that a significant interaction means that the differences in response of the genotypes are not the same in all the environments. Therefore, on an individual analysis you could find significant differences among genotypes for some environments and non-significant differences for some others, and the difference for any pair of genotypes could be in different directions and magnitudes depending on the environment."}`
+
+Below you can see a table of means for genotypes, environments, and interaction:
+
+```{r, echo = FALSE}
+tapply(data[, trait], data[, geno], mean)
+tapply(data[, trait], data[, env], mean)
+tapply(data[, trait], list(data[, geno], data[, env]), mean)
+```
+
+Don't forget the assumptions of the model. It is supposed that the error has a normal distribution with the same variance for all the genotypes and evironments. The following plots must help you evaluate this:
+
+```{r, echo = FALSE, fig.height = 5, fig.width = 10}
+par(mfrow = c(1, 2))
+plot(model, which = 1)
+plot(model, which = 2)
+```
+
+Funnel shapes for the first plot may suggest heterogeneity of variances while departures from the theoretical normal line are symptoms of lack of normality.

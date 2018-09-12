@@ -1,0 +1,41 @@
+---
+title: "Elston index"
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output:   
+  html_document:
+    theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+params: 
+  traits: "no data"
+  geno: "no data"
+  env: "no data"
+  rep: "no data"
+  data: "no data"
+  means: "no data"
+  lb: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+traits <- params$traits
+geno <- params$geno
+env <- params$env
+rep <- params$rep
+data <- params$data
+means <- params$means
+lb <- params$lb
+
+eindex <- elston(traits, geno, env, rep, data, means, lb)
+```
+
+### The Elston index
+
+The Elston index for each genotype is shown below. As you see, genotype `r (eindex[sort(eindex$E.Index, decreasing = T, index.return = T)$ix, ])[1,1]` is the one with the highest value.
+```{r, echo = FALSE}
+eindex[sort(eindex$E.Index, decreasing = T, index.return = T)$ix, ]
+```

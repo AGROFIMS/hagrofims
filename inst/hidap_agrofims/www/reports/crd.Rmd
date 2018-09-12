@@ -1,0 +1,59 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+    toc: true
+    toc_depth: 3
+params: 
+  traits: "no data"
+  geno: "no data"
+  data: "no data"
+  maxp: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+library(knitr)
+
+traits <- params$traits
+geno <- params$geno
+data <- params$data
+maxp <- params$maxp
+```
+
+# 1. Model specification and data description
+
+There are data from `r nlevels(as.factor(data[, geno]))` genotypes, evaluated using a completely randomized design. The statistical model is
+$$
+y_{ij} = \mu + \tau_i + \epsilon_{ij}
+$$
+where
+
+* $y_{ij}$ is the observed response with genotype $i$ and replication $j$.
+* $\mu$ is the mean response over all genotypes and replications.
+* $\tau_i$ is the effect for genotype $i$.
+* $\epsilon_{ij}$ is the error term.
+
+In this model we assume that the errors are independent and have a normal distribution with common variance, that is, $\epsilon_{ij} \sim N(0,\sigma_{\epsilon}^2)$.
+
+```{r, include = FALSE}
+out <- NULL
+for (i in 1:length(traits))
+  out <- c(out, knit_expand('child_crd.Rmd'))
+```
+
+`r paste(knit(text = out), collapse = '\n')`

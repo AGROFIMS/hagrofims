@@ -1,0 +1,65 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+    toc: true
+    toc_depth: 3
+params: 
+  traits: "no data"
+  geno: "no data"
+  rep: "no data"
+  block: "no data"
+  k: "no data"
+  data: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+library(knitr)
+
+traits <- params$traits
+geno <- params$geno
+rep <- params$rep
+block <- params$block
+k <- params$k
+data <- params$data
+```
+
+# 1. Model specification and data description
+
+There are data for `r nlevels(as.factor(data[, geno]))` genotypes tested using an alpha (0,1) design with `r nlevels(as.factor(data[, rep]))` replications and `r nlevels(as.factor(data[, block]))` incomplete blocks. In this design each replication is a complete block for the genotypes that is splitted in several incomplete blocks. The statistical model is
+$$
+y_{ijk} = \mu + \tau_i + \gamma_j + \rho_{k(j)} + \epsilon_{ijk}
+$$
+where
+
+* $y_{ijk}$ is the observed response with genotype $i$, replication $j$, incomplete block $k$.
+* $\mu$ is the mean response over all genotypes and replications.
+* $\tau_i$ is the effect for genotype $i$.
+* $\gamma_j$ is the effect for replication $j$.
+* $\rho_{k(j)}$ is the effect of the incomplete block $k$ which is nested into replication $j$.
+* $\epsilon_{ijk}$ is the error term.
+
+In this model we assume that the errors are independent and have a normal distribution with common variance, that is, $\epsilon_{ijk} \sim N(0,\sigma_{\epsilon}^2)$.
+
+```{r, include = FALSE}
+out <- NULL
+for (i in 1:length(traits))
+  out <- c(out, knit_expand('child_a01d.Rmd'))
+```
+
+`r paste(knit(text = out), collapse = '\n')`

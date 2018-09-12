@@ -1,0 +1,77 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    toc: true
+    toc_depth: 3
+    highlight: "tango"
+params:
+  traits: "no data"
+  A: "no data"
+  B: "no data"
+  rep: "no data"
+  design: "no data"
+  data: "no data"
+  maxp: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+library(knitr)
+
+traits <- params$traits
+A <- params$A
+B <- params$B
+rep <- params$rep
+design <- params$design
+data <- params$data
+maxp <- params$maxp
+
+data[, A] <- as.character(data[, A])
+data[, B] <- as.character(data[, B])
+data[, rep] <- as.character(data[, rep])
+```
+
+# 1. Model specification and data description
+
+The data frame has two factors with `r nlevels(as.factor(data[, A]))` and `r nlevels(as.factor(data[, B]))` levels. The experimental design is a randomized complete block design with `r nlevels(as.factor(data[, rep]))` blocks. The statistical model is
+$$
+y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \gamma_k + \epsilon_{ijk}
+$$
+where
+
+* $y_{ijk}$ is the observed response with level $i$ of factor A, level $j$ of factor B, and block $k$.
+* $\mu$ is the mean response over all levels of factor A, factor B, and blocks.
+* $\alpha_i$ is the effect for level $i$ of factor A.
+* $\beta_j$ is the effect for level $j$ of factor B.
+* $(\alpha\beta)_{ij}$ is the interaction effect between level $i$ of factor A and level $j$ of factor B.
+* $\gamma_k$ is the effect of block $k$.
+* $\epsilon_{ijk}$ is the error term.
+
+In this model we assume that the errors are independent and have a normal distribution with common variance, that is, $\epsilon_{ijk} \sim N(0,\sigma_{\epsilon}^2)$.
+
+```{r, include = FALSE}
+out <- NULL
+for (i in 1:length(traits)) {
+  lc <- check.2f(traits[i], A, B, rep, data)
+  if (lc$c1 == 1 & lc$c2 == 1 & lc$c3 == 1 & lc$pmis <= maxp)
+    out <- c(out, knit_expand('child_2f.Rmd'))
+  else
+    out <- c(out, knit_expand('child_2f_fail.Rmd'))
+}
+```
+
+`r paste(knit(text = out), collapse = '\n')`

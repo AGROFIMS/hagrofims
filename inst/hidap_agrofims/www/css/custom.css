@@ -1,0 +1,228 @@
+/* Background del dashboard */
+.content-wrapper,
+.right-side {
+  background-color: #fff;
+  margin-top: 50px;
+}
+
+/* Posicion del logo account en el header */
+#accountlogo {
+  padding-bottom: 2px;
+  padding-right: 2px;
+}
+
+/* Tamaño de font del header */
+.navbar-custom-menu>.navbar-nav>li {
+    font-size: 16px;
+}
+
+/* Oculta la cabezara del dropdownmenu */
+.navbar-nav>.messages-menu>.dropdown-menu>li.header, .navbar-nav>.notifications-menu>.dropdown-menu>li.header, .navbar-nav>.tasks-menu>.dropdown-menu>li.header {
+    display: none !important;
+}
+
+/* Reduce el ancho del dropdownmenu */
+.navbar-nav>.messages-menu>.dropdown-menu, .navbar-nav>.notifications-menu>.dropdown-menu, .navbar-nav>.tasks-menu>.dropdown-menu {
+    width: 160px;
+}
+
+/* Reduce y posiciona los iconos del dropdownmenu */
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > .glyphicon, .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > .fa, .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > .ion {
+  font-size: 20px;
+  width: 20px;
+}
+
+/* Color de los items de menu del dropdownmenu cuando la pantalla se reduce a movile app */
+.skin-blue .main-header .navbar .dropdown-menu li a {
+    color: #3c8dbc;
+}
+
+/* Ancho del modal del login */
+/*.modal-dialog {
+  width: 550px;
+}*/
+
+/* Ancho del modal del login */
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 10px;
+}
+
+@media (min-width: 768px){
+  .modal-dialog {
+      width: 550px;
+      margin: 30px auto;
+  }
+}
+
+/* Titulo del modal */
+#modaltitle {
+  font-family: 'Open Sans',Helvetica,Arial,Lucida,sans-serif;
+  font-weight: 600;
+  font-size: 25px;
+  color: #f7941d !important;
+}
+
+/* Titulo del modal */
+#modalimg {
+  width: 250px;
+}
+
+/* Radio de 3px al modal del login */
+.modal-content {
+    /*background: url(http://www.shearwaterdental.com/dental-chair/uploads/2017/05/Shearwater-login-background-1150x719.jpg);*/
+    border-radius: 3px;
+}
+
+/* Caracteristicas del username y password */
+#userName, #passwd {
+  height: 40px;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  display: block;
+}
+
+/* Caracteristicas de los botones del login */
+#goBackModal, #checkLogin, #closeModal, #btLoginModal {
+  vertical-align: middle;
+  height: 40px;
+  width: 98%;
+  font-size: 18px;
+}
+
+/* Color del texto del boton primary */
+.btn-primary {
+    color: #fff;
+}
+
+/* Color del mensaje de error cuando no coinciden las credenciales */
+#error {
+    color: #BF616A;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Titulo del footer */
+.modal-footer {
+  text-align:center;
+  font-size: 12px;
+}
+
+.headerTopRight {
+  line-height: 50px;
+  text-align: right;
+  font-family: "Arial";
+  padding: 0 15px;
+  color: black;
+  font-size: 2vw;
+}
+
+@media (min-width: 1200px) {
+  .headerTopRight {
+    line-height: 0px;
+    text-align: right;
+    font-family: "Arial";
+    padding: 0 15px;
+    color: black;
+    font-size: x-large;
+    color: white;
+  }
+}
+
+.sidebar-menu .treeview-menu {
+  padding-left: 10px;
+}
+
+/* logo */
+.skin-blue .main-header .logo {
+  background-color: #869910;
+}
+
+/* logo when hovered */
+.skin-blue .main-header .logo:hover {
+ background-color: #869910;
+}
+
+/* navbar (rest of the header) */
+ .skin-blue .main-header .navbar {
+ background-color: #aac309;
+}
+
+/* toggle button when hovered  */
+.skin-blue .main-header .navbar .sidebar-toggle:hover{
+ background-color: #869910;
+}
+
+/* other links in the sidebarmenu when hovered */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+ background-color: #3C8DBC !important;
+}
+
+.box.box-solid.box-primary>.box-header {
+ color:#555;
+ font-weight: 800;
+ /* background:#aac309; */
+ background: -webkit-linear-gradient(top, #FAFAFA 0%, #E9E9E9 100%);
+ border: 1px solid #D5D5D5;
+}
+
+.box.box-solid.box-primary{
+ /* border-bottom-color:#aac309;
+ border-left-color:#aac309;
+ border-right-color:#aac309;
+ border-top-color:#aac309; */
+ border: 1px solid #D5D5D5;
+}
+
+.box.box-solid.box-primary>.box-header .btn, .box.box-solid.box-primary>.box-header a {
+ color: #000;
+}
+
+.box {
+ border-radius: 3px;
+}
+
+.box-header .box-title, .box-header>.fa, .box-header>.glyphicon, .box-header>.ion {
+ color: #555;
+ font-weight: 800;
+}
+
+.box.box-solid.box-success>.box-header {
+ color:#fff;
+ background:#6c757d
+}
+
+.box.box-solid.box-success{
+ border-bottom-color:#6c757d;
+ border-left-color:#6c757d;
+ border-right-color:#6c757d;
+ border-top-color:#6c757d;
+}
+
+.checkbox, .radio {
+ margin-top: 0px;
+ margin-bottom: -20px;
+}
+
+.main-header {
+    position: fixed;
+    width: 100%;
+}
+
+/*box(
+        status = "primary", solidHeader = TRUE, collapsible = TRUE,
+        title = fluidRow(
+          column(1, checkboxInput(inputId = "Other", "", value = FALSE)),
+          column(11, "Inventory information")
+        ),
+        "body",
+        plotOutput("plot3", height = 250)
+      ),*/
+
+
+
+
+
+

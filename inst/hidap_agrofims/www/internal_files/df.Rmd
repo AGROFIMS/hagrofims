@@ -1,0 +1,27 @@
+---
+title: "Report for a data table"
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+params: 
+  x: "no data"
+  author: "no data"
+---
+
+You have a nice data table with `r dim(params$x)[1]` rows and `r dim(params$x)[2]` columns. The first six rows are shown below:
+```{r, echo = FALSE}
+head(params$x)
+```
+Remember that the table is the standard format for data analysis; it is the kind of data structure that any statistical package prefers. In a table you have:
+
+* one row for each observation (e.g. a plot, a pot or a plant) and
+* one column for each variable (e.g. a trait like root yield or a factor like genotypes).
+
+Maybe you would like to read [this](https://github.com/reyzaguirre/MoreStats/tree/master/GoodDataPractices).

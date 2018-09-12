@@ -1,0 +1,60 @@
+---
+title: "Report for a numeric trait"
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+params: 
+  x: "no data"
+  author: "no data"
+---
+
+```{r, echo = FALSE}
+# Some parameters
+p1 <- length(params$x)
+p2 <- max(table(params$x))
+p3 <- length(table(params$x))
+```
+
+It looks like you have a numeric trait. You can see a descriptive summary below:
+```{r, echo = FALSE}
+output <- summary(params$x)
+output
+```
+
+```{r, echo = FALSE}
+sk <- 3*(mean(params$x) - median(params$x))/sd(params$x)
+```
+
+`r if(sk > 0.5) {"It looks like you have some positive skewness because your mean is quite larger than your median. Watch out with this if you want to fit a model that assumes normality." }`
+
+`r if(sk < -0.5) {"It looks like you have some negative skewness because your mean is quite smaller than your median. Watch out with this if you want to fit a model that assumes normality." }`
+
+`r if(p1 > 25 & (p1/p3 <= 2 | (p1/p3 > 2 & p3 > 20))) {"A boxplot could be a suitable plot for these data:"}`
+
+```{r, echo = FALSE}
+if(p1 > 25 & (p1/p3 <= 2 | (p1/p3 > 2 & p3 > 20))) boxplot(params$x)
+```
+`r if(p1 > 25 & p1/p3 > 2 & p3 <= 20) {"For this trait a frequency table could produce a good display of the data:"}`
+
+```{r, echo = FALSE}
+if(p1 > 25 & p1/p3 > 2 & p3 <= 20) table(params$x)
+```
+
+`r if(p1 <= 25) {"A dotplot could be a suitable plot for these data:"}`
+
+```{r, echo = FALSE}
+if(p1 <= 25) stripchart(params$x)
+```
+
+`r if(p1 > 25 & p1/p3 < 2 & p2/p1 > 0.05) {"Although your trait seems to be on a continuous scale, there are some values with a very high frequency. What out with this if you plan to fit a model that assumes normality. You can see these values and their frequency below:"}`
+
+```{r, echo = FALSE}
+if(p1 > 25 & p1/p3 < 2 & p2/p1 > 0.05) table(params$x)[table(params$x)/p1 > 0.05]
+```

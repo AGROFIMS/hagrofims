@@ -1,0 +1,14 @@
+<p>The Agronomy Field Information Management System (AgroFIMS) has been developed on CGIAR’s <a href="https://research.cip.cgiar.org/gtdms/hidap/"> HiDAP </a> (Highly-interactive Data Analysis Platform created by CGIAR’s International Potato Center, <a href="https://www.cgiar.org/research/center/cip/"> CIP</a>). AgroFIMS draws fully on ontologies, particularly the Agronomy Ontology and the Crop Ontology. It consists of modules that represent the typical cycle of operations in agronomic trial management, and enables the creation of data collection sheets using the same ontology-based set of variables, terminology, units and protocols. AgroFIMS therefore: <p>
+
+<ul>
+<li>Standardizes data collection and description for easy aggregation and inter-linking across disparate datasets;</li>
+<li>Allows easy integration with HiDAP breeding data, or any other ontology-based datasets; </li>
+<li>Functions as a data staging repository, allowing data uploads with view/edit permissions; </li>
+<li>Enables data quality checks, statistical analysis of the data collected, and the generation of sophisticated statistics reports; </li>
+<li>Aligns a priori with CGIAR’s CG Core metadata schema;</li>
+<li>Enables easy upload to the institutional repositories, and much more. </li>
+</ul>
+
+<p>
+Funding for AgroFIMS was provided by the Bill and Melinda Gates Foundation’s Open Access, Open Data Initiative, and the <a href="http://bigdata.cgiar.org/"> CGIAR Big Data Platform.</a>
+</p>
