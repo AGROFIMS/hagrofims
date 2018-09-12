@@ -240,7 +240,7 @@ ui <- dashboardPage(
           a(
             list(
               #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
-              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy")
+              tags$div(id = "test", "Powered by HIDAP 2| Terms of Use & Privacy Policy")
             ),
             href="#"
           ),
