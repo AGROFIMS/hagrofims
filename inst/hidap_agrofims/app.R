@@ -1,6 +1,8 @@
 #### Librerias
-### Librerias de CRAN que cargan por defecto:
-library(d3heatmap)
+
+#TODO: the complete list of packages is listed in list_packages_agrofims
+
+#library(d3heatmap)
 library(shinysky)
 library(data.table)
 library(shinydashboard)
@@ -39,7 +41,7 @@ library(shinyTree)
 library(agricolae)
 library(brapi)
 library(brapps)
-library(fbdesign)
+library(agdesign)
 library(rhandsontable)
 library(shinyjs)
 library(st4gi)
@@ -69,45 +71,14 @@ library(sp)
 library(shinyStore) # install_github("trestletech/shinyStore")
 library(PKI) # CRAN
 library(shinyWidgets)
-library(fbsession)
-# library(shinyURL)
-# library(fbmet)
-# library(fbhelp)
-# library(fbmlist)
-# library(fbmet)
-# library(fbcheck)
-# library(fbmlist)
-# library(fbopenbooks)
-# library(fbanalysis)
-# library(traittools)
-# library(fbdocs)
-# library(geneticdsg)
-# package fbupdate
-# library(remotes)
-# library(fbupdate)
-# library(shinyjs)
-# library(shinyalert)
-# packages for HiDAP network
-# library(DT)
-# library(shinyjs)
-# library(shinydashboard)
-# library(RMySQL)
+library(agsession)
+
 
 ####
 
 # Llaves para encriptar las cookies: utilizado en el Remember me
 privKey <- PKI.load.key(file="test.key")
 pubKey <- PKI.load.key(file="test.key.pub")
-#
-
-# Codigo de Omar
-# init default data: TODO make a function with better logic checking whats new
-# from fbglobal get_base_dir
-#dd = system.file("xdata/Default", package = "fbglobal")
-#file.copy(from = dd, to = fbglobal::get_base_dir(""), recursive = TRUE)
-# remove dependency on RTools by pointing to a zip.exe. NOTE: needs to be installed
-# into HiDAP working dir by installer
-#Sys.setenv("R_ZIPCMD" = file.path(Sys.getenv("HIDAP_HOME"), "zip.exe"))
 #
 
 # Carga las credenciales de la bd
@@ -229,8 +200,8 @@ ui <- dashboardPage(
               br()
       ),
 
-      fbdesign::ui_fieldbook_agrofims(name = "newFieldbookAgrofims"),
-      fbsession::ui_session(name = "opensession"),
+      agdesign::ui_fieldbook_agrofims(name = "newFieldbookAgrofims"),
+      agsession::ui_session(name = "openFieldbook"),
       fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims")#,
     ),
 
@@ -240,7 +211,7 @@ ui <- dashboardPage(
           a(
             list(
               #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
-              tags$div(id = "test", "Powered by HIDAP 2| Terms of Use & Privacy Policy")
+              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy")
             ),
             href="#"
           ),
@@ -315,9 +286,9 @@ sv <- function(input, output,  session) ({
   incProgress(2/25, detail = paste("..."))
 
 
-  fbdesign::server_design_agrofims(input, output, session, values)
-  fbsession::server_session(input, output, session, values)
-  # fbdesign::server_design_big(input, output, session, values)
+  agdesign::server_design_agrofims(input, output, session, values)
+  agsession::server_session(input, output, session, values)
+ 
   # fbopenbooks::fbopenbooks_server(input, output, session, values)
   fbanalysis::single_hdagrofims_server(input, output, session, values)
   # fbanalysis::dtr_server(input, output, session, values)
