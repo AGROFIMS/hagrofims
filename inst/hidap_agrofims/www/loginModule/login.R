@@ -349,8 +349,8 @@ observe({
         # menuItem("Drive", tabName = "driveNet", icon = icon("archive")),
         menuItem("Site information", tabName = "trialSite", icon = icon("location-arrow")),
         menuItem("Fieldbook", icon = icon("book"),
-                 menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right"))#,
-                 #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("angle-right"))
+                 menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("angle-right"))
                  #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("file-o")),
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),
