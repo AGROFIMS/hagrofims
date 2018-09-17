@@ -19,8 +19,8 @@ Description: The Agronomy Field Information Management System (AgroFIMS) has bee
              the creation of data collection sheets using the same ontology-based set of variables, terminology, units and protocols.
 Depends: R (>= 3.3.1)
 Imports: shiny,
-         shinydashboard
-Suggest: data.table,
+         shinydashboard,
+         data.table,
          doBy,
          tidyr,
          DT,
