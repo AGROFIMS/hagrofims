@@ -350,7 +350,7 @@ observe({
         menuItem("Site information", tabName = "trialSite", icon = icon("location-arrow")),
         menuItem("Fieldbook", icon = icon("book"),
                  menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right"))#,
-                 #menuSubItem("Open session", tabName = "opensession", icon = icon("angle-right"))
+                 #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("angle-right"))
                  #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("file-o")),
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),

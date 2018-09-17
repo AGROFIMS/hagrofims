@@ -1,10 +1,85 @@
 Package: hagrofims
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Title: Shiny App main application for the Agronomy Field Information Management System (AgroFIMS)
+Version: 0.0.1
+Authors@R: c( 
+          person("Omar", "Benites-Alfaro", , email = "obacc07@gmail.com",role ="aut"),
+          person("Ivan", "Perez-Masias", , "ivanpe834@gmail.com", "aut"),
+          person("Raul", "Arias-Levano", , "rarias@cgiar.org", "aut"),
+          person("Raul", "Eyzaguirre", , "reyzaguirre@cgiar.org", "aut"),
+          person("Medha", "Devare", , "mdevare@cgiar.org", "aut"),
+          person("CIP-RIU", "Research Informatic", , "cip-riu@cgiar.org", role = c("aut", "cre"), comment = "Partial copyright holder of the R code"),
+          person("International Potato Center (CIP)", role = "cph", comment = "copyright holder of the R code"),
+          person("Bioversity International (BI)", role = "cph", comment = "copyright holder of the R code"),
+          person("The International Center for Tropical Agriculture", ,role = "cph", comment = "copyright holder of the R code"),
+          person("International Food Policy Research Institute (IFPRI)", role = "cph", comment = "copyright holder of the R code")
+          )
+Description: The Agronomy Field Information Management System (AgroFIMS) has been developed based on CGIAR’s HIDAP (Highly-interactive Data Analysis Platform 
+             created by CGIAR’s International Potato Center, CIP). AgroFIMS draws fully on ontologies, particularly the Agronomy Ontology and the Crop Ontology. 
+             It consists of modules that represent the typical cycle of operations in agronomic trial management, and enables 
+             the creation of data collection sheets using the same ontology-based set of variables, terminology, units and protocols.
 Depends: R (>= 3.3.1)
-License: What license is it under?
+Imports: shiny,
+         shinydashboard
+Suggest: data.table,
+         doBy,
+         tidyr,
+         DT,
+         date,
+         dplyr,
+         leaflet,
+         withr,
+         dplyr,
+         purrr,
+         tibble,
+         knitr,
+         readxl,
+         countrycode,
+         DBI,
+         RMySQL,
+         spsurvey,
+         foreign,
+         tools,
+         stringr,
+         rprojroot,
+         factoextra,
+         ggrepel,
+         tibble,
+         stringi,
+         digest,
+         datasets,
+         agricolae,
+         rhandsontable,
+         shinyjs,
+         shinyBS,
+         rlist,
+         httr,
+         bsplus,
+         htmltools,
+         lubridate,
+         shinyalert,
+         leaflet,
+         magrittr,
+         maps,
+         maptools,
+         raster,
+         rgeos,
+         sp,
+         PKI
+Remotes: dkahle/ggmap,
+         ralev013/shinyStore,
+         trestletech/shinyTree,
+         AGROFIMS/agdesign,
+         reyzaguirre/st4gi,
+         reyzaguirre/pepa,
+         AGROFIMS/agsession,
+         AGROFIMS/agdesign,
+         CIP-RIU/shinysky,
+         CIP-RIU/openxlsx,
+         CIP-RIU/fbanalysis,
+         CIP-RIU/fbsites,
+         CIP-RIU/shinyFiles,
+         CIP-RIU/sbformula
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
