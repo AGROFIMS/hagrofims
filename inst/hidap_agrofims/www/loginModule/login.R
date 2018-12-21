@@ -347,10 +347,14 @@ observe({
         div(img(src="images/logo_agrofims_v3.jpg"), style="text-align: center;"),
         br(),
         # menuItem("Drive", tabName = "driveNet", icon = icon("archive")),
-        menuItem("Site information", tabName = "trialSite", icon = icon("location-arrow")),
+       # menuItem("Site information", tabName = "trialSite", icon = icon("location-arrow")),
+        menuItem("Site", icon = icon("location-arrow"),
+                 menuSubItem("Create site", tabName = "newSiteAgrofims", icon = icon("angle-right")),
+                 menuSubItem("List sites", tabName = "listSitesAgrofims", icon = icon("angle-right"))
+        ),
         menuItem("Fieldbook", icon = icon("book"),
                  menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
-                 menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("angle-right"))
+                 menuSubItem("Manage fieldbook", tabName = "openFieldbook", icon = icon("angle-right"))
                  #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("file-o")),
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),

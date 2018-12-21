@@ -2,10 +2,10 @@ Package: hagrofims
 Title: Shiny App main application for the Agronomy Field Information Management System (AgroFIMS)
 Version: 0.0.1
 Authors@R: c( 
-          person("Omar", "Benites-Alfaro", , email = "obacc07@gmail.com",role ="aut"),
-          person("Ivan", "Perez-Masias", , "ivanpe834@gmail.com", "aut"),
-          person("Raul", "Arias-Levano", , "rarias@cgiar.org", "aut"),
-          person("Raul", "Eyzaguirre", , "reyzaguirre@cgiar.org", "aut"),
+          person("Ivan O.", "Perez Masias", , "ivanpe834@gmail.com", "aut"),
+          person("Omar E.", "Benites Alfaro", , email = "obacc07@gmail.com",role ="aut"),
+          person("Raul", "Arias Levano", , "rarias@cgiar.org", "aut"),
+          person("Raul", "Eyzaguirre Perez", , "reyzaguirre@cgiar.org", "aut"),
           person("Medha", "Devare", , "mdevare@cgiar.org", "aut"),
           person("CIP-RIU", "Research Informatic", , "cip-riu@cgiar.org", role = c("aut", "cre"), comment = "Partial copyright holder of the R code"),
           person("International Potato Center (CIP)", role = "cph", comment = "copyright holder of the R code"),
@@ -64,6 +64,8 @@ Imports: shiny,
          raster,
          rgeos,
          sp,
+         shinyWidgets,
+         V8,
          PKI
 Remotes: dkahle/ggmap,
          ralev013/shinyStore,
@@ -78,8 +80,9 @@ Remotes: dkahle/ggmap,
          CIP-RIU/fbanalysis,
          CIP-RIU/fbsites,
          CIP-RIU/shinyFiles,
-         CIP-RIU/sbformula
+         CIP-RIU/fbglobal
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+Suggests: testthat
