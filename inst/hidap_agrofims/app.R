@@ -73,7 +73,7 @@ library(PKI) # CRAN
 library(shinyWidgets)
 library(agsession)
 library(qrencoder)
-
+library(fbglobal)
 ####
 
 
