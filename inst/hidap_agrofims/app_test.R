@@ -111,7 +111,7 @@ ui <- dashboardPage(
       sidebarMenuOutput("menu") # Menu is render in login.R when users logs in
     )
   ),
-
+  
   dashboardBody(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "css/custom.css")
@@ -121,16 +121,16 @@ ui <- dashboardPage(
     tags$head(
       tags$script(
         HTML("
-          var openTab = function(tabName){
-          	$('a', $('.sidebar')).each(function(){
-          		if(this.getAttribute('data-value') == tabName){
-          			this.click()
-                  };
-              });
-          }
-        ")
-      )
-    ),
+             var openTab = function(tabName){
+             $('a', $('.sidebar')).each(function(){
+             if(this.getAttribute('data-value') == tabName){
+             this.click()
+             };
+             });
+             }
+             ")
+        )
+        ),
     
     # Funciones javascript para el manejo de cookies en general
     tags$head(
@@ -188,7 +188,7 @@ ui <- dashboardPage(
               ),
               br(),
               br(),
-
+              
               fluidRow(
                 column(
                   12, align="center",
@@ -207,11 +207,11 @@ ui <- dashboardPage(
       agdesign::ui_listsites_agrofims(name="listSitesAgrofims"),
       agdesign::ui_fieldbook_agrofims(name = "newFieldbookAgrofims"),
       #agsession::ui_session(name = "openFieldbook"),
-      agdesign::ui_mobile_agrofims(name  = "uimobileagrofims"),
-      fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
-      agdesign::ui_session_agrofims(name = "uisessionagrofims")
+      #agdesign::ui_mobile_agrofims(name  = "uimobileagrofims"),
+      fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims")
+      #agdesign::ui_session_agrofims(name = "uisessionagrofims")
     ),
-
+    
     tags$div(
       fluidRow(
         tags$footer(
@@ -227,9 +227,9 @@ ui <- dashboardPage(
         )
       )
     )
-
-  )
-)
+    
+      )
+    )
 
 
 ############################################################
@@ -252,20 +252,20 @@ sv <- function(input, output,  session) ({
   session$userData$userLname <- NULL
   session$userData$userFname <- NULL
   session$userData$userMail <- NULL
-
+  
   USER <- reactiveValues(Logged = FALSE, username = NULL, id = NULL, fname = NULL, lname = NULL, org=NULL, country=NULL)
   ####
   
   useShinyjs()
   extendShinyjs(text = jscode)
-
-
-
+  
+  
+  
   # USER <- reactiveValues(Logged = FALSE, username = NULL, id = NULL, fname = NULL, lname = NULL, org=NULL, country=NULL)
   #### Modulo pendiente
   dt_myMaterialList <- reactiveValues()
   ####
-
+  
   #### Files necesrios para el login
   source("www/loginModule/userMenuUi.R",local = TRUE)
   source("www/driveModule/drive.R", local = TRUE)
@@ -275,82 +275,82 @@ sv <- function(input, output,  session) ({
   
   #### Codigo de Omar
   values <- shiny::reactiveValues(crop = "sweetpotato", amode = "brapi")
-
+  
   withProgress(message = 'Loading HiDAP', value = 0, {
-
-  incProgress(1/25, detail = paste("..."))
-
-  # fbcheck::fbcheck_server(input, output, session, values)
-
-  #fbmlist::server_managerlist(input, output, session, values)
-  #fbmlist::server_managerlist_agrofims(input, output, session, values)
-  #fbmlist::server_generate(input, output, session, values)
-  #fbmlist::server_generate_agrofims(input, output, session, values)
-  #fbmlist::server_createlist(input, output, session, values)
-  #fbmlist::server_parentlist(input, output, session, values)
-  #fbmlist::server_distribution(input,output,session, values)
-
-  incProgress(2/25, detail = paste("..."))
-
-  agdesign::server_sites_agrofims(input, output, session, values)
-  agdesign::server_listsites_agrofims(input, output, session, values)
-  agdesign::server_design_agrofims(input, output, session, values)
-  #agsession::server_session(input, output, session, values)
-  agdesign::server_session_agrofims(input, output, session, values)
- 
-  # fbopenbooks::fbopenbooks_server(input, output, session, values)
-  fbanalysis::single_hdagrofims_server(input, output, session, values)
-  # fbanalysis::dtr_server(input, output, session, values)
-  #
-  # fbanalysis::met_server(input, output, session, values)
-  #
-  # incProgress(3/25, detail = paste("..."))
-  #
-  # fbanalysis::elston_server(input, output, session, values)
-  #
-  # incProgress(4/25, detail = paste("..."))
-  #
-  # fbanalysis::pbaker_server(input, output, session, values)
-  #
-  # incProgress(5/25, detail = paste("..."))
-  #
-  # fbanalysis::droindex_server(input, output, session, values = values)
-  #
-  # fbanalysis::pvs_server(input, output, session, values)
-  #
-  # incProgress(6/25, detail = paste("..."))
-  #
-  # fbanalysis::genetic_server(input, output, session, values)
-  #
-  # incProgress(8/25, detail = paste("..."))
-  #
-  # fbanalysis::pvs_anova_server(input, output, session, values)
-  #
-  #
-  # incProgress(9/25, detail = paste("..."))
-  #
-  # fbdocs::fbdocs_server(input, output, session, values)
-  #
-  # incProgress(10/25, detail = paste("..."))
-  #
-  # fbsites::server_addsite(input, output, session, values = values)
-  # fbsites::server_site(input, output, session, values = values)
-  #
-  # incProgress(12/25, detail = paste("..."))
-  #
-  # fbupdate::fbupdate_server(input, output, session, values = values)
-  #
-  # incProgress(15/25, detail = paste("..."))
-  #
-  #
-  #     incProgress(16/25, detail = paste("..."))
-
-     incProgress(25/25, detail = paste("..."))
-  #
-   }) #end shiny progress bar
+    
+    incProgress(1/25, detail = paste("..."))
+    
+    # fbcheck::fbcheck_server(input, output, session, values)
+    
+    #fbmlist::server_managerlist(input, output, session, values)
+    #fbmlist::server_managerlist_agrofims(input, output, session, values)
+    #fbmlist::server_generate(input, output, session, values)
+    #fbmlist::server_generate_agrofims(input, output, session, values)
+    #fbmlist::server_createlist(input, output, session, values)
+    #fbmlist::server_parentlist(input, output, session, values)
+    #fbmlist::server_distribution(input,output,session, values)
+    
+    incProgress(2/25, detail = paste("..."))
+    
+    agdesign::server_sites_agrofims(input, output, session, values)
+    agdesign::server_listsites_agrofims(input, output, session, values)
+    agdesign::server_design_agrofims(input, output, session, values)
+    #agsession::server_session(input, output, session, values)
+    #agdesign::server_session_agrofims(input, output, session, values)
+    
+    # fbopenbooks::fbopenbooks_server(input, output, session, values)
+    fbanalysis::single_hdagrofims_server(input, output, session, values)
+    # fbanalysis::dtr_server(input, output, session, values)
+    #
+    # fbanalysis::met_server(input, output, session, values)
+    #
+    # incProgress(3/25, detail = paste("..."))
+    #
+    # fbanalysis::elston_server(input, output, session, values)
+    #
+    # incProgress(4/25, detail = paste("..."))
+    #
+    # fbanalysis::pbaker_server(input, output, session, values)
+    #
+    # incProgress(5/25, detail = paste("..."))
+    #
+    # fbanalysis::droindex_server(input, output, session, values = values)
+    #
+    # fbanalysis::pvs_server(input, output, session, values)
+    #
+    # incProgress(6/25, detail = paste("..."))
+    #
+    # fbanalysis::genetic_server(input, output, session, values)
+    #
+    # incProgress(8/25, detail = paste("..."))
+    #
+    # fbanalysis::pvs_anova_server(input, output, session, values)
+    #
+    #
+    # incProgress(9/25, detail = paste("..."))
+    #
+    # fbdocs::fbdocs_server(input, output, session, values)
+    #
+    # incProgress(10/25, detail = paste("..."))
+    #
+    # fbsites::server_addsite(input, output, session, values = values)
+    # fbsites::server_site(input, output, session, values = values)
+    #
+    # incProgress(12/25, detail = paste("..."))
+    #
+    # fbupdate::fbupdate_server(input, output, session, values = values)
+    #
+    # incProgress(15/25, detail = paste("..."))
+    #
+    #
+    #     incProgress(16/25, detail = paste("..."))
+    
+    incProgress(25/25, detail = paste("..."))
+    #
+  }) #end shiny progress bar
   #
   # ################## End NETWORK ######################################################################################
-
+  
 })
 
 shinyApp(ui, sv)
