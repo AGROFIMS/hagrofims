@@ -297,7 +297,7 @@ sv <- function(input, output,  session) ({
   agdesign::server_design_agrofims(input, output, session, values)
   #agsession::server_session(input, output, session, values)
   agdesign::server_session_agrofims(input, output, session, values)
- 
+  agdesign::server_mobile_agrofims(input, output, session, values)
   # fbopenbooks::fbopenbooks_server(input, output, session, values)
   fbanalysis::single_hdagrofims_server(input, output, session, values)
   # fbanalysis::dtr_server(input, output, session, values)
