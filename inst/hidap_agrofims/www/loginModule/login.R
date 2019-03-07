@@ -355,8 +355,8 @@ observe({
         menuItem("Fieldbook", icon = icon("book"),
                  menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
                  #menuSubItem("Manage fieldbook", tabName = "openFieldbook", icon = icon("angle-right")),
-                 menuSubItem("Manage session", tabName = "uisessionagrofims", icon = icon("angle-right")),
-                 menuSubItem("KDSmart", tabName = "uimobileagrofims", icon = icon("angle-right"))
+                 menuSubItem("Manage session", tabName = "uisessionagrofims", icon = icon("angle-right"))#,
+                 #menuSubItem("KDSmart", tabName = "uimobileagrofims", icon = icon("angle-right"))
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),
         
