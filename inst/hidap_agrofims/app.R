@@ -75,7 +75,7 @@ library(shinyWidgets)
 library(qrencoder)
 library(fbglobal)
 ####
-
+library(geohash)
 
 
 

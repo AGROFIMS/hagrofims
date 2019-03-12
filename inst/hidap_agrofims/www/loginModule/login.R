@@ -5,29 +5,40 @@ listCountries <- c('Aruba','Afghanistan','Angola','Anguilla','Albania','Andorra'
 )
 
 # modal to show when app is launched
-showModal(modalDialog(
-  title = HTML("
-          <div id='modaltitle'><center>WELCOME to HIDAP AgroFIMS</center></div>
-          <div><p><center><img src='img/BIG-DATA.png' id='modalimg'></center></p></div>
-          "),
-  includeHTML("www/loginModule/modaltext.txt"),
-  fluidRow(
-    column(
-      12, br(),
-      column(6, align = "center", fluidRow(actionButton("closeModal", "Continue", class = "btn-primary"))),
-      column(6, align = "center", fluidRow(actionButton("btLoginModal", "Log in")))
-    )
-  ),
-  easyClose = FALSE,
-  footer = NULL
-  # footer = tagList(
-  #   # modalButton("Continue with Open Version"),
-  #   div(style="display:inline-block",
-  #   #actionButton("closeModal", "Continue", style="color: #fff; background-color: #35b872; font-size:170%;", width = 150),
-  #   actionButton("closeModal", "Continue", style="color: #fff;font-size:150%;", class = "btn-primary", width = 150),
-  #   actionButton("btLoginModal", "Log in", style=" font-size:150%;", width = 150), style="float:right;text-align:center")
-  # )
-))
+observe({
+# print(USER$Logged)
+# print(USER$fname)
+delay(500,
+if (is.null(USER$fname)) {
+  showModal(modalDialog(
+    title = HTML("
+            <div id='modaltitle'><center>WELCOME to HIDAP AgroFIMS</center></div>
+            <div><p><center><img src='img/BIG-DATA.png' id='modalimg'></center></p></div>
+            "),
+    includeHTML("www/loginModule/modaltext.txt"),
+    fluidRow(
+      column(
+        12, br(),
+        column(6, align = "center", fluidRow(actionButton("closeModal", "Continue", class = "btn-primary"))),
+        column(6, align = "center", fluidRow(actionButton("btLoginModal", "Log in")))
+      )
+    ),
+    easyClose = FALSE,
+    footer = NULL
+    # footer = tagList(
+    #   # modalButton("Continue with Open Version"),
+    #   div(style="display:inline-block",
+    #   #actionButton("closeModal", "Continue", style="color: #fff; background-color: #35b872; font-size:170%;", width = 150),
+    #   actionButton("closeModal", "Continue", style="color: #fff;font-size:150%;", class = "btn-primary", width = 150),
+    #   actionButton("btLoginModal", "Log in", style=" font-size:150%;", width = 150), style="float:right;text-align:center")
+    # )
+  ))  
+}
+)
+})
+
+
+
 
 # modal to show to user to login or register
 observeEvent(input$btLoginModal, {
@@ -355,14 +366,15 @@ observe({
         menuItem("Fieldbook", icon = icon("book"),
                  menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
                  #menuSubItem("Manage fieldbook", tabName = "openFieldbook", icon = icon("angle-right")),
-                 menuSubItem("Manage session", tabName = "uisessionagrofims", icon = icon("angle-right"))#,
+                 menuSubItem("Manage fieldbooks", tabName = "uisessionagrofims", icon = icon("angle-right"))#,
                  #menuSubItem("KDSmart", tabName = "uimobileagrofims", icon = icon("angle-right"))
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),
         
-        menuItem("Single Trial Analysis", icon = icon("bar-chart"),
+        menuItem("Statistical analysis", icon = icon("bar-chart"),
                  #menuSubItem("Single trial graph",tabName = "SingleChart", icon = icon("calculator")),
-                 menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                 menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
                  #menuSubItem("Genetic report", tabName = "geneticAnalysisReport", icon = icon("file-text-o"))
                  
                  #menuSubItem("Data Transformation", tabName = "singleAnalysisTrans", icon = icon("file-text-o"))
@@ -450,8 +462,10 @@ observe({
                      #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("file-o")),
                      #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))
             ),
-            menuItem("Single Trial Analysis", icon = icon("bar-chart"),
-                     menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))
+            menuItem("Statistical analysis", icon = icon("bar-chart"),
+                     #menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))
+                     menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
+                     menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
             ),
             menuItem("Documentation",  icon = icon("copy")
             ),
@@ -642,7 +656,7 @@ observeEvent(input$btLogIn, {
 observeEvent(input$btLogOut, {
   js$rmcookie()
   USER$Logged <- FALSE
-  showModal(loginModalMenu())
+  #showModal(loginModalMenu())
 })
 
 ###########################################################################################################
