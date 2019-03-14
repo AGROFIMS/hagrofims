@@ -1,0 +1,89 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+    toc: true
+    toc_depth: 3
+params: 
+  traits: "no data"
+  mpf: "no data"
+  spf: "no data"
+  sspf: "no data"
+  rep: "no data"
+  dfr: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo = FALSE}
+library(knitr)
+
+# Pass arguments
+
+traits <- params$traits
+mpf <- params$mpf
+spf <- params$spf
+sspf <- params$sspf
+rep <- params$rep
+dfr <- params$dfr
+
+# Check factors structure
+
+out <- ck.fs(c(mpf, spf, sspf), rep, dfr)
+nmpf <- out$nl[[1]]
+nspf <- out$nl[[2]]
+nsspf <- out$nl[[3]]
+nrep <- out$nrep
+dfr <- out$dfr
+nmis.fac <- out$nmis.fac
+
+# Define internal variables
+
+mpf <- dfr[, mpf]
+spf <- dfr[, spf]
+sspf <- dfr[, sspf]
+rep <- dfr[, rep]
+```
+
+# 1. Model specification and data description
+
+There are data for a split-split-plot design with `r nmpf` levels for the main plot factor, `r nspf` levels for the sub-plot factor, `r nsspf` levels for the sub-sub-plot factor, and `r nrep` replications for the main plot factor. The statistical model is
+$$
+y_{ijk} = \mu + \alpha_i + \beta_j + \gamma_k + \delta_l + (\alpha\beta)_{ij} + (\alpha\gamma)_{ik} + (\alpha\delta)_{il} + (\beta\gamma)_{jk} + (\beta\delta)_{jl} + (\gamma\delta)_{kl} \\
++ (\alpha\beta\gamma)_{ijk} + (\alpha\beta\delta)_{ijl} + (\alpha\gamma\delta)_{ikl} + (\beta\gamma\delta)_{jkl} + (\alpha\beta\gamma\delta)_{ijkl}
+$$
+where
+
+* $y_{ijkl}$ is the observed response with level $i$ of the main plot factor, level $j$ of the sub-plot factor, level $k$ of the sub-sub-plot factor, and replication $l$.
+* $\mu$ is the mean response over all levels of factors and replications.
+* $\alpha_i$ is the effect for level $i$ of the main plot factor.
+* $\beta_j$ is the effect for level $j$ of the sub-plot factor.
+* $\gamma_k$ is the effect for level $k$ of the sub-sub-plot factor.
+* $\delta_l$ is the effect of replication $l$.
+* $(\alpha\beta)_{ij}$, $(\alpha\gamma)_{ik}$, $(\alpha\delta)_{il}$, $(\beta\gamma)_{jk}$, $(\beta\delta)_{jl}$, $(\gamma\delta)_{kl}$, $(\alpha\beta\gamma)_{ijk}$, $(\alpha\beta\delta)_{ijl}$, $(\alpha\gamma\delta)_{ikl}$, $(\beta\gamma\delta)_{jkl}$, and $(\alpha\beta\gamma\delta)_{ijkl}$ the corresponding interactions.
+
+In this model $(\alpha\delta)_{il}$ is the error term for the main plot factor, $(\beta\delta)_{jl}$ and $(\alpha\beta\delta)_{ijl}$ are pooled to form the error term for the split-plot factor, and $(\gamma\delta)_{kl}$, $(\alpha\gamma\delta)_{ikl}$, $(\beta\gamma\delta)_{jkl}$, and $(\alpha\beta\gamma\delta)_{ijkl}$ are pooled to form the error term for the sub-sub-plot factor.
+
+`r if (nmis.fac == 1) paste("Note: There is", nmis.fac, "data row with missing values for classifications factors. This row has been deleted.")`
+`r if (nmis.fac > 1) paste("Note: There are", nmis.fac, "data rows with missing values for classifications factors. These rows have been deleted.")`
+
+```{r include = FALSE}
+out <- NULL
+for (i in 1:length(traits))
+  out <- c(out, knit_expand('child_spld.Rmd'))
+```
+
+`r paste(knit(text = out), collapse = '\n')`

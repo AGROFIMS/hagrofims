@@ -18,30 +18,44 @@ output:
     toc_depth: 3
 params: 
   traits: "no data"
-  lines: "no data"
-  testers: "no data"
+  line: "no data"
+  tester: "no data"
   rep: "no data"
-  data: "no data"
+  dfr: "no data"
   title: "no data"
   subtitle: "no data"
   author: "no data"
 ---
 
-```{r, echo = FALSE}
+```{r echo = FALSE}
 library(knitr)
 
+# Pass arguments
+
 traits <- params$traits
-lines <- params$lines
-testers <- params$testers
+line <- params$line
+tester <- params$tester
 rep <- params$rep
-data <- params$data
+dfr <- params$dfr
+
+# Define genotypes id
+
+dfr[, 'geno'] <- paste(dfr[, line], dfr[, tester])
 ```
 
-```{r, include = FALSE}
-out <- NULL
+```{r include = FALSE}
+lc.gd <- ck.lxt(line, tester, dfr)
 
-for (i in 1:length(traits))
-  out <- c(out, knit_expand('child_lxt.Rmd'))
+out <- NULL
+for (i in 1:length(traits)) {
+  lc <- ck.rcbd(traits[i], 'geno', rep, dfr)
+  if (lc$ng.0 == 0 & lc$nrep > 1 & lc$ng.mult == 0 & lc$nmis == 0 &
+      lc.gd$c1 == TRUE & lc.gd$c2 == TRUE & lc.gd$c3 == TRUE) {
+    out <- c(out, knit_expand('child_lxt.Rmd'))
+  } else {
+    out <- c(out, knit_expand('child_lxt_fail.Rmd'))
+  }
+}
 ```
 
 `r paste(knit(text = out), collapse = '\n')`

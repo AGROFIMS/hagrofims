@@ -2,25 +2,12 @@
 
 # {{i}}. Analysis for trait `r traits[i]`
 
-```{r, echo = FALSE}
-if (model == 1) {
-  ddd <- data.frame (
-      set = data[, set],
-      male = data[, male],
-      female = data[, female],
-      progeny = data[, progeny],
-      rep = data[, rep],
-      yield = data[, traits[i]])
-}
+```{r echo = FALSE}
+if (model == 1)
+  temp <- dfr[, c(set, male, female, progeny, rep, traits[i])]
 
-if (model == 2 | model == 3) {
-  ddd <- data.frame (
-      set = data[, set],
-      male = data[, male],
-      female = data[, female],
-      rep = data[, rep],
-      yield = data[, traits[i]])
-}
+if (model == 2 | model == 3)
+  temp <- dfr[, c(set, male, female, rep, traits[i])]
 
-agricolae::carolina(model, ddd)
+agricolae::carolina(model, temp)
 ```

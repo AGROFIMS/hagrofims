@@ -1,0 +1,91 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    toc: true
+    toc_depth: 3
+    highlight: "tango"
+params:
+  traits: "no data"
+  trt: "no data"
+  env: "no data"
+  rep: "no data"
+  dfr: "no data"
+  maxp: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo = FALSE}
+library(knitr)
+
+# Pass arguments
+
+traits <- params$traits
+trt <- params$trt
+env <- params$env
+rep <- params$rep
+dfr <- params$dfr
+maxp <- params$maxp
+
+# Check factors structure
+
+out <- ck.fs(c(trt, env), rep, dfr)
+dfr <- out$dfr
+nl <- out$nl
+nrep <- out$nrep
+nmis.fac <- out$nmis.fac
+
+# Everything as character
+
+dfr[, trt] <- as.character(dfr[, trt])
+dfr[, env] <- as.character(dfr[, env])
+dfr[, rep] <- as.character(dfr[, rep])
+```
+
+# 1. Model specification and data description
+
+The data frame has `r nl[2]` environments and `r nl[1]` treatments. In each environment the treatments were evaluated using a randomized complete block design with `r nrep` blocks. The statistical model is
+$$
+y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \gamma_{k(j)} + \epsilon_{ijk}
+$$
+where
+
+* $y_{ijk}$ is the observed response with treatment $i$, environment $j$, and block $k$ nested in environment $j$.
+* $\mu$ is the mean response over all treatments, environments and blocks.
+* $\alpha_i$ is the effect for treatment $i$.
+* $\beta_j$ is the effect for environment $j$.
+* $(\alpha\beta)_{ij}$ is the interaction effect between treatment $i$ and environment $j$.
+* $\gamma_{k(j)}$ is the effect of block $k$ nested in environment $j$.
+* $\epsilon_{ijk}$ is the error term.
+
+In this model we assume that the errors are independent and have a normal distribution with common variance, that is, $\epsilon_{ijk} \sim N(0,\sigma_{\epsilon}^2)$.
+
+`r if (nmis.fac == 1) paste("Note: There is", nmis.fac, "row with missing values for classifications factors. This row has been deleted.")`
+`r if (nmis.fac > 1) paste("Note: There are", nmis.fac, "rows with missing values for classifications factors. These rows have been deleted.")`
+
+```{r include = FALSE}
+out <- NULL
+for (i in 1:length(traits)) {
+  lc <- ck.f(traits[i], c(trt, env), rep, dfr)
+  if (lc$nt.0 == 0 & lc$nrep > 1 & lc$nt.mult == 0 & lc$pmis <= maxp) {
+    out <- c(out, knit_expand('child_met_agro.Rmd'))
+  } else {
+    out <- c(out, knit_expand('child_met_agro_fail.Rmd'))
+  }
+}
+```
+
+`r paste(knit(text = out), collapse = '\n')`

@@ -1,0 +1,29 @@
+`r i = {{i}}`
+
+# {{i}}. Analysis for trait `r traits[i]`
+
+```{r echo = FALSE}
+lc.gd <- ck.lxt(line, tester, dfr)
+lc <- ck.rcbd(traits[i], 'geno', rep, dfr)
+```
+
+`r if (!lc.gd$c1) {"There is at least one line that does not appear as parent."}`
+
+`r if (!lc.gd$c2) {"There is at least one tester that does not appear as parent."}`
+
+`r if (!lc.gd$c3) {"There is at least one line by tester combination without crosses."}`
+
+`r if (lc$nrep == 1) {"There is only one replication. Analysis is not possible with one replication."}`
+
+`r if (lc$ng.mult > 0) {"There is more than one datum for at least one genotype in at least one replication. This could be the result of a mislabeling for the levels of the factors. The table below shows the frequencies of valid data for each genotype in each replication."}`
+
+`r if (lc$ng.0 > 0) {"There is at least one genotype without data. The table below shows the frequencies of valid data for each genotype. The analysis cannot be produced if there are genotypes without data."}`
+
+`r if (lc$nmis > 0) paste0("There are missing values (", format(lc$pmis * 100, digits = 3), "%), the design is not balanced. The table below shows the frequencies of valid data for each genotype in each replication.")`
+
+```{r echo = FALSE}
+if (lc$ng.mult > 0 | lc$nmis > 0)
+  lc$tfr
+if (lc$ng.0 > 0)
+  lc$tf
+```

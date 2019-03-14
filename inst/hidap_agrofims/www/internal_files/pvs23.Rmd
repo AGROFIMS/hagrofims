@@ -17,7 +17,7 @@ output:
     toc_depth: 3
     highlight: "tango"
 params:
-  data: "no data"
+  dfr: "no data"
   form: "no data"
   title: "no data"
   subtitle: "no data"
@@ -25,7 +25,6 @@ params:
 ---
 
 ```{r echo = FALSE}
-
 ## Form
 
 if (params$form == 2) stage <- "flowering"
@@ -33,12 +32,12 @@ if (params$form == 3) stage <- "harvest"
 
 ## Data
 
-data <- params$data
-temp <- data[!is.na(data$MSGLO), ]
-nrm <- nlevels(factor(temp$REP))
-temp <- data[!is.na(data$BSGLO), ]
-nrb <- nlevels(factor(temp$REP))
-ds <- docomp("sum", c("MSM", "MSWM", "MSGLO", "BSM", "BSWM", "BSGLO"), "INSTN", data = data)
+dfr <- params$dfr
+temp <- dfr[!is.na(dfr$MSGLO), ]
+nrm <- length(unique(temp$REP))
+temp <- dfr[!is.na(dfr$BSGLO), ]
+nrb <- length(unique(temp$REP))
+ds <- docomp("sum", c("MSM", "MSWM", "MSGLO", "BSM", "BSWM", "BSGLO"), "INSTN", dfr = dfr)
 ds <- tidyr::gather(ds, group, value, MSM:BSGLO)
 ds[ds$group %in% c("MSM", "MSWM", "MSGLO"), "trial"] <- "mother"
 ds[ds$group %in% c("BSM", "BSWM", "BSGLO"), "trial"] <- "baby"
@@ -50,30 +49,30 @@ ds[ds$group %in% c("MSGLO", "BSGLO"), "group"] <- "Global"
 
 moth <- ds[ds$trial == "mother", -4]
 baby <- ds[ds$trial == "baby", -4]
-both <- docomp("sum", "value", c("INSTN", "group"), data = ds)
+both <- docomp("sum", "value", c("INSTN", "group"), dfr = ds)
 
 ## Sort by number of votes
 
 temp <- moth[moth$group == "Global", c("INSTN", "value")]
-orden <- temp$INSTN[sort(temp$value, decreasing = T, index.return = T)$ix]
+orden <- temp$INSTN[sort(temp$value, decreasing = TRUE, index.return = TRUE)$ix]
 moth$INSTN <- factor(moth$INSTN, levels = orden)
 
 temp <- baby[baby$group == "Global", c("INSTN", "value")]
-orden <- temp$INSTN[sort(temp$value, decreasing = T, index.return = T)$ix]
+orden <- temp$INSTN[sort(temp$value, decreasing = TRUE, index.return = TRUE)$ix]
 baby$INSTN <- factor(baby$INSTN, levels = orden)
 
 temp <- both[both$group == "Global", c("INSTN", "value")]
-orden <- temp$INSTN[sort(temp$value, decreasing = T, index.return = T)$ix]
+orden <- temp$INSTN[sort(temp$value, decreasing = TRUE, index.return = TRUE)$ix]
 both$INSTN <- factor(both$INSTN, levels = orden)
 
 ## Count number of votes
 
-nvmmoth <- sum(moth[moth$group == "Men", "value"], na.rm = T)
-nvmbaby <- sum(baby[baby$group == "Men", "value"], na.rm = T)
+nvmmoth <- sum(moth[moth$group == "Men", "value"], na.rm = TRUE)
+nvmbaby <- sum(baby[baby$group == "Men", "value"], na.rm = TRUE)
 nvmboth <- nvmmoth + nvmbaby
 
-nvwmoth <- sum(moth[moth$group == "Women", "value"], na.rm = T)
-nvwbaby <- sum(baby[baby$group == "Women", "value"], na.rm = T)
+nvwmoth <- sum(moth[moth$group == "Women", "value"], na.rm = TRUE)
+nvwbaby <- sum(baby[baby$group == "Women", "value"], na.rm = TRUE)
 nvwboth <- nvwmoth + nvwbaby
 
 ## Count number of voters
@@ -91,7 +90,7 @@ mothp$value <- mothp$value / (nvmmoth + nvwmoth)
 temp <- moth[moth$group != "Global", ]
 temp[temp$group == "Men", "value"] <- temp[temp$group == "Men", "value"] / nvmmoth / 2
 temp[temp$group == "Women", "value"] <- temp[temp$group == "Women", "value"] / nvwmoth / 2
-temp <- docomp("sum", "value", "INSTN", data = temp)
+temp <- docomp("sum", "value", "INSTN", dfr = temp)
 temp$group <- "Global adjusted"
 mothp <- rbind(mothp, temp)
 mothp$value <- round(mothp$value * 100, 1)
@@ -101,7 +100,7 @@ babyp$value <- babyp$value / (nvmbaby + nvwbaby)
 temp <- baby[baby$group != "Global", ]
 temp[temp$group == "Men", "value"] <- temp[temp$group == "Men", "value"] / nvmbaby / 2
 temp[temp$group == "Women", "value"] <- temp[temp$group == "Women", "value"] / nvwbaby / 2
-temp <- docomp("sum", "value", "INSTN", data = temp)
+temp <- docomp("sum", "value", "INSTN", dfr = temp)
 temp$group <- "Global adjusted"
 babyp <- rbind(babyp, temp)
 babyp$value <- round(babyp$value * 100, 1)
@@ -111,11 +110,10 @@ bothp$value <- bothp$value / (nvmboth + nvwboth)
 temp <- both[both$group != "Global", ]
 temp[temp$group == "Men", "value"] <- temp[temp$group == "Men", "value"] / nvmboth / 2
 temp[temp$group == "Women", "value"] <- temp[temp$group == "Women", "value"] / nvwboth / 2
-temp <- docomp("sum", "value", "INSTN", data = temp)
+temp <- docomp("sum", "value", "INSTN", dfr = temp)
 temp$group <- "Global adjusted"
 bothp <- rbind(bothp, temp)
 bothp$value <- round(bothp$value * 100, 1)
-
 ```
 
 # 1. Voting process for the identification of best genotypes at `r stage`
@@ -225,95 +223,95 @@ if (nrb > 0 & nrm > 0) {
 ## 5.1. Men's votes at mother trial
 
 ```{r echo = FALSE}
-check <- st4gi::check.rcbd("MSM", "INSTN", "REP", data)
-if (max(check$tfreq) > 0 & check$c4 == 1) {
-  ft <- with(data, friedman(REP, INSTN, MSM, group = T))
+lc <- ck.rcbd("MSM", "INSTN", "REP", dfr)
+if (lc$nrep > 1 & lc$nmis == 0) {
+  ft <- with(dfr, friedman(REP, INSTN, MSM, group = TRUE))
   ft$statistics
   ft$groups
-  ft <- with(data, friedman(REP, INSTN, MSM, group = F))
-  ft$comparison  
+  ft <- with(dfr, friedman(REP, INSTN, MSM, group = FALSE))
+  ft$comparison
 }
 ```
 
-`r if (max(check$tfreq) == 0) {"There were no data for men on the mother plot."}`
-`r if (max(check$tfreq) > 0 & check$c4 == 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
+`r if (lc$nrep <= 1) {"There were no data for men on the mother plot."}`
+`r if (lc$nrep > 1 & lc$nmis > 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
 
 ## 5.2. Women's votes at mother trial
 
 ```{r echo = FALSE}
-check <- st4gi::check.rcbd("MSWM", "INSTN", "REP", data)
-if (max(check$tfreq) > 0 & check$c4 == 1) {
-  ft <- with(data, friedman(REP, INSTN, MSWM, group = T))
+lc <- ck.rcbd("MSWM", "INSTN", "REP", dfr)
+if (lc$nrep > 1 & lc$nmis == 0) {
+  ft <- with(dfr, friedman(REP, INSTN, MSWM, group = TRUE))
   ft$statistics
   ft$groups
-  ft <- with(data, friedman(REP, INSTN, MSWM, group = F))
+  ft <- with(dfr, friedman(REP, INSTN, MSWM, group = FALSE))
   ft$comparison
 }
 ```
 
-`r if (max(check$tfreq) == 0) {"There were no data for women on the mother plot."}`
-`r if (max(check$tfreq) > 0 & check$c4 == 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
+`r if (lc$nrep <= 1) {"There were no data for women on the mother plot."}`
+`r if (lc$nrep > 1 & lc$nmis > 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
 
 ## 5.3. Total votes at mother trial
 
 ```{r echo = FALSE}
-check <- st4gi::check.rcbd("MSGLO", "INSTN", "REP", data)
-if (max(check$tfreq) > 0 & check$c4 == 1) {
-  ft <- with(data, friedman(REP, INSTN, MSGLO, group = T))
+lc <- ck.rcbd("MSGLO", "INSTN", "REP", dfr)
+if (lc$nrep > 1 & lc$nmis == 0) {
+  ft <- with(dfr, friedman(REP, INSTN, MSGLO, group = TRUE))
   ft$statistics
   ft$groups
-  ft <- with(data, friedman(REP, INSTN, MSGLO, group = F))
+  ft <- with(dfr, friedman(REP, INSTN, MSGLO, group = FALSE))
   ft$comparison
 }
 ```
 
-`r if (max(check$tfreq) == 0) {"There were no data on the mother plot."}`
-`r if (max(check$tfreq) > 0 & check$c4 == 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
+`r if (lc$nrep <= 1) {"There were no data on the mother plot."}`
+`r if (lc$nrep > 1 & lc$nmis > 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
 
 ## 5.4. Men's votes at baby trials
 
 ```{r echo = FALSE}
-check <- st4gi::check.rcbd("BSM", "INSTN", "REP", data)
-if (max(check$tfreq) > 0 & check$c4 == 1) {
-  ft <- with(data, friedman(REP, INSTN, BSM, group = T))
+lc <- ck.rcbd("BSM", "INSTN", "REP", dfr)
+if (lc$nrep > 1 & lc$nmis == 0) {
+  ft <- with(dfr, friedman(REP, INSTN, BSM, group = TRUE))
   ft$statistics
   ft$groups
-  ft <- with(data, friedman(REP, INSTN, BSM, group = F)) 
+  ft <- with(dfr, friedman(REP, INSTN, BSM, group = FALSE)) 
   ft$comparison
 }
 ```
 
-`r if (max(check$tfreq) == 0) {"There were no data for men on the baby plots."}`
-`r if (max(check$tfreq) > 0 & check$c4 == 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
+`r if (lc$nrep <= 1) {"There were no data for men on the baby plots."}`
+`r if (lc$nrep > 1 & lc$nmis > 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
 
 ## 5.5. Women's votes at baby trials
 
 ```{r echo = FALSE}
-check <- st4gi::check.rcbd("BSWM", "INSTN", "REP", data)
-if (max(check$tfreq) > 0 & check$c4 == 1) {
-  ft <- with(data, friedman(REP, INSTN, BSWM, group = T))
+lc <- ck.rcbd("BSWM", "INSTN", "REP", dfr)
+if (lc$nrep > 1 & lc$nmis == 0) {
+  ft <- with(dfr, friedman(REP, INSTN, BSWM, group = TRUE))
   ft$statistics
   ft$groups
-  ft <- with(data, friedman(REP, INSTN, BSWM, group = F))
+  ft <- with(dfr, friedman(REP, INSTN, BSWM, group = FALSE))
   ft$comparison
 }
 ```
 
-`r if (max(check$tfreq) == 0) {"There were no data for women on the baby plots."}`
-`r if (max(check$tfreq) > 0 & check$c4 == 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
+`r if (lc$nrep <= 1) {"There were no data for women on the baby plots."}`
+`r if (lc$nrep > 1 & lc$nmis > 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
 
 ## 5.6. Total votes at baby trials
 
 ```{r echo = FALSE}
-check <- st4gi::check.rcbd("BSGLO", "INSTN", "REP", data)
-if (max(check$tfreq) > 0 & check$c4 == 1) {
-  ft <- with(data, friedman(REP, INSTN, BSGLO, group = T))
+lc <- ck.rcbd("BSGLO", "INSTN", "REP", dfr)
+if (lc$nrep > 1 & lc$nmis == 0) {
+  ft <- with(dfr, friedman(REP, INSTN, BSGLO, group = TRUE))
   ft$statistics
   ft$groups
-  ft <- with(data, friedman(REP, INSTN, BSGLO, group = F))
+  ft <- with(dfr, friedman(REP, INSTN, BSGLO, group = FALSE))
   ft$comparison
 }
 ```
 
-`r if (max(check$tfreq) == 0) {"There were no data on the baby plots."}`
-`r if (max(check$tfreq) > 0 & check$c4 == 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`
+`r if (lc$nrep <= 1) {"There were no data on the baby plots."}`
+`r if (lc$nrep > 1 & lc$nmis > 0) {"There are some missing values. The design must be balanced to run the Friedman test."}`

@@ -15,22 +15,22 @@ params:
   geno: "no data"
   env: "no data"
   rep: "no data"
-  data: "no data"
+  dfr: "no data"
   means: "no data"
   lb: "no data"
   author: "no data"
 ---
 
-```{r, echo = FALSE}
+```{r echo = FALSE}
 traits <- params$traits
 geno <- params$geno
 env <- params$env
 rep <- params$rep
-data <- params$data
+dfr <- params$dfr
 means <- params$means
 lb <- params$lb
 
-eindex <- elston(traits, geno, env, rep, data, means, lb)
+eindex <- elston(traits, geno, env, rep, dfr, means, lb)
 ```
 
 ### The Elston index

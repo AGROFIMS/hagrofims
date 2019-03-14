@@ -21,31 +21,43 @@ params:
   geno: "no data"
   env: "no data"
   rep: "no data"
-  data: "no data"
+  dfr: "no data"
   maxp: "no data"
   title: "no data"
   subtitle: "no data"
   author: "no data"
 ---
 
-```{r, echo = FALSE}
+```{r echo = FALSE}
 library(knitr)
+
+# Pass arguments
 
 traits <- params$traits
 geno <- params$geno
 env <- params$env
 rep <- params$rep
-data <- params$data
+dfr <- params$dfr
 maxp <- params$maxp
 
-data[, geno] <- as.character(data[, geno])
-data[, env] <- as.character(data[, env])
-data[, rep] <- as.character(data[, rep])
+# Check factors structure
+
+out <- ck.fs(c(geno, env), rep, dfr)
+dfr <- out$dfr
+nl <- out$nl
+nrep <- out$nrep
+nmis.fac <- out$nmis.fac
+
+# Everything as character
+
+dfr[, geno] <- as.character(dfr[, geno])
+dfr[, env] <- as.character(dfr[, env])
+dfr[, rep] <- as.character(dfr[, rep])
 ```
 
 # 1. Model specification and data description
 
-The data frame has `r nlevels(as.factor(data[, env]))` environments and `r nlevels(as.factor(data[, geno]))` genotypes. In each environment the genotypes were evaluated using a randomized complete block design with `r nlevels(as.factor(data[, rep]))` blocks. The statistical model is
+The data frame has `r nl[2]` environments and `r nl[1]` genotypes. In each environment the genotypes were evaluated using a randomized complete block design with `r nrep` blocks. The statistical model is
 $$
 y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \gamma_{k(j)} + \epsilon_{ijk}
 $$
@@ -61,14 +73,18 @@ where
 
 In this model we assume that the errors are independent and have a normal distribution with common variance, that is, $\epsilon_{ijk} \sim N(0,\sigma_{\epsilon}^2)$.
 
-```{r, include = FALSE}
+`r if (nmis.fac == 1) paste("Note: There is", nmis.fac, "row with missing values for classifications factors. This row has been deleted.")`
+`r if (nmis.fac > 1) paste("Note: There are", nmis.fac, "rows with missing values for classifications factors. These rows have been deleted.")`
+
+```{r include = FALSE}
 out <- NULL
 for (i in 1:length(traits)) {
-  lc <- check.2f(traits[i], geno, env, rep, data)
-  if (lc$c1 == 1 & lc$c2 == 1 & lc$c3 == 1 & lc$pmis <= maxp)
+  lc <- ck.f(traits[i], c(geno, env), rep, dfr)
+  if (lc$nt.0 == 0 & lc$nrep > 1 & lc$nt.mult == 0 & lc$pmis <= maxp) {
     out <- c(out, knit_expand('child_met.Rmd'))
-  else
+  } else {
     out <- c(out, knit_expand('child_met_fail.Rmd'))
+  }
 }
 ```
 

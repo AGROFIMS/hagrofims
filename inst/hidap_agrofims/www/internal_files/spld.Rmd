@@ -1,0 +1,84 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+    toc: true
+    toc_depth: 3
+params: 
+  traits: "no data"
+  mpf: "no data"
+  spf: "no data"
+  sspf: "no data"
+  rep: "no data"
+  dfr: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo = FALSE}
+library(knitr)
+
+# Pass arguments
+
+traits <- params$traits
+mpf <- params$mpf
+spf <- params$spf
+rep <- params$rep
+dfr <- params$dfr
+
+# Check factors structure
+
+out <- ck.fs(c(mpf, spf), rep, dfr)
+nmpf <- out$nl[[1]]
+nspf <- out$nl[[2]]
+nrep <- out$nrep
+dfr <- out$dfr
+nmis.fac <- out$nmis.fac
+
+# Define internal variables
+
+mpf <- dfr[, mpf]
+spf <- dfr[, spf]
+rep <- dfr[, rep]
+```
+
+# 1. Model specification and data description
+
+There are data for a split-plot design with `r nmpf` levels for the main plot factor, `r nspf` levels for the sub-plot factor, and `r nrep` replications for the main plot factor. The statistical model is
+$$
+y_{ijk} = \mu + \alpha_i + \beta_j + \gamma_k + (\alpha\beta)_{ij} + (\alpha\gamma)_{ik} + (\beta\gamma)_{jk} + (\alpha\beta\gamma)_{ijk}
+$$
+where
+
+* $y_{ijk}$ is the observed response with level $i$ of the main plot factor, level $j$ of the sub-plot factor, and replication $k$.
+* $\mu$ is the mean response over all levels of factors and replications.
+* $\alpha_i$ is the effect for level $i$ of the main plot factor.
+* $\beta_j$ is the effect for level $j$ of the sub-plot factor.
+* $\gamma_k$ is the effect of replication $k$.
+* $(\alpha\beta)_{ij}$, $(\alpha\gamma)_{ik}$, $(\beta\gamma)_{jk}$, $(\beta\gamma)_{jk}$, and $(\alpha\beta\gamma)_{ijk}$ the corresponding interactions.
+
+In this model $(\alpha\gamma)_{ik}$ is the error term for the main plot factor, and $(\beta\gamma)_{jk}$ and $(\alpha\beta\gamma)_{ijk}$ are pooled to form the error term for the split-plot factor.
+
+`r if (nmis.fac == 1) paste("Note: There is", nmis.fac, "data row with missing values for classifications factors. This row has been deleted.")`
+`r if (nmis.fac > 1) paste("Note: There are", nmis.fac, "data rows with missing values for classifications factors. These rows have been deleted.")`
+
+```{r include = FALSE}
+out <- NULL
+for (i in 1:length(traits))
+  out <- c(out, knit_expand('child_spld.Rmd'))
+```
+
+`r paste(knit(text = out), collapse = '\n')`

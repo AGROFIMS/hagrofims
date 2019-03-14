@@ -17,7 +17,7 @@ output:
     toc_depth: 3
     highlight: "tango"
 params:
-  data: "no data"
+  dfr: "no data"
   form: "no data"
   title: "no data"
   subtitle: "no data"
@@ -25,44 +25,43 @@ params:
 ---
 
 ```{r echo=FALSE}
-
 ## Data
 
-data <- params$data
-data <- data[, c("PHASE", "IDENTIFIED_CRITERIA", "SCORE_MEN", "SCORE_WOMEN", "SCORE_GLOBAL")]
-data$IDENTIFIED_CRITERIA <- as.character(data$IDENTIFIED_CRITERIA)
-colnames(data) <- c("phase", "Criteria", "Men", "Women", "Global")
-data <- tidyr::gather(data, group, value, Men:Global)
+dfr <- params$dfr
+dfr <- dfr[, c("PHASE", "IDENTIFIED_CRITERIA", "SCORE_MEN", "SCORE_WOMEN", "SCORE_GLOBAL")]
+dfr$IDENTIFIED_CRITERIA <- as.character(dfr$IDENTIFIED_CRITERIA)
+colnames(dfr) <- c("phase", "Criteria", "Men", "Women", "Global")
+dfr <- tidyr::gather(dfr, group, value, Men:Global)
 
 ## Split by phase
 
-flow <- data[data$phase == "Flowering", ]
-harv <- data[data$phase == "Harvest", ]
-stor <- data[data$phase == "Storage", ]
+flow <- dfr[dfr$phase == "Flowering", ]
+harv <- dfr[dfr$phase == "Harvest", ]
+stor <- dfr[dfr$phase == "Storage", ]
 
 ## Sort by number of votes
 
 temp <- flow[flow$group == "Global", c("Criteria", "value")]
-orden <- temp$Criteria[sort(temp$value, decreasing = T, index.return = T)$ix]
+orden <- temp$Criteria[sort(temp$value, decreasing = TRUE, index.return = TRUE)$ix]
 flow$Criteria <- factor(flow$Criteria, levels = orden)
 
 temp <- harv[harv$group == "Global", c("Criteria", "value")]
-orden <- temp$Criteria[sort(temp$value, decreasing = T, index.return = T)$ix]
+orden <- temp$Criteria[sort(temp$value, decreasing = TRUE, index.return = TRUE)$ix]
 harv$Criteria <- factor(harv$Criteria, levels = orden)
 
 temp <- stor[stor$group == "Global", c("Criteria", "value")]
-orden <- temp$Criteria[sort(temp$value, decreasing = T, index.return = T)$ix]
+orden <- temp$Criteria[sort(temp$value, decreasing = TRUE, index.return = TRUE)$ix]
 stor$Criteria <- factor(stor$Criteria, levels = orden)
 
 ## Count number of votes
 
-nvmflow <- sum(flow[flow$group == "Men", "value"], na.rm = T)
-nvmharv <- sum(harv[harv$group == "Men", "value"], na.rm = T)
-nvmstor <- sum(stor[stor$group == "Men", "value"], na.rm = T)
+nvmflow <- sum(flow[flow$group == "Men", "value"], na.rm = TRUE)
+nvmharv <- sum(harv[harv$group == "Men", "value"], na.rm = TRUE)
+nvmstor <- sum(stor[stor$group == "Men", "value"], na.rm = TRUE)
 
-nvwflow <- sum(flow[flow$group == "Women", "value"], na.rm = T)
-nvwharv <- sum(harv[harv$group == "Women", "value"], na.rm = T)
-nvwstor <- sum(stor[stor$group == "Women", "value"], na.rm = T)
+nvwflow <- sum(flow[flow$group == "Women", "value"], na.rm = TRUE)
+nvwharv <- sum(harv[harv$group == "Women", "value"], na.rm = TRUE)
+nvwstor <- sum(stor[stor$group == "Women", "value"], na.rm = TRUE)
 
 ## Count number of voters
 
@@ -105,7 +104,6 @@ temp <- docomp("sum", "value", "Criteria", "phase", temp)
 temp$group <- "Global adjusted"
 storp <- rbind(storp, temp)
 storp$value <- round(storp$value * 100, 1)
-
 ```
 
 # 1. Identification of selection criteria and voting process
@@ -127,9 +125,8 @@ Votes are recorded for men and women.
 `r if (nrow(flow) == 0) {"There were no data for selection criteria at flowering."}`
 `r if (all(is.na(flow$Criteria))) {"There were no data for selection criteria at flowering."}`
 
-
 ```{r echo = FALSE, fig.height = 5, fig.width = 8}
-if (nrow(flow) > 0 && !all(is.na(flow$Criteria)) ){
+if (nrow(flow) > 0 && !all(is.na(flow$Criteria))) {
   ggplot(flow, aes(x = group, y = value, fill = Criteria)) +
     geom_bar(stat = "identity", position = "dodge", color = "black") +
     labs(title = "Voting for selection criteria of new varieties at flowering stage",
@@ -139,13 +136,10 @@ if (nrow(flow) > 0 && !all(is.na(flow$Criteria)) ){
 }
 ```
 
-`r if (nrow(flow) > 0  && !all(is.na(flow$Criteria)) ) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
-
-
-
+`r if (nrow(flow) > 0  && !all(is.na(flow$Criteria))) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
 
 ```{r echo = FALSE, fig.height = 5, fig.width = 8}
-if (nrow(flow) > 0  && !all(is.na(flow$Criteria)) ) {
+if (nrow(flow) > 0 && !all(is.na(flow$Criteria))) {
   ggplot(flowp, aes(x = group, y = value, fill = Criteria)) +
     geom_bar(stat = "identity", position = "dodge", color = "black") + 
     labs(title = "Voting for selection criteria of new varieties at flowering stage",
@@ -161,9 +155,8 @@ if (nrow(flow) > 0  && !all(is.na(flow$Criteria)) ) {
 `r if (nrow(harv) == 0) {"There were no data for selection criteria at harvest."}`
 `r if (all(is.na(harv$Criteria))) {"There were no data for selection criteria at harvest."}`
 
-
 ```{r echo = FALSE, fig.height = 5, fig.width = 8}
-if (nrow(harv) > 0   && !all(is.na(harv$Criteria)) ) {
+if (nrow(harv) > 0 && !all(is.na(harv$Criteria))) {
   ggplot(harv, aes(x = group, y = value, fill = Criteria)) +
     geom_bar(stat = "identity", position = "dodge", color = "black") + 
     labs(title = "Voting for selection criteria of new varieties at harvest stage", 
@@ -173,10 +166,10 @@ if (nrow(harv) > 0   && !all(is.na(harv$Criteria)) ) {
 }
 ```
 
-`r if (nrow(harv) > 0  && !all(is.na(harv$Criteria)) ) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
+`r if (nrow(harv) > 0 && !all(is.na(harv$Criteria))) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
 
 ```{r echo = FALSE, fig.height = 5, fig.width = 8}
-if (nrow(harv) > 0  && !all(is.na(harv$Criteria)) ) {
+if (nrow(harv) > 0 && !all(is.na(harv$Criteria))) {
   ggplot(harvp, aes(x = group, y = value, fill = Criteria)) +
     geom_bar(stat = "identity", position = "dodge", color = "black") + 
     labs(title = "Voting for selection criteria of new varieties at harvest stage",
@@ -192,9 +185,8 @@ if (nrow(harv) > 0  && !all(is.na(harv$Criteria)) ) {
 `r if (nrow(stor) == 0) {"There were no data for selection criteria at post-harvest."}`
 `r if (all(is.na(stor$Criteria))) {"There were no data for selection criteria at post-harvest."}`
 
-
 ```{r echo = FALSE, fig.height = 5, fig.width = 8}
-if (nrow(stor) > 0  && !all(is.na(stor$Criteria)) ) {
+if (nrow(stor) > 0 && !all(is.na(stor$Criteria))) {
   ggplot(stor, aes(x = group, y = value, fill = Criteria)) +
     geom_bar(stat = "identity", position = "dodge", color = "black") + 
     labs(title = "Voting for selection criteria of new varieties at post-harvest stage", 
@@ -204,10 +196,10 @@ if (nrow(stor) > 0  && !all(is.na(stor$Criteria)) ) {
 }
 ```
 
-`r if (nrow(stor) > 0  && !all(is.na(stor$Criteria)) ) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
+`r if (nrow(stor) > 0 && !all(is.na(stor$Criteria))) {"Below a percentage graph is shown. On the right panel the percentages are adjusted by gender, thus trying to reflect what would have been obtained if the number of men and women would be the same in the sample."}`
 
 ```{r echo = FALSE, fig.height = 5, fig.width = 8}
-if (nrow(stor) > 0  && !all(is.na(stor$Criteria)) ) {
+if (nrow(stor) > 0 && !all(is.na(stor$Criteria))) {
   ggplot(storp, aes(x = group, y = value, fill = Criteria)) +
     geom_bar(stat = "identity", position = "dodge", color = "black") + 
     labs(title = "Voting for selection criteria of new varieties at post-harvest stage",

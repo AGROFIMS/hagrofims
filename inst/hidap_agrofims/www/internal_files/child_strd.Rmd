@@ -1,0 +1,15 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r echo = FALSE, results = 'hide'}
+y <- dfr[, traits[i]]
+
+model <- agricolae::strip.plot(rep, rowf, colf, y)
+```
+
+## {{i+1}}.1. ANOVA
+
+```{r echo = FALSE}
+model$ANOVA
+```

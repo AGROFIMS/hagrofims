@@ -76,8 +76,9 @@ library(qrencoder)
 library(fbglobal)
 ####
 library(geohash)
-
-
+library(fbanalysis)
+library(pepa)
+library(st4gi)
 
 # Llaves para encriptar las cookies: utilizado en el Remember me
 privKey <- PKI.load.key(file="test.key")

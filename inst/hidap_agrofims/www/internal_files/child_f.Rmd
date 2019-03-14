@@ -1,0 +1,106 @@
+`r i = {{i}}`
+
+```{r echo = FALSE}
+
+# Check design
+
+lc <- ck.f(traits[i], factors, rep, dfr)
+
+# Fit a model for assumptions plots
+
+expr <- paste(traits[i], '~', factors[1])
+for (j in 2:lc$nf)
+  expr <- paste(expr, '*', factors[j])
+
+if (is.null(rep))
+  ff <- as.formula(expr)
+
+if (!is.null(rep)) {
+  expr <- paste(expr, '+', rep)
+  ff <- as.formula(expr)
+}
+
+model <- aov(ff, dfr)
+
+# Estimate missing values
+
+trait.est <- paste0(traits[i], ".est")
+
+if (lc$nmis > 0) {
+  dfr[, trait.est] <- mve.f(traits[i], factors, rep, dfr, maxp)[, trait.est]
+} else {
+  dfr[, trait.est] <- dfr[, traits[i]]
+}
+
+# Get anova table with estimated missing values
+
+at <- suppressWarnings(aov.f(traits[i], factors, rep, dfr, maxp))
+
+# CV
+
+rr <- dim(at)[1]
+cv <- (at[rr, 3])^0.5 / mean(dfr[, trait.est]) * 100
+
+```
+    
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+`r if (lc$nmis == 0) {"There are no missing values for this trait; the design is balanced."}`
+
+`r if (lc$nmis > 0) paste0("There are some missing values (", format(lc$pmis * 100, digits = 3), "%) and they have been estimated for the descriptive statistics and ANOVA.")`
+
+## {{i+1}}.1. Descriptive statistics
+
+### {{i+1}}.1.1. Means by individual factor levels
+
+```{r echo = FALSE}
+
+for (j in 1:lc$nf)
+  print(tapply(dfr[, trait.est], dfr[, factors[j]], mean))
+
+```
+
+### {{i+1}}.1.2. Means by factor levels combinations
+
+```{r echo = FALSE}
+
+# Create expression for list of factors
+  
+lf.expr <- 'list(dfr[, factors[1]]'
+  
+for (j in 2:lc$nf)
+  lf.expr <- paste0(lf.expr, ', dfr[, factors[', j, ']]')
+  
+lf.expr <- paste0(lf.expr, ')')
+
+# Compute means over replications
+
+tapply(dfr[, trait.est], eval(parse(text = lf.expr)), mean)
+
+```
+
+## {{i+1}}.2. ANOVA
+
+### {{i+1}}.2.1. Checking assumptions
+
+As it was stated in section 1, it is supposed that the error has a normal distribution with the same variance for all the combinations among the levels of the factors. The following plots help to evaluate this assumptions:
+
+```{r echo = FALSE, fig.height = 5, fig.width = 10}
+
+par(mfrow = c(1, 2))
+suppressWarnings(plot(model, which = 1))
+suppressWarnings(plot(model, which = 2))
+
+```
+
+Funnel shapes for the first plot may suggest heterogeneity of variances while departures from the theoretical normal line are symptoms of lack of normality.
+
+### {{i+1}}.2.2. ANOVA table
+
+```{r echo = FALSE}
+
+at
+
+```
+
+The coefficient of variation for this experiment is `r format(cv, digits = 4)`%.

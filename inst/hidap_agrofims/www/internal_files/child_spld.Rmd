@@ -1,0 +1,19 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r echo = FALSE, results = 'hide'}
+y <- dfr[, traits[i]]
+
+if (is.null(sspf)) {
+  model <- agricolae::sp.plot(rep, mpf, spf, y)
+} else {
+  model <- agricolae::ssp.plot(rep, mpf, spf, sspf, y)
+}
+```
+
+## {{i+1}}.1. ANOVA
+
+```{r echo = FALSE}
+model$ANOVA
+```
