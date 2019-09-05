@@ -5,7 +5,6 @@
 
 #library(d3heatmap)
 library(shinysky)
-library(data.table)
 library(shinydashboard)
 library(doBy)
 library(tidyr)
@@ -13,7 +12,7 @@ library(DT)
 library(date)
 library(dplyr)
 library(openxlsx)
-
+library(data.table)
 library(leaflet)
 library(withr)
 library(dplyr)
@@ -84,7 +83,8 @@ library(st4gi)
 
 #fastmap
 library(fastmap)
-
+library(limSolve)
+library(rowr)
 
 # Llaves para encriptar las cookies: utilizado en el Remember me
 privKey <- PKI.load.key(file="test.key")
@@ -360,4 +360,4 @@ sv <- function(input, output,  session) ({
 
 })
 
-shinyApp(ui, sv)
+shinyApp(ui, sv, enableBookmarking = "url")
