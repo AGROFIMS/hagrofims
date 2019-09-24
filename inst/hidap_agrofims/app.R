@@ -80,11 +80,10 @@ library(pepa)
 library(st4gi)
 ##
 #library(shinyFeedback)
-
-#fastmap
 library(fastmap)
 library(limSolve)
 library(rowr)
+library(reticulate)
 
 # Llaves para encriptar las cookies: utilizado en el Remember me
 privKey <- PKI.load.key(file="test.key")
