@@ -104,29 +104,17 @@ ggplot(dsp, aes(x = group, y = value, fill = INSTN)) +
 ## 3.1. Men's votes
 
 ```{r echo = FALSE}
-ft <- with(dfr, friedman(REP, INSTN, Men, group = TRUE)) 
-ft$statistics
-ft$groups
-ft <- with(dfr, friedman(REP, INSTN, Men, group = FALSE)) 
-ft$comparison
+friedman.t('Men', 'INSTN', 'REP', dfr)
 ```
 
 ## 3.2. Women's votes
 
 ```{r echo = FALSE}
-ft <- with(dfr, friedman(REP, INSTN, Women, group = TRUE)) 
-ft$statistics
-ft$groups
-ft <- with(dfr, friedman(REP, INSTN, Women, group = FALSE)) 
-ft$comparison
+friedman.t('Women', 'INSTN', 'REP', dfr)
 ```
 
 ## 3.3. Total votes
 
 ```{r echo = FALSE}
-ft <- with(dfr, friedman(REP, INSTN, Global, group = TRUE)) 
-ft$statistics
-ft$groups
-ft <- with(dfr, friedman(REP, INSTN, Global, group = FALSE)) 
-ft$comparison
+friedman.t('Global', 'INSTN', 'REP', dfr)
 ```

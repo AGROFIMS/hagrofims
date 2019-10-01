@@ -30,6 +30,23 @@ at <- suppressWarnings(aov.rcbd(traits[i], trt, rep, dfr, maxp))
 
 cv <- (at[3, 3])^0.5 / mean(dfr[, trait.est]) * 100
 
+# ANOVA with subsampling
+
+show.anova.sub <- FALSE
+
+if (!is.null(eu))
+  if (sum(is.na(dfr2[, traits[i]])) == 0 & dim(dfr)[1] < dim(dfr2)[1]) {
+    model2 <- aov(dfr2[, traits[i]] ~ dfr2[, trt] + dfr2[, rep] + dfr2[, eu] %in% dfr2[, trt])
+    model2$terms[[2]] <- traits[i]
+    at2 <- anova(model2)
+    at2[1, 4] <- at2[1, 3] / at2[3, 3]
+    at2[2, 4] <- at2[2, 3] / at2[3, 3]
+    at2[1, 5] <- pf(at2[1, 4], at2[1, 1], at2[3, 1], lower.tail = FALSE)
+    at2[2, 5] <- pf(at2[2, 4], at2[2, 1], at2[3, 1], lower.tail = FALSE)
+    rownames(at2) <- c(trt, rep, "Exp. Error", "Sampling Error")
+    show.anova.sub <- TRUE
+  }
+
 ```
 
 ## {{i+1}}.1. ANOVA
@@ -47,6 +64,17 @@ at
 The coefficient of variation for this experiment is `r format(cv, digits = 4)`%.
 The p-value for `r trt.lab.s` is `r format(at[1, 5], digits = 4)`
 `r if(at[1, 5] < 0.05) {"which is significant at the 5% level."} else {"which is not significant at the 5% level."}`
+
+`r if(show.anova.sub) {"At the subsample level, the ANOVA table is:"}`
+
+```{r echo = FALSE}
+if (show.anova.sub)
+  at2
+```
+
+`r if(show.anova.sub) {if (at2[3, 5] > 0.05) {"The p-value for the experimental error is non significant which implies that plot to plot variation is low. Thus, fewer plots with more subsamples could be used."}}`
+
+`r if(show.anova.sub) {if (at2[3, 5] < 0.05) {"The p-value for the experimental error is significant which implies that plot to plot variation is high. Thus, more plots could be used."}}`
 
 ## {{i+1}}.2. Assumptions
 
@@ -70,8 +98,10 @@ Any trend in the residuals in the left plot would violate the assumption of inde
 
 ```{r echo = FALSE}
 
-if (at[1, 5] < 0.05)
-  agricolae::LSD.test(dfr[, trait.est], dfr[, trt], at[3, 1], at[3, 3])$groups
+if (at[1, 5] < 0.05) {
+  means <- dfr[, trait.est]
+  agricolae::LSD.test(means, dfr[, trt], at[3, 1], at[3, 3])$groups
+}
 
 ```
 
@@ -80,7 +110,7 @@ if (at[1, 5] < 0.05)
 ```{r echo = FALSE}
 
 if (at[1, 5] < 0.05)
-  agricolae::HSD.test(dfr[, trait.est], dfr[, trt], at[3, 1], at[3, 3])$groups
+  agricolae::HSD.test(means, dfr[, trt], at[3, 1], at[3, 3])$groups
 
 ```
 

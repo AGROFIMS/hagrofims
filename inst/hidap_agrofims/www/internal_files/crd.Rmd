@@ -20,8 +20,8 @@ params:
   traits: "no data"
   trt: "no data"
   trt.lab: "no data"
+  eu: "no data"
   dfr: "no data"
-  maxp: "no data"
   title: "no data"
   subtitle: "no data"
   author: "no data"
@@ -39,8 +39,15 @@ nct <- nchar(trt.lab)
 trt.lab.s <- paste0(trt.lab, "s")
 trt.lab.c <- paste0(toupper(substr(trt.lab, 1, 1)), substr(trt.lab, 2, nct))
 trt.lab.sc <- paste0(toupper(substr(trt.lab, 1, 1)), substr(trt.lab, 2, nct), "s")
+eu <- params$eu
 dfr <- params$dfr
-maxp <- params$maxp
+
+# Get means if subsamples
+
+if (!is.null(eu)) {
+  dfr2 <- dfr
+  dfr <- docomp("mean", traits, c(trt, eu), dfr = dfr)
+}
 
 # Check factors structure
 

@@ -8,6 +8,22 @@ model <- aov(dfr[, traits[i]] ~ dfr[, trt])
 model$terms[[2]] <- traits[i]
 at <- anova(model)
 rownames(at)[1] <- trt
+
+# ANOVA with subsampling
+
+show.anova.sub <- FALSE
+
+if (!is.null(eu))
+  if (dim(dfr)[1] < dim(dfr2)[1]) {
+    model2 <- aov(dfr2[, traits[i]] ~ dfr2[, trt] + dfr2[, eu] %in% dfr2[, trt])
+    model2$terms[[2]] <- traits[i]
+    at2 <- anova(model2)
+    at2[1, 4] <- at2[1, 3] / at2[2, 3]
+    at2[1, 5] <- pf(at2[1, 4], at2[1, 1], at2[2, 1], lower.tail = FALSE)
+    rownames(at2) <- c(trt, "Exp. Error", "Sampling Error")
+    show.anova.sub <- TRUE
+}
+  
 ```
 
 ## {{i+1}}.1. ANOVA
@@ -21,6 +37,17 @@ at
 The coefficient of variation for this experiment is `r format(agricolae::cv.model(model), digits = 4)`%.
 The p-value for `r trt.lab.s` is `r format(at[1, 5], digits = 4)`
 `r if(at[1, 5] < 0.05) {"which is significant at the 5% level."} else {"which is not significant at the 5% level."}`
+
+`r if(show.anova.sub) {"At the subsample level, the ANOVA table is:"}`
+
+```{r echo = FALSE}
+if (show.anova.sub)
+  at2
+```
+
+`r if(show.anova.sub) {if (at2[2, 5] > 0.05) {"The p-value for the experimental error is non significant which implies that plot to plot variation is low. Thus, fewer plots with more subsamples could be used."}}`
+
+`r if(show.anova.sub) {if (at2[2, 5] < 0.05) {"The p-value for the experimental error is significant which implies that plot to plot variation is high. Thus, more plots could be used."}}`
 
 ## {{i+1}}.2. Assumptions
 
@@ -36,14 +63,32 @@ Any trend in the residuals in the left plot would violate the assumption of inde
 
 ## {{i+1}}.3. `r trt.lab.c` means
 
-`r if (at[1, 5] < 0.05) {paste("Below are the sorted means for each", trt.lab, "with letters indicating if there are significant differences using the multiple comparisons method of Tukey at the 5% level.")} else {paste("The means of your", trt.lab.s, "are:")}`
+`r if (at[1, 5] < 0.05) {paste("Below are the sorted means for each", trt.lab, "with letters indicating if there are significant differences using the least significance difference method and the multiple comparisons method of Tukey, both at the 5% level.")} else {paste("Because the effect of", trt.lab.s, "was not significant in the ANOVA, multiple comparison tests are not presented. The means of your", trt.lab.s, "are:")}`
+
+`r if (at[1, 5] < 0.05) {paste0("### ", {{i+1}}, ".3.1. LSD test")}`
 
 ```{r echo = FALSE}
+
 if (at[1, 5] < 0.05) {
-  agricolae::HSD.test(dfr[, traits[i]], dfr[, trt], at[2, 1], at[2, 3])$groups
-} else {
-  tapply(dfr[, traits[i]], dfr[, trt], mean, na.rm = TRUE)
+  means <- dfr[, traits[i]]
+  agricolae::LSD.test(means, dfr[, trt], at[2, 1], at[2, 3])$groups
 }
+```
+
+`r if (at[1, 5] < 0.05) {paste0("### ", {{i+1}}, ".3.2. Tukey test")}`
+
+```{r echo = FALSE}
+
+if (at[1, 5] < 0.05)
+  agricolae::HSD.test(means, dfr[, trt], at[2, 1], at[2, 3])$groups
+
+```
+
+```{r echo = FALSE}
+
+if (at[1, 5] > 0.05)
+  tapply(dfr[, traits[i]], dfr[, trt], mean, na.rm = TRUE)
+
 ```
 
 `r if (lc$ng < 10) {paste0("It is always good to have some visualization of the data. Because the number of ", trt.lab.s, " in your experiment is not so big, we can plot the data for each ", trt.lab, ":")}`

@@ -1,0 +1,7 @@
+"SourceTraitId","TraitName","TraitLevel","TraitDataType","TraitAlias","TraitUnit","TraitValidation","TraitDescription","Barcode"
+"2","2:Maize_Ear_Moisture content_%","Plot","DECIMAL","Mai_Ear_Moist","%","RANGE(0.00 <= x <= 100.00)","Days after planting:90, 180",""
+"2","1:Maize_Ear_Moisture content_%","Plot","DECIMAL","Mai_Ear_Moist","%","RANGE(0.00 <= x <= 100.00)","Days after planting:90, 180",""
+"25","Amount_harvested_g","Plot","DECIMAL","Har_Amount","g","RANGE(0.00 <= x <= 100000.00)","",""
+"1","3:Maize_Grain_Fresh weight_g","Plot","DECIMAL","Mai_Gra_FreW","g","RANGE(0.00 <= x <= 100000.00)","Days after planting:90, 120, 180",""
+"1","2:Maize_Grain_Fresh weight_g","Plot","DECIMAL","Mai_Gra_FreW","g","RANGE(0.00 <= x <= 100000.00)","Days after planting",""
+"1","1:Maize_Grain_Fresh weight_g","Plot","DECIMAL","Mai_Gra_FreW","g","RANGE(0.00 <= x <= 100000.00)","Days after planting",""

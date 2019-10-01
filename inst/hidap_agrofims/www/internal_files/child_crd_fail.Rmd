@@ -8,9 +8,13 @@ lc <- ck.crd(traits[i], trt, dfr)
 
 `r if (lc$nrep == 1) {"There is only one replication. Analysis is not possible with one replication."}`
 
-`r if (lc$ng.0 > 0 & lc$nrep > 1) paste("There is at least one", trt.lab, "without data. The table below shows the frequencies of valid data for each", trt.lab, ". The analysis cannot be produced if there are", trt.lab.s, "without data.")`
+`r if (lc$ng == 1 & lc$nrep > 1) paste("There is only one ", trt.lab, ". There is nothing to compare.")`
+
+`r if (lc$ng == 2 & lc$nrep > 1) paste("There are only two ", trt.lab.s, ". Use a t-test to compare them.")`
+
+`r if (lc$ng.0 > 0 & lc$ng > 2 & lc$nrep > 1) paste0("There is at least one ", trt.lab, " without data. The table below shows the frequencies of valid data for each ", trt.lab, ". The analysis cannot be produced if there are ", trt.lab.s, " without data.")`
 
 ```{r echo = FALSE}
-if (lc$nrep > 1)
+if (lc$ng.0 > 0 & lc$ng > 2 & lc$nrep > 1)
   lc$tf
 ```

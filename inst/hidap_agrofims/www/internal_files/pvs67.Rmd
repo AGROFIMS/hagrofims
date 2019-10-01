@@ -103,29 +103,17 @@ factoextra::fviz_pca(princip, repel = TRUE,
 ## 3.1. Analysis for appearance
 
 ```{r echo = FALSE}
-ft <- with(dfr, friedman(PanelNo, INSTN, Appe, group = TRUE)) 
-ft$statistics
-ft$groups
-ft <- with(dfr, friedman(PanelNo, INSTN, Appe, group = FALSE)) 
-ft$comparison
+friedman.t('Appe', 'INSTN', 'PanelNo', dfr)
 ```
 
 ## 3.2. Analysis for taste
 
 ```{r echo = FALSE}
-ft <- with(dfr, friedman(PanelNo, INSTN, Tast, group = TRUE)) 
-ft$statistics
-ft$groups
-ft <- with(dfr, friedman(PanelNo, INSTN, Tast, group = FALSE)) 
-ft$comparison
+friedman.t('Tast', 'INSTN', 'PanelNo', dfr)
 ```
 
 ## 3.3. Analysis for texture
 
 ```{r echo = FALSE}
-ft <- with(dfr, friedman(PanelNo, INSTN, Text, group = TRUE)) 
-ft$statistics
-ft$groups
-ft <- with(dfr, friedman(PanelNo, INSTN, Text, group = FALSE)) 
-ft$comparison
+friedman.t('Text', 'INSTN', 'PanelNo', dfr)
 ```

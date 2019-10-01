@@ -367,8 +367,8 @@ observe({
                  menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
                  #menuSubItem("Manage fieldbook", tabName = "openFieldbook", icon = icon("angle-right")), --> old
                  ##
-                 menuSubItem("Manage fieldbooks", tabName = "uisessionagrofims", icon = icon("angle-right")),
-                 menuSubItem("KDSmart", tabName = "uimobileagrofims", icon = icon("angle-right"))
+                 menuSubItem("Manage session", tabName = "uisessionagrofims", icon = icon("angle-right")),
+                 menuSubItem("Manage fieldbook", tabName = "uimobileagrofims", icon = icon("angle-right"))
                  ##
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),
@@ -376,6 +376,7 @@ observe({
         menuItem("Statistical analysis", icon = icon("bar-chart"),
                  #menuSubItem("Single trial graph",tabName = "SingleChart", icon = icon("calculator")),
                  menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
                  menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
                  #menuSubItem("Genetic report", tabName = "geneticAnalysisReport", icon = icon("file-text-o"))
                  
@@ -467,6 +468,7 @@ observe({
             menuItem("Statistical analysis", icon = icon("bar-chart"),
                      #menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))
                      menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
+                     menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
                      menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
             ),
             menuItem("Documentation",  icon = icon("copy")
@@ -604,7 +606,8 @@ observeEvent(input$btCreateUser, {
   strCounS <- trimws(input$countrySelection)
 
   mydb = dbConnect(MySQL(), user=constUserDB, password=constPassDB, dbname=constDBName, host=constDBHost)
-  strQry <- paste("insert into users (username, password, fname, lname, organization, country) values('",strMail,"','",strPass,"','", strFName,"','",strLName,"','",strOrg, "','",strCounS, "')", sep ="")
+  strQry <- paste("insert into users (username, password, fname, lname, organization, country, available) values('",strMail,"','",strPass,"','", strFName,"','",strLName,"','",strOrg, "','",strCounS, "'," , 1, ")", sep ="")
+  #strQry <- paste("insert into users (username, password, fname, lname, organization, country) values('",strMail,"','",strPass,"','", strFName,"','",strLName,"','",strOrg, "','",strCounS,"')", sep ="")
   qryUpdate = dbSendQuery(mydb, strQry)
 
 
@@ -615,6 +618,8 @@ observeEvent(input$btCreateUser, {
 
   var <- POST("https://research.cip.cgiar.org/gtdms/hidap/script/agrofims/createNewUser.php", body=params)
   code <- content(var, "text")
+  print(var)
+  print(code)
   if (code == "500"){
     strQry <- paste("delete from users where username = '", strMail, "'", sep ="")
     qryDel = dbSendQuery(mydb, strQry)
