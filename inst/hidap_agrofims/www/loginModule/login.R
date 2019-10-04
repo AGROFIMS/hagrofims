@@ -364,11 +364,11 @@ observe({
                  menuSubItem("List sites", tabName = "listSitesAgrofims", icon = icon("angle-right"))
         ),
         menuItem("Fieldbook", icon = icon("book"),
-                 menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Create", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
                  #menuSubItem("Manage fieldbook", tabName = "openFieldbook", icon = icon("angle-right")), --> old
                  ##
-                 menuSubItem("Manage session", tabName = "uisessionagrofims", icon = icon("angle-right")),
-                 menuSubItem("Manage fieldbook", tabName = "uimobileagrofims", icon = icon("angle-right"))
+                 menuSubItem("Manage", tabName = "uisessionagrofims", icon = icon("angle-right")),
+                 menuSubItem("Export", tabName = "uimobileagrofims", icon = icon("angle-right"))
                  ##
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),
@@ -460,7 +460,7 @@ observe({
             div(img(src="images/logo_agrofims_v3.jpg"), style="text-align: center;"),
             br(),
             menuItem("Fieldbook", icon = icon("book"),
-                     menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right"))#,
+                     menuSubItem("Create", tabName = "newFieldbookAgrofims", icon = icon("angle-right"))#,
 
                      #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("file-o")),
                      #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))
