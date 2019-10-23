@@ -143,7 +143,7 @@ ui <- dashboardPage(
     ),
     
     tags$head(
-      tags$script(
+  
         "<script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-150744979-1\"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -151,9 +151,10 @@ ui <- dashboardPage(
           gtag('js', new Date());
         
           gtag('config', 'UA-150744979-1');
+          ga('send', 'pageview');
         </script>
         "
-      )
+      
     ),
     
     useShinyjs(),
