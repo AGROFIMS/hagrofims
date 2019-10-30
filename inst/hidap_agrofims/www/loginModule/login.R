@@ -623,10 +623,10 @@ observeEvent(input$btCreateUser, {
   if (code == "500"){
     strQry <- paste("delete from users where username = '", strMail, "'", sep ="")
     qryDel = dbSendQuery(mydb, strQry)
-    showModal(modalDialog(title = "HiDAP-AGROFIMS", HTML("Problems creating account, please try again.")))
+    showModal(modalDialog(title = "AGROFIMS", HTML("Problems creating account, please try again.")))
   }
   else if (code == "200") {
-    showModal(modalDialog(title = "HiDAP-AGROFIMS", HTML("<h4>Yout account was successfully created, a confirmation message will be sent soon. Check your email to activate your account.</h4> <br> <h5>If you haven't received a message, please check your spam and add us to your contacts.</h5>")))
+    showModal(modalDialog(title = "AGROFIMS", HTML("<h3>Your account has been successfully created.</h3> <br> <h3>You can now log in and start using AgroFIMS.</h3>"), footer = actionButton("confirm", "OK")))
     output$uiLogin <- renderUI({
 
       if (USER$Logged == FALSE) {

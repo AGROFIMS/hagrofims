@@ -2,10 +2,12 @@ Package: hagrofims
 Title: Shiny App main application for the Agronomy Field Information Management System (AgroFIMS)
 Version: 0.0.1
 Authors@R: c( 
-          person("Ivan O.", "Perez Masias", , "ivanpe834@gmail.com", "aut"),
-          person("Omar E.", "Benites Alfaro", , email = "obacc07@gmail.com",role ="aut"),
-          person("Raul", "Arias Levano", , "rarias@cgiar.org", "aut"),
-          person("Raul", "Eyzaguirre Perez", , "reyzaguirre@cgiar.org", "aut"),
+          person("Omar E.", "Benites-Alfaro", , email = "obacc07@gmail.com",role ="aut"),
+          person("Ivan O.", "Perez-Masias", , "ivanpe834@gmail.com", "aut"),
+          person("Raul", "Arias-Levano", , "rarias@cgiar.org", "aut"),
+          person("Raul", "Eyzaguirre-Perez", , "reyzaguirre@cgiar.org", "aut"),
+          person("Jose.", "Medina-Donayre", , "j.medina@cgiar.org", "aut"),
+          person("Celine", "Aubert", , "c.aubert@cgiar.org", "aut"),
           person("Medha", "Devare", , "mdevare@cgiar.org", "aut"),
           person("CIP-RIU", "Research Informatic", , "cip-riu@cgiar.org", role = c("aut", "cre"), comment = "Partial copyright holder of the R code"),
           person("International Potato Center (CIP)", role = "cph", comment = "copyright holder of the R code"),

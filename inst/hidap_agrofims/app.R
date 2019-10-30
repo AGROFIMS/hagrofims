@@ -1,5 +1,7 @@
 #### Librerias
 
+#options( warn = -1 )
+
 #TODO: the complete list of packages is listed in list_packages_agrofims
 
 #library(d3heatmap)
