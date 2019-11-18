@@ -25,11 +25,11 @@ output$uiChangePass <- renderUI({
         status = "primary", solidHeader = TRUE,
         collapsible = TRUE, width = 12,
         column(width = 6,
-          h3("Password Change"),
-          passwordInput("chngPassCurrent", "Current password: "),
-          passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters): "),
-          passwordInput("chngPassNewRep", "Re-enter new password: "),
-          actionButton("btChangePass", "Update")
+          #h3("Password Change"),
+          passwordInput("chngPassCurrent", "Current password "),
+          passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters) "),
+          passwordInput("chngPassNewRep", "Confirm new password "),
+          actionButton("btChangePass", "Update password")
         )#end column
       ) #end box
     )#end fluidrow
@@ -69,7 +69,7 @@ output$uiRegister <- renderUI({
             # actionLink("ForgotPass", "Forgot your password?"),br(),
             a( "Forgot your password?", href="#shiny-tab-forgotPass","data-toggle"="tab"),
             br(),
-            "Already have an account? " , actionLink("btLogIn2", "Log in "), " instead."
+            #"Already have an account? " , actionLink("btLogIn2", "Log in "), " instead."
         ) #end column
       )#end box
     )#end
@@ -88,16 +88,17 @@ output$uiForgotPass <- renderUI({
         status = "primary", solidHeader = TRUE,
         collapsible = TRUE, width = 12,
         column(width = 6,
-          h3("Forgot your password?"),
+          #h3("Forgot your password?"),
           # br(),
-          p("Write down your email (username) you used to create your account and a password will be sent there."),
-          textInput("userMailReset", "Email (username):"),
+          p("Enter your email adress and we will send you a new password."),
+          #textInput("userMailReset", "Email (username):"),
+          textInput("userMailReset", ""),
           br(),
           actionButton("ResetPass", "Reset my password"),
           br(), br(),
           "Not a user yet? ", a( "Create an account.", href="#shiny-tab-register","data-toggle"="tab"),
           br(),
-          "Already have an account? " , actionLink("btLogIn3", "Log in "), " instead."
+          #"Already have an account? " , actionLink("btLogIn3", "Log in "), " instead."
         )#end column
       )#end box
     )#end fluidrow

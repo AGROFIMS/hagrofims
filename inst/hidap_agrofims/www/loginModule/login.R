@@ -360,8 +360,8 @@ observe({
         # menuItem("Drive", tabName = "driveNet", icon = icon("archive")),
        # menuItem("Site information", tabName = "trialSite", icon = icon("location-arrow")),
         menuItem("Site", icon = icon("location-arrow"),
-                 menuSubItem("Create site", tabName = "newSiteAgrofims", icon = icon("angle-right")),
-                 menuSubItem("List sites", tabName = "listSitesAgrofims", icon = icon("angle-right"))
+                 menuSubItem("Create", tabName = "newSiteAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Manage", tabName = "listSitesAgrofims", icon = icon("angle-right"))
         ),
         menuItem("Fieldbook", icon = icon("book"),
                  menuSubItem("Create", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
@@ -516,16 +516,16 @@ observeEvent(input$btChangePass, {
 
       var <- POST("https://research.cip.cgiar.org/gtdms/hidap/script/agrofims/emailPasswordChanged.php", body=params)
       code <- content(var, "text")
-      output$mssgChngPass <- renderText("<font color='blue'><h3>Your password was successfully changed</h3></font>")
+      output$mssgChngPass <- renderText("<font color='blue'><h3>Your password has been successfully changed</h3></font>")
 
       output$uiChangePass <- renderUI({
         if (USER$Logged == TRUE) {
           wellPanel(
-            h3("Password Change"),
-            passwordInput("chngPassCurrent", "Current password: "),
+            #h3("Password Change"),
+            passwordInput("chngPassCurrent", "Current password "),
             passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters) "),
-            passwordInput("chngPassNewRep", "Re-enter new password: "),
-            actionButton("btChangePass", "Update")
+            passwordInput("chngPassNewRep", "Confirm new password "),
+            actionButton("btChangePass", "Update password")
           )
         }
       })
@@ -574,7 +574,7 @@ observeEvent(input$ResetPass,{
     
     if (code == "200"){
       # showModal(modalDialog(title = "HiDAP-AGROFIMS", HTML("Succesfully reset")))
-      output$pass <- renderText("<h4>Password reset successful. An email has been sent with a new password </h4>")
+      output$pass <- renderText("<h4>An email has been sent to your email with a new password. If it doesn't appear within a few minutes, check your spam folder. </h4>")
       updateTextInput(session,"userMailReset", value="" )
     }
     else{
@@ -626,7 +626,7 @@ observeEvent(input$btCreateUser, {
     showModal(modalDialog(title = "AGROFIMS", HTML("Problems creating account, please try again.")))
   }
   else if (code == "200") {
-    showModal(modalDialog(title = "AGROFIMS", HTML("<h3>Your account has been successfully created.</h3> <br> <h3>You can now log in and start using AgroFIMS.</h3>"), footer = actionButton("confirm", "OK")))
+    showModal(modalDialog(title = "AGROFIMS", HTML("<h4>Your account has been successfully created.</h4> <h4>You can now log in and start using AgroFIMS.</h4>"), footer = modalButton("Ok")))
     output$uiLogin <- renderUI({
 
       if (USER$Logged == FALSE) {
