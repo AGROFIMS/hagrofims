@@ -97,7 +97,7 @@ output$uiForgotPass <- renderUI({
           actionButton("ResetPass", "Reset my password"),
           br(), br(),
           "Not a user yet? ", a( "Create an account.", href="#shiny-tab-register","data-toggle"="tab"),
-          br(),
+          br()
           #"Already have an account? " , actionLink("btLogIn3", "Log in "), " instead."
         )#end column
       )#end box

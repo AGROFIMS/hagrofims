@@ -1,23 +1,47 @@
 #### Librerias
 
-#options( warn = -1 )
-
+#Remove warnings messages
+suppressWarnings("DT")
+suppressMessages("shiny")
+suppressWarnings("dplyr")
+suppressWarnings("plyr")
+suppressWarnings("stats")
+suppressWarnings("base")
+suppressWarnings("shinydashboard")
+suppressWarnings("purrr")
+suppressWarnings("foreign")
+suppressWarnings("agricolae")
+suppressWarnings("GGally")
+suppressWarnings("shinyjs")
+suppressWarnings("lubridate")
+suppressWarnings("shinyalert")
+suppressWarnings("ggmap")
+suppressWarnings("magrittr")
+suppressWarnings("maps")
+suppressWarnings("raster")
+suppressWarnings("base64enc")
+suppressWarnings("limSolve")
+suppressWarnings("rowr")
+suppressWarnings("aganalysis")
+suppressMessages("rgeos")
+suppressMessages("shinyjs")
+suppressMessages("ggmap")
 #TODO: the complete list of packages is listed in list_packages_agrofims
 
 #library(d3heatmap)
-library(shinysky)
-library(shinydashboard)
+library(shiny, warn.conflicts=FALSE)
+library(shinysky, warn.conflicts=FALSE)
+library(shinydashboard, warn.conflicts=FALSE)
 library(doBy)
-library(tidyr)
-library(DT)
+library(tidyr, warn.conflicts=FALSE)
+library(DT, warn.conflicts=FALSE)
 library(date)
-library(dplyr)
-library(openxlsx)
-library(data.table)
+library(dplyr, warn.conflicts=FALSE)
+library(openxlsx, warn.conflicts=FALSE)
+library(data.table, warn.conflicts=FALSE)
 library(leaflet)
 library(withr)
-library(dplyr)
-library(purrr)
+library(purrr, warn.conflicts=FALSE)
 library(tibble)
 library(knitr)
 library(readxl)
@@ -25,7 +49,7 @@ library(countrycode)
 library(DBI)
 library(RMySQL)
 library(spsurvey)
-library(foreign)
+library(foreign, warn.conflicts=FALSE)
 library(tools)
 library(stringr)
 library(rprojroot)
@@ -34,16 +58,15 @@ library(ggrepel)
 library(tibble)
 library(stringi)
 library(digest)
-library(shiny)
 library(datasets)
 
 ### Librerias de CIP-RIU (GITHUB) que cargan por defecto:
 library(shinyTree)
-library(agricolae)
+library(agricolae, warn.conflicts=FALSE)
 
 library(agdesign)
 library(rhandsontable)
-library(shinyjs)
+library(shinyjs, warn.conflicts=FALSE)
 library(st4gi)
 library(fbsites)
 library(shinyBS)
@@ -54,18 +77,18 @@ library(rlist)
 library(httr) # library for http requests, used to make POST request to the server
 library(bsplus) # hidapNetwork
 library(htmltools) # hidapnetwork
-library(lubridate)
-library(shinyalert) # new
+library(lubridate, warn.conflicts=FALSE)
+library(shinyalert, warn.conflicts=FALSE) # new
 
 ### for maps rendering
 library(ggmap) # devtools::install_github("dkahle/ggmap") ## use this version of ggmap
 library(leaflet)
-library(magrittr)
-library(maps)
+library(magrittr, warn.conflicts=FALSE)
+library(maps, warn.conflicts=FALSE)
 library(maptools)
-library(raster)
+library(raster, warn.conflicts=FALSE)
 library(rgeos)
-library(sp)
+library(sp, warn.conflicts=FALSE)
 
 ### libraries for the "remember me" 
 library(shinyStore) # install_github("trestletech/shinyStore")
@@ -76,15 +99,17 @@ library(qrencoder)
 library(fbglobal)
 ####
 library(geohash)
-library(fbanalysis)
+#library(fbanalysis)
 library(pepa)
 library(st4gi)
 ##
 #library(shinyFeedback)
-library(fastmap)
-library(limSolve)
-library(rowr)
-library(reticulate)
+library(fastmap, warn.conflicts=FALSE)
+library(limSolve, warn.conflicts=FALSE)
+library(rowr, warn.conflicts=FALSE)
+library(reticulate, warn.conflicts=FALSE)
+library(aganalysis, warn.conflicts=FALSE)
+
 
 # Llaves para encriptar las cookies: utilizado en el Remember me
 privKey <- PKI.load.key(file="test.key")
@@ -220,8 +245,10 @@ ui <- dashboardPage(
       agdesign::ui_fieldbook_agrofims(name = "newFieldbookAgrofims"),
       #agsession::ui_session(name = "openFieldbook"),
       agdesign::ui_mobile_agrofims(name  = "uimobileagrofims"),
-      fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
-      fbanalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
+      #fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
+      aganalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
+      aganalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
+      #fbanalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
       agdesign::ui_session_agrofims(name = "uisessionagrofims")
     ),
 
@@ -312,8 +339,10 @@ sv <- function(input, output,  session) ({
   #agdesign::server_session_agrofims(input, output, session, values)
   agdesign::server_mobile_agrofims(input, output, session, values)
   # fbopenbooks::fbopenbooks_server(input, output, session, values)
-  fbanalysis::single_hdagrofims_server(input, output, session, values)
-  fbanalysis::trend_hdagrofims_server(input, output, session, values = values)
+  #fbanalysis::single_hdagrofims_server(input, output, session, values)
+  aganalysis::single_hdagrofims_server(input, output, session, values)
+  aganalysis::trend_hdagrofims_server(input, output, session, values = values)
+  #fbanalysis::trend_hdagrofims_server(input, output, session, values = values)
   # fbanalysis::dtr_server(input, output, session, values)
   #
   # fbanalysis::met_server(input, output, session, values)
