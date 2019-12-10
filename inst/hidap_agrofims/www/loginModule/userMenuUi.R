@@ -27,7 +27,7 @@ output$uiChangePass <- renderUI({
         column(width = 6,
           #h3("Password Change"),
           passwordInput("chngPassCurrent", "Current password "),
-          passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters) "),
+          passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters)  "),
           passwordInput("chngPassNewRep", "Confirm new password "),
           actionButton("btChangePass", "Update password")
         )#end column
