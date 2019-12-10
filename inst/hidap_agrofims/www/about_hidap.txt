@@ -10,5 +10,5 @@
 </ul>
 
 <p>
-Funding for AgroFIMS was provided by the Bill and Melinda Gates Foundation’s Open Access, Open Data Initiative, and the <a href="http://bigdata.cgiar.org/"> CGIAR Big Data Platform.</a>
+Funding for AgroFIMS was provided by the Bill and Melinda Gates Foundation’s Open Access, Open Data Initiative, and the <a href="http://bigdata.cgiar.org/"> CGIAR Big Data Platform.</a> AgroFIMS is under <a href="https://github.com/AGROFIMS/hagrofims/blob/master/LICENSE" target="_blank">GPL license</a>
 </p>
