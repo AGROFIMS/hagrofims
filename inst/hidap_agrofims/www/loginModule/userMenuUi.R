@@ -90,7 +90,7 @@ output$uiForgotPass <- renderUI({
         column(width = 6,
           #h3("Forgot your password?"),
           # br(),
-          p("Enter your email adress and we will send you a new password."),
+          p("Enter your email address and we will send you a new password."),
           #textInput("userMailReset", "Email (username):"),
           textInput("userMailReset", ""),
           br(),

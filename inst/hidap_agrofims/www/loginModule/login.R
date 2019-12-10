@@ -574,7 +574,7 @@ observeEvent(input$ResetPass,{
     
     if (code == "200"){
       # showModal(modalDialog(title = "HiDAP-AGROFIMS", HTML("Succesfully reset")))
-      output$pass <- renderText("<h4>An email has been sent to your email with a new password. If it doesn't appear within a few minutes, check your spam folder. </h4>")
+      output$pass <- renderText("<h4>An email has been sent to your email address with a new password. If it doesn't appear within a few minutes, check your spam folder. </h4>")
       updateTextInput(session,"userMailReset", value="" )
     }
     else{
