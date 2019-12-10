@@ -63,7 +63,7 @@ output$uiRegister <- renderUI({
             textInput("newUsrFName", "* Name: "),
             textInput("newUsrLName", "* Lastname: "),
             textInput("newUsrOrg", "* Organization: "),
-            selectizeInput("countrySelection", choices = listCountries, label="* Country", options = list(maxOptions = 5 , selected = NULL,  placeholder = 'Select Country')),
+            selectizeInput("countrySelection", choices = listCountries, label="* Country", options = list(selected = NULL,  placeholder = 'Select Country')),
             actionButton("btCreateUser", "Create"),
             br(), br(),
             # actionLink("ForgotPass", "Forgot your password?"),br(),

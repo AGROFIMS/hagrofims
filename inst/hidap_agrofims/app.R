@@ -258,12 +258,14 @@ ui <- dashboardPage(
           a(
             list(
               #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
-              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy")
+              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy"),
+              tags$div(id = "test2", "agrofims@cgiar.org ")
             ),
             href="#"
           ),
-          tags$style("footer {background-color: #222d32;height: 40px;position: absolute;bottom: 0;width: 100%;}"),
-          tags$style("#test {color: #fff;padding-top: 9px;}")
+          tags$style("footer {background-color: #222d32;height: 40px;position: absolute;bottom: 0;width: 84%;}"),
+          tags$style("#test {color: #fff;padding-top: 9px;float:left}"),
+          tags$style("#test2 {color: #fff;padding-top: 9px;text-align:right}")
         )
       )
     )
