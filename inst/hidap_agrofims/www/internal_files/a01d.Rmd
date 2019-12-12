@@ -22,26 +22,43 @@ params:
   rep: "no data"
   block: "no data"
   k: "no data"
-  data: "no data"
+  dfr: "no data"
   title: "no data"
   subtitle: "no data"
   author: "no data"
 ---
 
-```{r, echo = FALSE}
+```{r echo = FALSE}
 library(knitr)
+
+# Pass arguments
 
 traits <- params$traits
 geno <- params$geno
 rep <- params$rep
 block <- params$block
 k <- params$k
-data <- params$data
+dfr <- params$dfr
+
+# Check factors structure
+
+out <- ck.fs(c(geno, block), rep, dfr)
+ng <- out$nl[[1]]
+nrep <- out$nrep
+nib <- out$nl[[2]]
+dfr <- out$dfr
+nmis.fac <- out$nmis.fac
+
+# Define internal variables
+
+block <- dfr[, block]
+geno <- dfr[, geno]
+rep <- dfr[, rep]
 ```
 
 # 1. Model specification and data description
 
-There are data for `r nlevels(as.factor(data[, geno]))` genotypes tested using an alpha (0,1) design with `r nlevels(as.factor(data[, rep]))` replications and `r nlevels(as.factor(data[, block]))` incomplete blocks. In this design each replication is a complete block for the genotypes that is splitted in several incomplete blocks. The statistical model is
+There are data for `r ng` genotypes tested using an alpha (0,1) design with `r nrep` replications and `r nib` incomplete blocks. In this design each replication is a complete block for the genotypes that is splitted in several incomplete blocks. The statistical model is
 $$
 y_{ijk} = \mu + \tau_i + \gamma_j + \rho_{k(j)} + \epsilon_{ijk}
 $$
@@ -56,7 +73,10 @@ where
 
 In this model we assume that the errors are independent and have a normal distribution with common variance, that is, $\epsilon_{ijk} \sim N(0,\sigma_{\epsilon}^2)$.
 
-```{r, include = FALSE}
+`r if (nmis.fac == 1) paste("Note: There is", nmis.fac, "row with missing values for classifications factors. This row has been deleted.")`
+`r if (nmis.fac > 1) paste("Note: There are", nmis.fac, "rows with missing values for classifications factors. These rows have been deleted.")`
+
+```{r include = FALSE}
 out <- NULL
 for (i in 1:length(traits))
   out <- c(out, knit_expand('child_a01d.Rmd'))

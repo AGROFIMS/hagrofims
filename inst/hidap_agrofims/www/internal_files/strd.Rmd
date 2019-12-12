@@ -1,0 +1,83 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    highlight: "tango"
+    toc: true
+    toc_depth: 3
+params: 
+  traits: "no data"
+  rowf: "no data"
+  colf: "no data"
+  rep: "no data"
+  dfr: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo = FALSE}
+library(knitr)
+
+# Pass arguments
+
+traits <- params$traits
+rowf <- params$rowf
+colf <- params$colf
+rep <- params$rep
+dfr <- params$dfr
+
+# Check factors structure
+
+out <- ck.fs(c(rowf, colf), rep, dfr)
+nrf <- out$nl[[1]]
+ncf <- out$nl[[2]]
+nrep <- out$nrep
+dfr <- out$dfr
+nmis.fac <- out$nmis.fac
+
+# Define internal variables
+
+rowf <- dfr[, rowf]
+colf <- dfr[, colf]
+rep <- dfr[, rep]
+```
+
+# 1. Model specification and data description
+
+There are data for a strip plot design with `r nrf` level for the row factor, `r ncf` levels for the column factor, and `r nrep` replications. In this design each replication is a complete block for the levels of each factor. The statistical model is
+$$
+y_{ijk} = \mu + \alpha_i + \beta_j + \gamma_k + (\alpha\beta)_{ij} + (\alpha\gamma)_{ik} + (\beta\gamma)_{jk} + (\alpha\beta\gamma)_{ijk}
+$$
+where
+
+* $y_{ijk}$ is the observed response with level $i$ of the row factor, level $j$ of the column factor, and replication $k$.
+* $\mu$ is the mean response over all levels of factors and replications.
+* $\alpha_i$ is the effect for level $i$ of the row factor.
+* $\beta_j$ is the effect for level $j$ of the column factor.
+* $\gamma_k$ is the effect of replication $k$.
+* $(\alpha\beta)_{ij}$, $(\alpha\gamma)_{ik}$, $(\beta\gamma)_{jk}$, and $(\alpha\beta\gamma)_{ijk}$ the corresponding interactions.
+
+In this model $(\alpha\gamma)_{ik}$, $(\beta\gamma)_{jk}$, and $(\alpha\beta\gamma)_{ijk}$ are the errors used to test the row factor, the column factor, and the row and column factors interaction respectively.
+
+`r if (nmis.fac == 1) paste("Note: There is", nmis.fac, "data row with missing values for classifications factors. This row has been deleted.")`
+`r if (nmis.fac > 1) paste("Note: There are", nmis.fac, "data rows with missing values for classifications factors. These rows have been deleted.")`
+
+```{r include = FALSE}
+out <- NULL
+for (i in 1:length(traits))
+  out <- c(out, knit_expand('child_strd.Rmd'))
+```
+
+`r paste(knit(text = out), collapse = '\n')`

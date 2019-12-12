@@ -2,41 +2,40 @@
 
 # {{i}}. Analysis for trait `r traits[i]`
 
-```{r, echo = FALSE}
-model <- aov.lxt(traits[i], lines, testers, rep, data)
+```{r echo = FALSE}
+model <- aov.lxt(traits[i], line, tester, rep, dfr)
 ```
 
 #### GCA effects for lines plot
 
-```{r, echo = FALSE}
-barplot(model$GCA.le[, 1], col = "lightblue", las = 2, cex.names = 0.8,
-        ylab = "GCA effects")
+```{r echo = FALSE}
+barplot(model$GCA.le[, 1], col = "lightblue", las = 2, cex.names = 0.8, ylab = "GCA effects")
 ```
 
 #### Mid parent heterosis increment plot
 
-```{r, echo = FALSE}
+```{r echo = FALSE}
 # Means
 
-means <- docomp('mean', traits[i], c(lines, testers), data = data)
-hhh <- means[!is.na(means[, lines]) & !is.na(means[, testers]), ]
-line.means <- means[!is.na(means[, lines]) & is.na(means[, testers]), ]
-test.means <- means[is.na(means[, lines]) & !is.na(means[, testers]), ]
+means <- docomp('mean', traits[i], c(line, tester), dfr = dfr)
+hhh <- means[!is.na(means[, line]) & !is.na(means[, tester]), ]
+line.means <- means[!is.na(means[, line]) & is.na(means[, tester]), ]
+test.means <- means[is.na(means[, line]) & !is.na(means[, tester]), ]
 
 # Colnames
 
-colnames(line.means)[3] <- paste(lines, 'means', sep = "_")
-colnames(test.means)[3] <- paste(testers, 'means', sep = "_")
+colnames(line.means)[3] <- paste(line, 'means', sep = "_")
+colnames(test.means)[3] <- paste(tester, 'means', sep = "_")
 
 # Merge data frames
 
-hhh <- merge(hhh, line.means[, -2], by = lines)
-hhh <- merge(hhh, test.means[, -1], by = testers)
+hhh <- merge(hhh, line.means[, -2], by = line)
+hhh <- merge(hhh, test.means[, -1], by = tester)
 hhh$het <- hhh[, 3] / (hhh[, 4] + hhh[, 5]) * 200 - 100
 
 # Graph
 
 barplot(hhh$het, col = "lightblue", las = 2, cex.names = 0.8,
         ylab = "Heterosis increment (%)",
-        names.arg = paste(hhh[, lines], hhh[, testers], sep = "-"))
+        names.arg = paste(hhh[, line], hhh[, tester], sep = "-"))
 ```

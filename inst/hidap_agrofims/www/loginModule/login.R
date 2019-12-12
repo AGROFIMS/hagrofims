@@ -5,29 +5,40 @@ listCountries <- c('Aruba','Afghanistan','Angola','Anguilla','Albania','Andorra'
 )
 
 # modal to show when app is launched
-showModal(modalDialog(
-  title = HTML("
-          <div id='modaltitle'><center>WELCOME to HIDAP AgroFIMS</center></div>
-          <div><p><center><img src='img/BIG-DATA.png' id='modalimg'></center></p></div>
-          "),
-  includeHTML("www/loginModule/modaltext.txt"),
-  fluidRow(
-    column(
-      12, br(),
-      column(6, align = "center", fluidRow(actionButton("closeModal", "Continue", class = "btn-primary"))),
-      column(6, align = "center", fluidRow(actionButton("btLoginModal", "Log in")))
-    )
-  ),
-  easyClose = FALSE,
-  footer = NULL
-  # footer = tagList(
-  #   # modalButton("Continue with Open Version"),
-  #   div(style="display:inline-block",
-  #   #actionButton("closeModal", "Continue", style="color: #fff; background-color: #35b872; font-size:170%;", width = 150),
-  #   actionButton("closeModal", "Continue", style="color: #fff;font-size:150%;", class = "btn-primary", width = 150),
-  #   actionButton("btLoginModal", "Log in", style=" font-size:150%;", width = 150), style="float:right;text-align:center")
-  # )
-))
+observe({
+# print(USER$Logged)
+# print(USER$fname)
+delay(500,
+if (is.null(USER$fname)) {
+  showModal(modalDialog(
+    title = HTML("
+            <div id='modaltitle'><center>WELCOME to HIDAP AgroFIMS</center></div>
+            <div><p><center><img src='img/BIG-DATA.png' id='modalimg'></center></p></div>
+            "),
+    includeHTML("www/loginModule/modaltext.txt"),
+    fluidRow(
+      column(
+        12, br(),
+        column(6, align = "center", fluidRow(actionButton("closeModal", "Continue", class = "btn-primary"))),
+        column(6, align = "center", fluidRow(actionButton("btLoginModal", "Log in")))
+      )
+    ),
+    easyClose = FALSE,
+    footer = NULL
+    # footer = tagList(
+    #   # modalButton("Continue with Open Version"),
+    #   div(style="display:inline-block",
+    #   #actionButton("closeModal", "Continue", style="color: #fff; background-color: #35b872; font-size:170%;", width = 150),
+    #   actionButton("closeModal", "Continue", style="color: #fff;font-size:150%;", class = "btn-primary", width = 150),
+    #   actionButton("btLoginModal", "Log in", style=" font-size:150%;", width = 150), style="float:right;text-align:center")
+    # )
+  ))  
+}
+)
+})
+
+
+
 
 # modal to show to user to login or register
 observeEvent(input$btLoginModal, {
@@ -347,17 +358,26 @@ observe({
         div(img(src="images/logo_agrofims_v3.jpg"), style="text-align: center;"),
         br(),
         # menuItem("Drive", tabName = "driveNet", icon = icon("archive")),
-        menuItem("Site information", tabName = "trialSite", icon = icon("location-arrow")),
+       # menuItem("Site information", tabName = "trialSite", icon = icon("location-arrow")),
+        menuItem("Site", icon = icon("location-arrow"),
+                 menuSubItem("Create", tabName = "newSiteAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Manage", tabName = "listSitesAgrofims", icon = icon("angle-right"))
+        ),
         menuItem("Fieldbook", icon = icon("book"),
-                 menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
-                 menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("angle-right"))
-                 #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("file-o")),
+                 menuSubItem("Create", tabName = "newFieldbookAgrofims", icon = icon("angle-right")),
+                 #menuSubItem("Manage fieldbook", tabName = "openFieldbook", icon = icon("angle-right")), --> old
+                 ##
+                 menuSubItem("Manage", tabName = "uisessionagrofims", icon = icon("angle-right")),
+                 menuSubItem("Export", tabName = "uimobileagrofims", icon = icon("angle-right"))
+                 ##
                  #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))#,
         ),
         
-        menuItem("Single Trial Analysis", icon = icon("bar-chart"),
+        menuItem("Statistical analysis", icon = icon("bar-chart"),
                  #menuSubItem("Single trial graph",tabName = "SingleChart", icon = icon("calculator")),
-                 menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                 menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
+                 menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
                  #menuSubItem("Genetic report", tabName = "geneticAnalysisReport", icon = icon("file-text-o"))
                  
                  #menuSubItem("Data Transformation", tabName = "singleAnalysisTrans", icon = icon("file-text-o"))
@@ -440,13 +460,16 @@ observe({
             div(img(src="images/logo_agrofims_v3.jpg"), style="text-align: center;"),
             br(),
             menuItem("Fieldbook", icon = icon("book"),
-                     menuSubItem("Create fieldbook", tabName = "newFieldbookAgrofims", icon = icon("angle-right"))#,
+                     menuSubItem("Create", tabName = "newFieldbookAgrofims", icon = icon("angle-right"))#,
 
                      #menuSubItem("Open fieldbook", tabName = "openFieldbook", icon = icon("file-o")),
                      #menuSubItem("Check fieldbook", tabName = "checkFieldbook", icon = icon("eraser"))
             ),
-            menuItem("Single Trial Analysis", icon = icon("bar-chart"),
-                     menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))
+            menuItem("Statistical analysis", icon = icon("bar-chart"),
+                     #menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))
+                     menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
+                     menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
+                     menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
             ),
             menuItem("Documentation",  icon = icon("copy")
             ),
@@ -493,16 +516,16 @@ observeEvent(input$btChangePass, {
 
       var <- POST("https://research.cip.cgiar.org/gtdms/hidap/script/agrofims/emailPasswordChanged.php", body=params)
       code <- content(var, "text")
-      output$mssgChngPass <- renderText("<font color='blue'><h3>Your password was successfully changed</h3></font>")
+      output$mssgChngPass <- renderText("<font color='blue'><h3>Your password has been successfully changed</h3></font>")
 
       output$uiChangePass <- renderUI({
         if (USER$Logged == TRUE) {
           wellPanel(
-            h3("Password Change"),
-            passwordInput("chngPassCurrent", "Current password: "),
+            #h3("Password Change"),
+            passwordInput("chngPassCurrent", "Current password "),
             passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters) "),
-            passwordInput("chngPassNewRep", "Re-enter new password: "),
-            actionButton("btChangePass", "Update")
+            passwordInput("chngPassNewRep", "Confirm new password "),
+            actionButton("btChangePass", "Update password")
           )
         }
       })
@@ -551,7 +574,7 @@ observeEvent(input$ResetPass,{
     
     if (code == "200"){
       # showModal(modalDialog(title = "HiDAP-AGROFIMS", HTML("Succesfully reset")))
-      output$pass <- renderText("<h4>Password reset successful. An email has been sent with a new password </h4>")
+      output$pass <- renderText("<h4>An email has been sent to your email address with a new password. If it doesn't appear within a few minutes, check your spam folder. </h4>")
       updateTextInput(session,"userMailReset", value="" )
     }
     else{
@@ -583,7 +606,8 @@ observeEvent(input$btCreateUser, {
   strCounS <- trimws(input$countrySelection)
 
   mydb = dbConnect(MySQL(), user=constUserDB, password=constPassDB, dbname=constDBName, host=constDBHost)
-  strQry <- paste("insert into users (username, password, fname, lname, organization, country) values('",strMail,"','",strPass,"','", strFName,"','",strLName,"','",strOrg, "','",strCounS, "')", sep ="")
+  strQry <- paste("insert into users (username, password, fname, lname, organization, country, available) values('",strMail,"','",strPass,"','", strFName,"','",strLName,"','",strOrg, "','",strCounS, "'," , 1, ")", sep ="")
+  #strQry <- paste("insert into users (username, password, fname, lname, organization, country) values('",strMail,"','",strPass,"','", strFName,"','",strLName,"','",strOrg, "','",strCounS,"')", sep ="")
   qryUpdate = dbSendQuery(mydb, strQry)
 
 
@@ -594,13 +618,15 @@ observeEvent(input$btCreateUser, {
 
   var <- POST("https://research.cip.cgiar.org/gtdms/hidap/script/agrofims/createNewUser.php", body=params)
   code <- content(var, "text")
+  print(var)
+  print(code)
   if (code == "500"){
     strQry <- paste("delete from users where username = '", strMail, "'", sep ="")
     qryDel = dbSendQuery(mydb, strQry)
-    showModal(modalDialog(title = "HiDAP-AGROFIMS", HTML("Problems creating account, please try again.")))
+    showModal(modalDialog(title = "AGROFIMS", HTML("Problems creating account, please try again.")))
   }
   else if (code == "200") {
-    showModal(modalDialog(title = "HiDAP-AGROFIMS", HTML("<h4>Yout account was successfully created, a confirmation message will be sent soon. Check your email to activate your account.</h4> <br> <h5>If you haven't received a message, please check your spam and add us to your contacts.</h5>")))
+    showModal(modalDialog(title = "AGROFIMS", HTML("<h4>Your account has been successfully created.</h4> <h4>You can now log in and start using AgroFIMS.</h4>"), footer = modalButton("Ok")))
     output$uiLogin <- renderUI({
 
       if (USER$Logged == FALSE) {
@@ -637,7 +663,7 @@ observeEvent(input$btLogIn, {
 observeEvent(input$btLogOut, {
   js$rmcookie()
   USER$Logged <- FALSE
-  showModal(loginModalMenu())
+  #showModal(loginModalMenu())
 })
 
 ###########################################################################################################

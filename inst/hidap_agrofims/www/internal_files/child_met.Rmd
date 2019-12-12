@@ -1,36 +1,66 @@
 `r i = {{i}}`
 
-```{r, echo = FALSE}
-lc <- check.2f(traits[i], geno, env, rep, data)
-if (lc$c4 == 0)
-  data$est <- mve.met(traits[i], geno, env, rep, data, maxp)[, 5] else
-    data$est <- data[, traits[i]]
+```{r echo = FALSE}
+
+# Check design
+
+lc <- ck.f(traits[i], c(geno, env), rep, dfr)
+
+# Fit a model for assumptions plots
+
+model <- aov(dfr[, traits[i]] ~ dfr[, geno] + dfr[, env] +
+               dfr[, rep] %in% dfr[, env] + dfr[, geno]:dfr[, env])
+
+# Estimate missing values
+
+trait.est <- paste0(traits[i], ".est")
+
+if (lc$nmis > 0) {
+  dfr[, trait.est] <- mve.met(traits[i], geno, env, rep, dfr, maxp)[, trait.est]
+} else {
+  dfr[, trait.est] <- dfr[, traits[i]]
+}
+
+# Get anova table with estimated missing values
+
+at <- suppressWarnings(aov.met(traits[i], geno, env, rep, dfr, maxp))
+
+# CV
+
+cv <- (at[5, 3])^0.5 / mean(dfr[, trait.est]) * 100
+
 ```
-    
+
 # {{i+1}}. Analysis for trait `r traits[i]`
 
-`r if (lc$c4 == 1) {"There are no missing values for this trait; the design is balanced."}`
+`r if (lc$nmis == 0) {"There are no missing values for this trait; the design is balanced."}`
 
-`r if (lc$c4 == 0) paste("There are some missing values (", format(lc$pmis * 100, digits = 3), "%) and they have been estimated for the descriptive statistics, ANOVA, regression stability analysis and Tai sections.", sep = "")`
+`r if (lc$nmis > 0) paste0("There are some missing values (", format(lc$pmis * 100, digits = 3), "%) and they have been estimated for the descriptive statistics, ANOVA, regression stability analysis and Tai sections.")`
 
 ## {{i+1}}.1. Descriptive statistics
 
 ### {{i+1}}.1.1. Means by genotypes
 
-```{r, echo = FALSE}
-tapply(data$est, data[, geno], mean)
+```{r echo = FALSE}
+
+tapply(dfr[, trait.est], dfr[, geno], mean)
+
 ```
 
 ### {{i+1}}.1.2. Means by environments
 
-```{r, echo = FALSE}
-tapply(data$est, data[, env], mean)
+```{r echo = FALSE}
+
+tapply(dfr[, trait.est], dfr[, env], mean)
+
 ```
 
 ### {{i+1}}.1.3. Means by genotypes and environments
 
-```{r, echo = FALSE}
-tapply(data$est, list(data[, geno], data[, env]), mean)
+```{r echo = FALSE}
+
+tapply(dfr[, trait.est], list(dfr[, geno], dfr[, env]), mean)
+
 ```
 
 ## {{i+1}}.2. ANOVA
@@ -39,12 +69,12 @@ tapply(data$est, list(data[, geno], data[, env]), mean)
 
 As it was stated in section 1, it is supposed that the error has a normal distribution with the same variance for all the genotypes and environments. The following plots help to evaluate this assumptions:
 
-```{r, echo = FALSE, fig.height = 5, fig.width = 10}
-model <- aov(data[, traits[i]] ~ data[, geno] + data[, env]
-             + data[, rep] %in% data[, env] + data[, geno]:data[, env])
+```{r echo = FALSE, fig.height = 5, fig.width = 10}
+
 par(mfrow = c(1, 2))
 suppressWarnings(plot(model, which = 1))
 suppressWarnings(plot(model, which = 2))
+
 ```
 
 Funnel shapes for the first plot may suggest heterogeneity of variances while departures from the theoretical normal line are symptoms of lack of normality.
@@ -53,38 +83,108 @@ Funnel shapes for the first plot may suggest heterogeneity of variances while de
 
 For this analysis it is assumed that genotypes and environments have fixed effects and that the blocks are random.
 
-```{r, echo = FALSE}
-at <- suppressWarnings(aov.met(traits[i], geno, env, rep, data, maxp))
+```{r echo = FALSE}
+
 at
+
 ```
 
-The coefficient of variation for this experiment is `r format(agricolae::cv.model(model), digits = 4)`%. The p-values for the model are: `r format(at[1, 5], digits = 4)` for genotypes `r if (at[1, 5] < 0.05) {" which is significant at the 5% level, "} else {" which is not significant at the 5% level, "}` `r format(at[2, 5], digits = 4)` for environments `r if (at[2, 5] < 0.05) {" which is significant at the 5% level,"} else {" which is not significant at the 5% level,"}` and `r format(at[4, 5], digits = 4)` for the genotypes by environments interaction `r if (at[4, 5] < 0.05) {" which is significant at the 5% level."} else {" which is not significant at the 5% level."}`
+The coefficient of variation for this experiment is `r format(cv, digits = 4)`%. The p-values for the model are: `r format(at[1, 5], digits = 4)` for genotypes `r if (at[1, 5] < 0.05) {" which is significant at the 5% level, "} else {" which is not significant at the 5% level, "}` `r format(at[2, 5], digits = 4)` for environments `r if (at[2, 5] < 0.05) {" which is significant at the 5% level,"} else {" which is not significant at the 5% level,"}` and `r format(at[4, 5], digits = 4)` for the genotypes by environments interaction `r if (at[4, 5] < 0.05) {" which is significant at the 5% level."} else {" which is not significant at the 5% level."}`
 
-`r if(at[1, 5] < 0.05) {"In the next two sections the least significance difference method and the multiple comparisons method of Tukey are used to evaluate differences among genotypes, both at the 5% level. However take into account that differences among genotypes can be obscured by the interaction effects, and that in the case of strong interaction, differences among genotypes must depend on the specific environments."} else {"Because the effect of genotypes was not significant in the ANOVA, multiple comparison tests are not presented."}`
+`r if (at[1, 5] < 0.05 | at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.3. LSD test for genotypes")}`
 
-`r if (at[1, 5] < 0.05) {paste("### ", {{i+1}}, ".2.3. LSD test", sep = "")}`
+```{r echo = FALSE}
 
-```{r, echo = FALSE}
-if (at[1, 5] < 0.05)
-  agricolae::LSD.test(data[, traits[i]], data[, geno], at[5, 1], at[5, 3])$groups
+if (at[1, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::LSD.test(y, dfr[, geno], at[5, 1], at[5, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[2]) {
+    temp <- dfr[dfr[, env] == unique(dfr[, env])[j], ]
+    y <- temp[, trait.est]
+    print(paste("LSD test for environment", unique(dfr[, env])[j]))
+    print(agricolae::LSD.test(y, temp[, geno], at[5, 1], at[5, 3])$groups)
+  }
+}
+
 ```
 
-`r if (at[1, 5] < 0.05) {paste("### ", {{i+1}}, ".2.4. Tukey test", sep = "")}`
+`r if (at[1, 5] < 0.05 | at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.4. Tukey test for genotypes")}`
 
-```{r, echo = FALSE}
-if (at[1, 5] < 0.05)
-  agricolae::HSD.test(data[, traits[i]], data[, geno], at[5, 1], at[5, 3])$groups
+```{r echo = FALSE}
+
+if (at[1, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::HSD.test(y, dfr[, geno], at[5, 1], at[5, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[2]) {
+    temp <- dfr[dfr[, env] == unique(dfr[, env])[j], ]
+    y <- temp[, trait.est]
+    print(paste("HSD Tukey test for environment", unique(dfr[, env])[j]))
+    print(agricolae::HSD.test(y, temp[, geno], at[5, 1], at[5, 3])$groups)
+  }
+}
+  
 ```
 
-`r if (at[1, 5] < 0.05) {paste("### ", {{i+1}}, ".2.5. Variance components estimation", sep = "")} else {paste("### ", {{i+1}}, ".2.3. Variance components estimation", sep = "")}`
+`r if (at[2, 5] < 0.05 & at[1, 5] > 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.3. LSD test for environments")}`
+`r if (at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.5. LSD test for environments")}`
+`r if (at[1, 5] < 0.05 & at[2, 5] < 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.5. LSD test for environments")}`
+
+```{r echo = FALSE}
+
+if (at[2, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::LSD.test(y, dfr[, env], at[3, 1], at[3, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[1]) {
+    temp <- dfr[dfr[, geno] == unique(dfr[, geno])[j], ]
+    y <- temp[, trait.est]
+    print(paste("LSD test for genotype", unique(dfr[, geno])[j]))
+    print(agricolae::LSD.test(y, temp[, env], at[3, 1], at[3, 3])$groups)
+  }
+}
+
+```
+
+`r if (at[2, 5] < 0.05 & at[1, 5] > 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.4. Tukey test for environments")}`
+`r if (at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.6. Tukey test for environments")}`
+`r if (at[1, 5] < 0.05 & at[2, 5] < 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.6. Tukey test for environments")}`
+
+```{r echo = FALSE}
+
+if (at[2, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::HSD.test(y, dfr[, env], at[3, 1], at[3, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[1]) {
+    temp <- dfr[dfr[, geno] == unique(dfr[, geno])[j], ]
+    y <- temp[, trait.est]
+    print(paste("HSD Tukey test for genotype", unique(dfr[, geno])[j]))
+    print(agricolae::HSD.test(y, temp[, env], at[3, 1], at[3, 3])$groups)
+  }
+}
+  
+```
+
+## {{i+1}}.3. Variance components estimation
 
 Under the assumption that all the factors (genotypes, environments, and blocks) have random effects, below it is shown the variance components estimation. Here the model is estimated by REML (Restricted Maximum Likelihood) and the original data without the estimation of missing values is used.
 
-```{r, echo = FALSE}
-y <- data[, traits[i]]
-fg <- data[, geno]
-fe <- data[, env]
-fr <- data[, rep]
+```{r echo = FALSE}
+
+y <- dfr[, traits[i]]
+fg <- dfr[, geno]
+fe <- dfr[, env]
+fr <- dfr[, rep]
 ff <- as.formula(y ~ (1|fg) + (1|fg:fe) + (1|fe/fr))
 model.reml <- lme4::lmer(ff)
 vc <- data.frame(lme4::VarCorr(model.reml))
@@ -93,122 +193,157 @@ vgxe <- vc[vc[, 1] == "fg:fe", 4]
 vr <- vc[vc[, 1] == "Residual", 4]
 vc[vc[, 1] == "fg", 1] <- geno
 vc[vc[, 1] == "fe", 1] <- env
-vc[vc[, 1] == "fg:fe", 1] <- paste(geno, ":", env, sep = "")
-vc[vc[, 1] == "fr:fe", 1] <- paste(rep, "(", env, ")", sep = "")
+vc[vc[, 1] == "fg:fe", 1] <- paste0(geno, ":", env)
+vc[vc[, 1] == "fr:fe", 1] <- paste0(rep, "(", env, ")")
 rownames(vc) <- vc[, 1]
 vc <- vc[, c(4, 5)]
 colnames(vc) <- c("Variance", "Std.Dev.")
-h2 <- vg / (vg + vgxe / lc$nb + vr / lc$nb / lc$nr) * 100
+h2 <- vg / (vg + vgxe / lc$nl[2] + vr / lc$nl[2] / lc$nrep) * 100
 vc
+
 ```
 
-With these variance estimates, the broad sense heritability results `r paste(format(h2, digits = 4), "%", sep = "")`.
+With these variance estimates, the broad sense heritability results `r paste0(format(h2, digits = 4), "%")`.
 
-## {{i+1}}.3. Stability analysis
+## {{i+1}}.4. Stability analysis
 
-`r if (at[4, 5] > 0.05 | lc$nb <= 2) {"This analysis is not shown because:"}`
+`r if (at[4, 5] > 0.05 | lc$nl[2] <= 2) {"This analysis is not shown because:"}`
 
 `r if (at[4, 5] > 0.05) {"- Interaction is non significant."}`
-`r if (lc$nb <= 2) {"- There are only 2 environments. At least 3 are needed."}`
+`r if (lc$nl[2] <= 2) {"- There are only 2 environments. At least 3 are needed."}`
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"Because interaction is significant a stability analysis is presented."}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"Because interaction is significant a stability analysis is presented."}`
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {paste("### ", {{i+1}}, ".3.1. AMMI", sep = "")}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {paste0("### ", {{i+1}}, ".4.1. AMMI")}`
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### AMMI biplots"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### AMMI biplots"}`
 
-```{r, echo = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
-if (at[4, 5] < 0.05 & lc$nb > 2) {
-  ammimodel <- suppressWarnings(ammi(traits[i], geno, env, rep, data))
-  plot(ammimodel, biplot = 1)
+```{r echo = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2) {
+  ammimodel <- suppressWarnings(ammi(trait.est, geno, env, rep, dfr))
+  plot(ammimodel, bp.type = 1)
 }
+
 ```
 
-```{r, echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
-if (at[4, 5] < 0.05 & lc$nb > 2) {
-  plot(ammimodel, biplot = 2)
+```{r echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  plot(ammimodel, bp.type = 2)
+
+```
+
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### Interaction effects"}`
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  ammimodel$Interaction_effects
+
+```
+
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### PC-values for genotypes"}`
+
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  ammimodel$PC_values_genotypes
+
+```
+
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### PC-values for environments"}`
+
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  ammimodel$PC_values_environments
+
+```
+
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### PC contributions"}`
+
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  ammimodel$Contribution_PCs
+
+```
+
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {paste0("### ", {{i+1}}, ".4.2. GGE")}`
+
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### GGE biplots"}`
+
+```{r echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2) {
+  ggemodel <- suppressWarnings(ammi(trait.est, geno, env, rep, dfr, method = "gge"))
+  plot(ggemodel, bp.type = 1)
 }
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### Interaction effects"}`
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) ammimodel$Interaction_effects
+```{r echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  plot(ggemodel, bp.type = 2)
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### PC-values for genotypes"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### PC-values for genotypes"}`
 
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) ammimodel$PC_values_genotypes
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  ggemodel$PC_values_genotypes
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### PC-values for environments"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### PC-values for environments"}`
 
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) ammimodel$PC_values_environments
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  ggemodel$PC_values_environments
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### PC contributions"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### PC contributions"}`
 
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) ammimodel$Contribution_PCs
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  ggemodel$Contribution_PCs
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {paste("### ", {{i+1}}, ".3.2. GGE", sep = "")}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {paste0("### ", {{i+1}}, ".4.3. Regression Stability Analysis")}`
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### GGE biplots"}`
+```{r echo = FALSE}
 
-```{r, echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
-if (at[4, 5] < 0.05 & lc$nb > 2) {
-  ggemodel <- suppressWarnings(ammi(traits[i], geno, env, rep, data, method = "gge"))
-  plot(ggemodel, biplot = 1)
-}
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  rsamodel <- suppressWarnings(rsa(traits[i], geno, env, rep, dfr))
+
 ```
 
-```{r, echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
-if (at[4, 5] < 0.05 & lc$nb > 2) {
-  plot(ggemodel, biplot = 2)
-}
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### ANOVA"}`
+
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  rsamodel$ANOVA
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### PC-values for genotypes"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### Stability measures for genotypes"}`
 
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) ggemodel$PC_values_genotypes
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  rsamodel$Stability_for_genotypes
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### PC-values for environments"}`
-
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) ggemodel$PC_values_environments
-```
-
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### PC contributions"}`
-
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) ggemodel$Contribution_PCs
-```
-
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {paste("### ", {{i+1}}, ".3.3. Regression Stability Analysis", sep = "")}`
-
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) {
-  rsamodel <- suppressWarnings(rsa(traits[i], geno, env, rep, data))
-}
-```
-
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### ANOVA"}`
-
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) rsamodel$ANOVA
-```
-
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### Stability measures for genotypes"}`
-
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) rsamodel$Stability_for_genotypes
-```
-
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"Here: \n
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"Here: \n
 - a is the linear regression intercept, \n
 - b is the linear regression slope, \n
 - se is the slope standard error, \n
@@ -217,26 +352,33 @@ if (at[4, 5] < 0.05 & lc$nb > 2) rsamodel$Stability_for_genotypes
 - MSinter is the variance of the interaction effects. \n
 The same is shown in the next section for each environment."}`
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### Stability measures for environments"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### Stability measures for environments"}`
 
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2) rsamodel$Stability_for_environments
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
+  rsamodel$Stability_for_environments
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {paste("### ", {{i+1}}, ".3.4. Tai stability analysis", sep = "")}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {paste0("### ", {{i+1}}, ".4.4. Tai stability analysis")}`
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### Tai plot"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### Tai plot"}`
 
-```{r, echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
-if (at[4, 5] < 0.05 & lc$nb > 2) {
-  taimodel <- suppressWarnings(tai(traits[i], geno, env, rep, data))
+```{r echo = FALSE, fig.align = 'center', fig.height = 8, fig.width = 8}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2) {
+  taimodel <- suppressWarnings(tai(trait.est, geno, env, rep, dfr))
   plot(taimodel)
 }
+
 ```
 
-`r if (at[4, 5] < 0.05 & lc$nb > 2) {"#### Tai alpha and lambda values"}`
+`r if (at[4, 5] < 0.05 & lc$nl[2] > 2) {"#### Tai alpha and lambda values"}`
 
-```{r, echo = FALSE}
-if (at[4, 5] < 0.05 & lc$nb > 2)
+```{r echo = FALSE}
+
+if (at[4, 5] < 0.05 & lc$nl[2] > 2)
   taimodel$Tai_values
+
 ```

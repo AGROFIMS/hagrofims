@@ -16,7 +16,7 @@ params:
 ---
 
 Congratulations! You have fitted a linear model. The ANOVA table for your model is
-```{r, echo = FALSE}
+```{r echo = FALSE}
 anova(params$x)
 noterms <- dim(anova(params$x))[1] - 1
 pvalues <- anova(params$x)[1:noterms, 5]

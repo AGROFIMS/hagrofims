@@ -1,0 +1,22 @@
+`r i = {{i}}`
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+```{r echo = FALSE}
+lc <- ck.f(traits[i], c(trt, env), rep, dfr)
+```
+
+`r if (lc$nrep == 1) {"There is only one replication. Analysis is not possible with one replication."}`
+
+`r if (lc$nrep > 1 & lc$nt.mult > 0) {"There is more than one datum for at least one combination of the treatments and environments in at least one replication. This could be the result of a mislabeling for the levels of the factors. The table below shows the frequencies of valid data for each treatment and environment in each replication."}`
+
+`r if (lc$nt.0 > 0 & lc$nrep > 1 & lc$nt.mult == 0) {"There is at least one treatment without data in at least one environment. The table below shows the frequencies of valid data for each treatment in each environment. A MET analysis cannot be produced if there are combination of treatments and environments without data."}`
+
+`r if (lc$pmis > maxp & lc$nt.0 == 0 & lc$nrep > 1 & lc$nt.mult == 0) paste0("There are too many missing values (", format(lc$pmis * 100, digits = 3), "%). The table below shows the frequencies of valid data for each treatment in each environment. This procedure estimates up to 10%.")`
+
+```{r echo = FALSE}
+if (lc$nrep > 1 & lc$nt.mult == 0)
+  lc$tf
+if (lc$nrep > 1 & lc$nt.mult > 0)
+  lc$tfr
+```

@@ -21,11 +21,11 @@ output$uiUserProfile <- renderUI({
 output$uiChangePass <- renderUI({
   if (USER$Logged == TRUE) {
     wellPanel(
-      h3("Password Change"),
-      passwordInput("chngPassCurrent", "Current password: "),
-      passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters): "),
-      passwordInput("chngPassNewRep", "Re-enter new password: "),
-      actionButton("btChangePass", "Update")
+      #h3("Password Change"),
+      passwordInput("chngPassCurrent", "Current password "),
+      passwordInput("chngPassNew", "New password (at least 8 and at most 12 characters) "),
+      passwordInput("chngPassNewRep", "Confirm password "),
+      actionButton("btChangePass", "Update password")
     )
   }
 })
@@ -66,10 +66,11 @@ observeEvent(input$ForgotPass, {
     if (USER$Logged == FALSE) {
       
       wellPanel(
-        h3("Forgot your password?"),
+        #h3("Forgot your password?"),
         # br(),
-        p("Write down your email (username) you used to create your account and a password will be sent there."),
-        textInput("userMailReset", "Email (username):"),
+        p("Enter your email adress and we will send you a new password."),
+        #textInput("userMailReset", "Email (username):"),
+        textInput("userMailReset", ""),
         br(),
         actionButton("ResetPass", "Reset my password"),
         br(), br(),
@@ -126,7 +127,7 @@ observeEvent(input$btCreate, {
         actionButton("btCreateUser", "Create"), 
         br(), br(),
         actionLink("ForgotPass", "Forgot your password?"),br(),
-        "Already have an account? " , actionLink("btLogin", "Log in "), " instead."
+        #"Already have an account? " , actionLink("btLogin", "Log in "), " instead."
       )
     }
   })

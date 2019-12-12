@@ -2,19 +2,19 @@
 
 # {{i+1}}. Analysis for trait `r traits[i]`
 
-```{r, echo = FALSE}
-lc <- check.rcbd(traits[i], geno, rep, data)
+```{r echo = FALSE}
+lc <- ck.rcbd(traits[i], trt, rep, dfr)
 ```
 
-`r if (lc$c2 == 0) {"There is only one replication. Analysis is not possible with one replication."}`
+`r if (lc$nrep == 1) {"There is only one replication. Analysis is not possible with one replication."}`
 
-`r if (lc$c2 == 1 & lc$c3 == 0) {"There is more than one datum for at least one genotype in at least one replication. This could be the result of a mislabeling for the levels of the factors. The table below shows the frequencies of valid data for each genotype in each replication. Solve this to proceed."}`
+`r if (lc$nrep > 1 & lc$ng.mult > 0) {paste("There is more than one datum for at least one", trt.lab, "in at least one replication. This could be the result of a mislabeling for the levels of the factors. The table below shows the frequencies of valid data for each", trt.lab, "in each replication.")}`
 
-`r if (lc$c1 == 0 & lc$c2 == 1 & lc$c3 == 1) {"There is at least one genotype without data. The table below shows the frequencies of valid data for each genotype in each replication. The analysis cannot be produced if there are genotypes without data. Solve this to proceed."}`
+`r if (lc$ng.0 > 0 & lc$nrep > 1 & lc$ng.mult == 0) {paste("There is at least one", trt.lab, "without data. The table below shows the frequencies of valid data for each", trt.lab, "in each replication. The analysis cannot be produced if there are", trt.lab.s, "without data.")}`
 
-`r if (lc$pmis > maxp & lc$c1 == 1 & lc$c2 == 1 & lc$c3 == 1) paste("There are too many missing values (", format(lc$pmis * 100, digits = 3), "%). The table below shows the frequencies of valid data for each genotype in each replication. This procedure estimates up to 10%. Solve this to proceed.", sep = "")`
+`r if (lc$pmis > maxp & lc$ng.0 == 0 & lc$nrep > 1 & lc$ng.mult == 0) paste0("There are too many missing values (", format(lc$pmis * 100, digits = 3), "%). The table below shows the frequencies of valid data for each ", trt.lab.s, " in each replication. This procedure estimates up to 10%.")`
 
-```{r, echo = FALSE}
-if (lc$c2 == 1)
-  lc$tfreq
+```{r echo = FALSE}
+if (lc$nrep > 1)
+  lc$tfr
 ```

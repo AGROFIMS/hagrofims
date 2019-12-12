@@ -1,22 +1,47 @@
 #### Librerias
 
+#Remove warnings messages
+suppressWarnings("DT")
+suppressMessages("shiny")
+suppressWarnings("dplyr")
+suppressWarnings("plyr")
+suppressWarnings("stats")
+suppressWarnings("base")
+suppressWarnings("shinydashboard")
+suppressWarnings("purrr")
+suppressWarnings("foreign")
+suppressWarnings("agricolae")
+suppressWarnings("GGally")
+suppressWarnings("shinyjs")
+suppressWarnings("lubridate")
+suppressWarnings("shinyalert")
+suppressWarnings("ggmap")
+suppressWarnings("magrittr")
+suppressWarnings("maps")
+suppressWarnings("raster")
+suppressWarnings("base64enc")
+suppressWarnings("limSolve")
+suppressWarnings("rowr")
+suppressWarnings("aganalysis")
+suppressMessages("rgeos")
+suppressMessages("shinyjs")
+suppressMessages("ggmap")
 #TODO: the complete list of packages is listed in list_packages_agrofims
 
 #library(d3heatmap)
-library(shinysky)
-library(data.table)
-library(shinydashboard)
+library(shiny, warn.conflicts=FALSE)
+library(shinysky, warn.conflicts=FALSE)
+library(shinydashboard, warn.conflicts=FALSE)
 library(doBy)
-library(tidyr)
-library(DT)
+library(tidyr, warn.conflicts=FALSE)
+library(DT, warn.conflicts=FALSE)
 library(date)
-library(dplyr)
-library(openxlsx)
-#library(qtlcharts)
+library(dplyr, warn.conflicts=FALSE)
+library(openxlsx, warn.conflicts=FALSE)
+library(data.table, warn.conflicts=FALSE) 
 library(leaflet)
 library(withr)
-library(dplyr)
-library(purrr)
+library(purrr, warn.conflicts=FALSE)
 library(tibble)
 library(knitr)
 library(readxl)
@@ -24,7 +49,7 @@ library(countrycode)
 library(DBI)
 library(RMySQL)
 library(spsurvey)
-library(foreign)
+library(foreign, warn.conflicts=FALSE)
 library(tools)
 library(stringr)
 library(rprojroot)
@@ -33,48 +58,58 @@ library(ggrepel)
 library(tibble)
 library(stringi)
 library(digest)
-library(shiny)
 library(datasets)
 
 ### Librerias de CIP-RIU (GITHUB) que cargan por defecto:
 library(shinyTree)
-library(agricolae)
-library(brapi)
-library(brapps)
+library(agricolae, warn.conflicts=FALSE)
+
 library(agdesign)
 library(rhandsontable)
-library(shinyjs)
+library(shinyjs, warn.conflicts=FALSE)
 library(st4gi)
 library(fbsites)
 library(shinyBS)
-library(sbformula)
+
 library(pepa)
 library(shinyFiles)
 library(rlist)
 library(httr) # library for http requests, used to make POST request to the server
 library(bsplus) # hidapNetwork
 library(htmltools) # hidapnetwork
-library(lubridate)
-library(shinyalert) # new
+library(lubridate, warn.conflicts=FALSE)
+library(shinyalert, warn.conflicts=FALSE) # new
 
 ### for maps rendering
 library(ggmap) # devtools::install_github("dkahle/ggmap") ## use this version of ggmap
 library(leaflet)
-library(magrittr)
-library(maps)
+library(magrittr, warn.conflicts=FALSE)
+library(maps, warn.conflicts=FALSE)
 library(maptools)
-library(raster)
+library(raster, warn.conflicts=FALSE)
 library(rgeos)
-library(sp)
+library(sp, warn.conflicts=FALSE)
 
 ### libraries for the "remember me" 
 library(shinyStore) # install_github("trestletech/shinyStore")
 library(PKI) # CRAN
 library(shinyWidgets)
-library(agsession)
-
-
+#library(agsession)
+library(qrencoder)
+library(fbglobal)
 ####
+library(geohash)
+#library(fbanalysis)
+library(pepa)
+library(st4gi)
+##
+#library(shinyFeedback)
+library(fastmap, warn.conflicts=FALSE)
+library(limSolve, warn.conflicts=FALSE)
+library(rowr, warn.conflicts=FALSE)
+library(reticulate, warn.conflicts=FALSE)
+library(aganalysis, warn.conflicts=FALSE)
+
 
 # Llaves para encriptar las cookies: utilizado en el Remember me
 privKey <- PKI.load.key(file="test.key")
@@ -134,6 +169,11 @@ ui <- dashboardPage(
       tags$script(src = "js/js.cookies.js")
     ),
     
+    tags$head(
+     
+     includeHTML(("www/analytics/google-analytics.html"))
+    ),
+    
     useShinyjs(),
     extendShinyjs(text = jscode),
     
@@ -143,7 +183,7 @@ ui <- dashboardPage(
     tabItems(
       tabItem(
         tabName = "hnetwork",
-        h2("Login or create HiDAP Network Account")
+        h2("Login or create HIDAP Network Account")
       ),
       tabItem(
         tabName = "sharedWithMe",
@@ -180,7 +220,7 @@ ui <- dashboardPage(
               #h2("HIDAP AgroFIMS v0.2.1"),
               h2("HIDAP AgroFIMS"),
               p(class = "text-muted", style="text-align:justify",
-                #paste("HiDAP is a Highly Interactive Data Analysis Platform originally meant to support clonal crop breeders at the <a href='http://www.cipotato.org' target='_new'>International Potato Center</a>. It is part of a continuous institutional effort to improve data collection, data quality, data analysis and open access publication. The recent iteration simultaneously also represents efforts to unify best practices from experiences in breeding data management of over 10 years, specifically with DataCollector and CloneSelector for potato and sweetpotato breeding, to address new demands for open access publishing and continue to improve integration with both corporate and community databases (such as biomart and sweetpotatobase) and platforms such as the <a href='https://research.cip.cgiar.org/gtdms/' target='_new'> Global Trial Data Management System (GTDMS)</a> at CIP. </br> One of the main new characteristics of the current software development platform established over the last two years is the web-based interface which provides also a highly interactive environment. It could be used both online and offline and on desktop as well as tablets and laptops. Key features include support for data capture, creation of field books, upload field books from and to accudatalogger, data access from breeding databases (e.g., <a href = 'http://germplasmdb.cip.cgiar.org/' target='_new'>CIP BioMart</a>, <a href='http://www.sweetpotatobase.org' target='_new'>sweetpotatobase</a> via <a href='http://docs.brapi.apiary.io/' target='_new'>breeding API</a>), data quality checks, single and multi-environmental data analysis, selection indices, and report generations. For users of DataCollector or CloneSelector many of the features are known but have been improved upon. Novel features include list management of breeding families, connection with the institutional pedigree database, interactive and linked graphs as well as reproducible reports. With the first full release by end of November 2016 we will include all characteristics from both DataCollector and CloneSelector. HIDAP, with additional support from <a href='https://sweetpotatogenomics.cals.ncsu.edu/' target='_new'>GT4SP</a>, <a href='http://www.rtb.cgiar.org/' target='_new'>RTB</a>, USAID, and <a href='http://cipotato.org/research/partnerships-and-special-projects/sasha-program/' target='_new'>SASHA</a>, is aimed to support the broader research community working on all aspects with primary focus on breeding, genetics, biotechnology, physiology and agronomy.")
+                #paste("HIDAP is a Highly Interactive Data Analysis Platform originally meant to support clonal crop breeders at the <a href='http://www.cipotato.org' target='_new'>International Potato Center</a>. It is part of a continuous institutional effort to improve data collection, data quality, data analysis and open access publication. The recent iteration simultaneously also represents efforts to unify best practices from experiences in breeding data management of over 10 years, specifically with DataCollector and CloneSelector for potato and sweetpotato breeding, to address new demands for open access publishing and continue to improve integration with both corporate and community databases (such as biomart and sweetpotatobase) and platforms such as the <a href='https://research.cip.cgiar.org/gtdms/' target='_new'> Global Trial Data Management System (GTDMS)</a> at CIP. </br> One of the main new characteristics of the current software development platform established over the last two years is the web-based interface which provides also a highly interactive environment. It could be used both online and offline and on desktop as well as tablets and laptops. Key features include support for data capture, creation of field books, upload field books from and to accudatalogger, data access from breeding databases (e.g., <a href = 'http://germplasmdb.cip.cgiar.org/' target='_new'>CIP BioMart</a>, <a href='http://www.sweetpotatobase.org' target='_new'>sweetpotatobase</a> via <a href='http://docs.brapi.apiary.io/' target='_new'>breeding API</a>), data quality checks, single and multi-environmental data analysis, selection indices, and report generations. For users of DataCollector or CloneSelector many of the features are known but have been improved upon. Novel features include list management of breeding families, connection with the institutional pedigree database, interactive and linked graphs as well as reproducible reports. With the first full release by end of November 2016 we will include all characteristics from both DataCollector and CloneSelector. HIDAP, with additional support from <a href='https://sweetpotatogenomics.cals.ncsu.edu/' target='_new'>GT4SP</a>, <a href='http://www.rtb.cgiar.org/' target='_new'>RTB</a>, USAID, and <a href='http://cipotato.org/research/partnerships-and-special-projects/sasha-program/' target='_new'>SASHA</a>, is aimed to support the broader research community working on all aspects with primary focus on breeding, genetics, biotechnology, physiology and agronomy.")
                 shiny::includeHTML("www/about_hidap.txt")
               ),
               br(),
@@ -200,10 +240,16 @@ ui <- dashboardPage(
               br(),
               br()
       ),
-
+      agdesign::ui_sites_agrofims(name="newSiteAgrofims"),
+      agdesign::ui_listsites_agrofims(name="listSitesAgrofims"),
       agdesign::ui_fieldbook_agrofims(name = "newFieldbookAgrofims"),
-      agsession::ui_session(name = "openFieldbook"),
-      fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims")#,
+      #agsession::ui_session(name = "openFieldbook"),
+      agdesign::ui_mobile_agrofims(name  = "uimobileagrofims"),
+      #fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
+      aganalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
+      aganalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
+      #fbanalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
+      agdesign::ui_session_agrofims(name = "uisessionagrofims")
     ),
 
     tags$div(
@@ -212,12 +258,14 @@ ui <- dashboardPage(
           a(
             list(
               #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
-              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy")
+              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy"),
+              tags$div(id = "test2", "agrofims@cgiar.org ")
             ),
             href="#"
           ),
-          tags$style("footer {background-color: #222d32;height: 40px;position: absolute;bottom: 0;width: 100%;}"),
-          tags$style("#test {color: #fff;padding-top: 9px;}")
+          tags$style("footer {background-color: #222d32;height: 40px;position: absolute;bottom: 0;width: 84%;}"),
+          tags$style("#test {color: #fff;padding-top: 9px;float:left}"),
+          tags$style("#test2 {color: #fff;padding-top: 9px;text-align:right}")
         )
       )
     )
@@ -270,28 +318,33 @@ sv <- function(input, output,  session) ({
   #### Codigo de Omar
   values <- shiny::reactiveValues(crop = "sweetpotato", amode = "brapi")
 
-  withProgress(message = 'Loading HiDAP', value = 0, {
+  withProgress(message = 'Loading HIDAP', value = 0, {
 
   incProgress(1/25, detail = paste("..."))
 
   # fbcheck::fbcheck_server(input, output, session, values)
 
   #fbmlist::server_managerlist(input, output, session, values)
-  fbmlist::server_managerlist_agrofims(input, output, session, values)
+  #fbmlist::server_managerlist_agrofims(input, output, session, values)
   #fbmlist::server_generate(input, output, session, values)
-  fbmlist::server_generate_agrofims(input, output, session, values)
+  #fbmlist::server_generate_agrofims(input, output, session, values)
   #fbmlist::server_createlist(input, output, session, values)
   #fbmlist::server_parentlist(input, output, session, values)
   #fbmlist::server_distribution(input,output,session, values)
 
   incProgress(2/25, detail = paste("..."))
 
-
+  agdesign::server_sites_agrofims(input, output, session, values)
+  agdesign::server_listsites_agrofims(input, output, session, values)
   agdesign::server_design_agrofims(input, output, session, values)
-  agsession::server_session(input, output, session, values)
- 
+  #agsession::server_session(input, output, session, values)
+  #agdesign::server_session_agrofims(input, output, session, values)
+  agdesign::server_mobile_agrofims(input, output, session, values)
   # fbopenbooks::fbopenbooks_server(input, output, session, values)
-  fbanalysis::single_hdagrofims_server(input, output, session, values)
+  #fbanalysis::single_hdagrofims_server(input, output, session, values)
+  aganalysis::single_hdagrofims_server(input, output, session, values)
+  aganalysis::trend_hdagrofims_server(input, output, session, values = values)
+  #fbanalysis::trend_hdagrofims_server(input, output, session, values = values)
   # fbanalysis::dtr_server(input, output, session, values)
   #
   # fbanalysis::met_server(input, output, session, values)
@@ -345,4 +398,4 @@ sv <- function(input, output,  session) ({
 
 })
 
-shinyApp(ui, sv)
+shinyApp(ui, sv, enableBookmarking = "url")

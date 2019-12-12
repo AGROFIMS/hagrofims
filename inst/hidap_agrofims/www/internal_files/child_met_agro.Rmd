@@ -1,0 +1,177 @@
+`r i = {{i}}`
+
+```{r echo = FALSE}
+
+# Check design
+
+lc <- ck.f(traits[i], c(trt, env), rep, dfr)
+
+# Fit a model for assumptions plots
+
+model <- aov(dfr[, traits[i]] ~ dfr[, trt] + dfr[, env] +
+               dfr[, rep] %in% dfr[, env] + dfr[, trt]:dfr[, env])
+
+# Estimate missing values
+
+trait.est <- paste0(traits[i], ".est")
+
+if (lc$nmis > 0) {
+  dfr[, trait.est] <- mve.met(traits[i], trt, env, rep, dfr, maxp)[, trait.est]
+} else {
+  dfr[, trait.est] <- dfr[, traits[i]]
+}
+
+# Get anova table with estimated missing values
+
+at <- suppressWarnings(aov.met(traits[i], trt, env, rep, dfr, maxp))
+
+# CV
+
+cv <- (at[5, 3])^0.5 / mean(dfr[, trait.est]) * 100
+
+```
+
+# {{i+1}}. Analysis for trait `r traits[i]`
+
+`r if (lc$nmis == 0) {"There are no missing values for this trait; the design is balanced."}`
+
+`r if (lc$nmis > 0) paste0("There are some missing values (", format(lc$pmis * 100, digits = 3), "%) and they have been estimated for the descriptive statistics, ANOVA, regression stability analysis and Tai sections.")`
+
+## {{i+1}}.1. Descriptive statistics
+
+### {{i+1}}.1.1. Means by treatments
+
+```{r echo = FALSE}
+
+tapply(dfr[, trait.est], dfr[, trt], mean)
+
+```
+
+### {{i+1}}.1.2. Means by environments
+
+```{r echo = FALSE}
+
+tapply(dfr[, trait.est], dfr[, env], mean)
+
+```
+
+### {{i+1}}.1.3. Means by treatments and environments
+
+```{r echo = FALSE}
+
+tapply(dfr[, trait.est], list(dfr[, trt], dfr[, env]), mean)
+
+```
+
+## {{i+1}}.2. ANOVA
+
+### {{i+1}}.2.1. Checking assumptions
+
+As it was stated in section 1, it is supposed that the error has a normal distribution with the same variance for all the treatments and environments. The following plots help to evaluate this assumptions:
+
+```{r echo = FALSE, fig.height = 5, fig.width = 10}
+
+par(mfrow = c(1, 2))
+suppressWarnings(plot(model, which = 1))
+suppressWarnings(plot(model, which = 2))
+
+```
+
+Funnel shapes for the first plot may suggest heterogeneity of variances while departures from the theoretical normal line are symptoms of lack of normality.
+
+### {{i+1}}.2.2. ANOVA table
+
+For this analysis it is assumed that treatments and environments have fixed effects and that the blocks are random.
+
+```{r echo = FALSE}
+
+at
+
+```
+
+The coefficient of variation for this experiment is `r format(cv, digits = 4)`%. The p-values for the model are: `r format(at[1, 5], digits = 4)` for treatments `r if (at[1, 5] < 0.05) {" which is significant at the 5% level, "} else {" which is not significant at the 5% level, "}` `r format(at[2, 5], digits = 4)` for environments `r if (at[2, 5] < 0.05) {" which is significant at the 5% level,"} else {" which is not significant at the 5% level,"}` and `r format(at[4, 5], digits = 4)` for the treatments by environments interaction `r if (at[4, 5] < 0.05) {" which is significant at the 5% level."} else {" which is not significant at the 5% level."}`
+
+`r if (at[1, 5] < 0.05 | at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.3. LSD test for treatments")}`
+
+```{r echo = FALSE}
+
+if (at[1, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::LSD.test(y, dfr[, trt], at[5, 1], at[5, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[2]) {
+    temp <- dfr[dfr[, env] == unique(dfr[, env])[j], ]
+    y <- temp[, trait.est]
+    print(paste("LSD test for environment", unique(dfr[, env])[j]))
+    print(agricolae::LSD.test(y, temp[, trt], at[5, 1], at[5, 3])$groups)
+  }
+}
+
+```
+
+`r if (at[1, 5] < 0.05 | at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.4. Tukey test for treatments")}`
+
+```{r echo = FALSE}
+
+if (at[1, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::HSD.test(y, dfr[, trt], at[5, 1], at[5, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[2]) {
+    temp <- dfr[dfr[, env] == unique(dfr[, env])[j], ]
+    y <- temp[, trait.est]
+    print(paste("HSD Tukey test for environment", unique(dfr[, env])[j]))
+    print(agricolae::HSD.test(y, temp[, trt], at[5, 1], at[5, 3])$groups)
+  }
+}
+  
+```
+
+`r if (at[2, 5] < 0.05 & at[1, 5] > 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.3. LSD test for environments")}`
+`r if (at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.5. LSD test for environments")}`
+`r if (at[1, 5] < 0.05 & at[2, 5] < 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.5. LSD test for environments")}`
+
+```{r echo = FALSE}
+
+if (at[2, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::LSD.test(y, dfr[, env], at[3, 1], at[3, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[1]) {
+    temp <- dfr[dfr[, trt] == unique(dfr[, trt])[j], ]
+    y <- temp[, trait.est]
+    print(paste("LSD test for treatments", unique(dfr[, trt])[j]))
+    print(agricolae::LSD.test(y, temp[, env], at[3, 1], at[3, 3])$groups)
+  }
+}
+
+```
+
+`r if (at[2, 5] < 0.05 & at[1, 5] > 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.4. Tukey test for environments")}`
+`r if (at[4, 5] < 0.05) {paste0("### ", {{i+1}}, ".2.6. Tukey test for environments")}`
+`r if (at[1, 5] < 0.05 & at[2, 5] < 0.05 & at[4, 5] > 0.05) {paste0("### ", {{i+1}}, ".2.6. Tukey test for environments")}`
+
+```{r echo = FALSE}
+
+if (at[2, 5] < 0.05 & at[4, 5] > 0.05) {
+  y <- dfr[, trait.est]
+  agricolae::HSD.test(y, dfr[, env], at[3, 1], at[3, 3])$groups
+}
+
+if (at[4, 5] < 0.05) {
+  for (j in 1:lc$nl[1]) {
+    temp <- dfr[dfr[, trt] == unique(dfr[, trt])[j], ]
+    y <- temp[, trait.est]
+    print(paste("HSD Tukey test for treatments", unique(dfr[, trt])[j]))
+    print(agricolae::HSD.test(y, temp[, env], at[3, 1], at[3, 3])$groups)
+  }
+}
+  
+```
+

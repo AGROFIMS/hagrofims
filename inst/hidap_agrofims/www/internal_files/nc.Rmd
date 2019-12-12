@@ -24,14 +24,16 @@ params:
   progeny: "no data"
   rep: "no data"
   model: "no data"
-  data: "no data"
+  dfr: "no data"
   title: "no data"
   subtitle: "no data"
   author: "no data"
 ---
 
-```{r, echo = FALSE}
+```{r echo = FALSE}
 library(knitr)
+
+# Pass arguments
 
 traits <- params$traits
 set <- params$set
@@ -40,10 +42,10 @@ female <- params$female
 progeny <- params$progeny
 rep <- params$rep
 model <- params$model
-data <- params$data
+dfr <- params$dfr
 ```
 
-```{r, include = FALSE}
+```{r include = FALSE}
 out <- NULL
 
 for (i in 1:length(traits))

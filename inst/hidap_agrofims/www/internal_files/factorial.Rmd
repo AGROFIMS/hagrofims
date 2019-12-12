@@ -1,0 +1,92 @@
+---
+title: "`r params$title`"
+subtitle: '`r params$subtitle`'
+author: '`r params$author`'
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    highlight: zenburn
+  word_document:
+    toc: true
+    toc_depth: 3
+    highlight: "tango"
+params:
+  traits: "no data"
+  factors: "no data"
+  rep: "no data"
+  dfr: "no data"
+  maxp: "no data"
+  title: "no data"
+  subtitle: "no data"
+  author: "no data"
+---
+
+```{r echo = FALSE}
+library(knitr)
+
+# Pass arguments
+
+traits <- params$traits
+factors <- params$factors
+rep <- params$rep
+dfr <- params$dfr
+maxp <- params$maxp
+
+# Check factors structure
+
+out <- ck.fs(factors, rep, dfr)
+dfr <- out$dfr
+nf <- out$nf
+nl <- out$nl
+nrep <- out$nrep
+nmis.fac <- out$nmis.fac
+
+# Texts for levels
+
+text.levels <- out$nl[1]
+for (i in 2:(nf - 1))
+  text.levels <- paste0(text.levels, ', ', nl[i])
+text.levels <- paste0(text.levels, ', and ', nl[nf])
+
+# Text for design
+
+if (is.null(rep))
+  text.design <- 'completely randomized design'
+if (!is.null(rep))
+  text.design <- 'randomized complete block design'
+  
+# Everything as character
+
+for (i in 1:nf) 
+  dfr[, factors[i]] <- as.character(dfr[, factors[i]])
+if (!is.null(rep))
+  dfr[, rep] <- as.character(dfr[, rep])
+```
+
+# 1. Model specification and data description
+
+The data frame has data for a full factorial with `r nf` factors with `r text.levels` levels. The experimental design is a `r text.design` with `r nrep` replications. 
+In this model we assume that the errors are independent and have a normal distribution with common variance.
+
+`r if (nmis.fac == 1) paste("Note: There is", nmis.fac, "row with missing values for classifications factors. This row has been deleted.")`
+`r if (nmis.fac > 1) paste("Note: There are", nmis.fac, "rows with missing values for classifications factors. These rows have been deleted.")`
+
+```{r include = FALSE}
+out <- NULL
+for (i in 1:length(traits)) {
+  lc <- ck.f(traits[i], factors, rep, dfr)
+  if (lc$nt.0 == 0 & lc$nrep > 1 & lc$nt.mult == 0 & lc$pmis <= maxp) {
+    out <- c(out, knit_expand('child_f.Rmd'))
+  } else {
+    out <- c(out, knit_expand('child_f_fail.Rmd'))
+  }
+}
+```
+
+`r paste(knit(text = out), collapse = '\n')`
