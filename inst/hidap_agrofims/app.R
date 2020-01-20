@@ -247,7 +247,7 @@ ui <- dashboardPage(
       agdesign::ui_mobile_agrofims(name  = "uimobileagrofims"),
       #fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
       aganalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
-      aganalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
+      #aganalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
       #fbanalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
       agdesign::ui_session_agrofims(name = "uisessionagrofims")
     ),
@@ -343,7 +343,7 @@ sv <- function(input, output,  session) ({
   # fbopenbooks::fbopenbooks_server(input, output, session, values)
   #fbanalysis::single_hdagrofims_server(input, output, session, values)
   aganalysis::single_hdagrofims_server(input, output, session, values)
-  aganalysis::trend_hdagrofims_server(input, output, session, values = values)
+  #aganalysis::trend_hdagrofims_server(input, output, session, values = values)
   #fbanalysis::trend_hdagrofims_server(input, output, session, values = values)
   # fbanalysis::dtr_server(input, output, session, values)
   #
