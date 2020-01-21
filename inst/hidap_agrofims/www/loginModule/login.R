@@ -375,9 +375,9 @@ observe({
         
         menuItem("Statistical analysis", icon = icon("bar-chart"),
                  #menuSubItem("Single trial graph",tabName = "SingleChart", icon = icon("calculator")),
-                 menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
-                 menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
-                 menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                 menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")) #,
+                 #menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
+                 #menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
                  #menuSubItem("Genetic report", tabName = "geneticAnalysisReport", icon = icon("file-text-o"))
                  
                  #menuSubItem("Data Transformation", tabName = "singleAnalysisTrans", icon = icon("file-text-o"))
