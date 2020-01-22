@@ -467,9 +467,9 @@ observe({
             ),
             menuItem("Statistical analysis", icon = icon("bar-chart"),
                      #menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))
-                     menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
-                     menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
-                     menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                     menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                     #menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
+                     #menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
             ),
             menuItem("Documentation",  icon = icon("copy")
             ),
