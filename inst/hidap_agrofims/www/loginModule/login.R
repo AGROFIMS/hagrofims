@@ -384,8 +384,7 @@ observe({
         ),
         
 
-        menuItem("Documentation",  icon = icon("copy")
-        ),
+        menuItem("Documentation", tabName = "documentation",  icon = icon("copy")),
 
         # menuItem("Help",  icon = icon("question-circle")
         # ),
@@ -471,7 +470,7 @@ observe({
                      #menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
                      #menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
             ),
-            menuItem("Documentation",  icon = icon("copy")
+            menuItem("Documentation", tabName = "documentation", icon = icon("copy")
             ),
             # menuItem("Help",  icon = icon("question-circle")
             # ),
