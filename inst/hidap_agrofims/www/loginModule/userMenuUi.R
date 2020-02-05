@@ -84,7 +84,7 @@ output$uiForgotPass <- renderUI({
     removeModal()
     fluidRow(
       box(
-        title = tagList(shiny::icon("lock"), "Password reset"),
+        title = tagList(shiny::icon("lock"), "Reset your password"),
         status = "primary", solidHeader = TRUE,
         collapsible = TRUE, width = 12,
         column(width = 6,

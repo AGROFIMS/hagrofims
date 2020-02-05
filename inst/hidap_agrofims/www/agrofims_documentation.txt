@@ -1,5 +1,3 @@
-<p>Below are some tips to help you get your technical documentation site started, and to save you time and effort managing your documentation's life cycle.<p>
-<p>The complete documentation:</p> 
 <ul>
 <h4> Manual</h4>
 <ul>
