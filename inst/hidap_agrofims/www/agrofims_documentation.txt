@@ -3,6 +3,8 @@
 <ul>
 <li> 
 <a href="https://github.com/AGROFIMS/hdocs/raw/master/AgroFIMS_UserManual_2019.pdf"> AgroFIMS v.1.0 - User manual </a>
+<p><b> Citation </b>
+<br>Aubert, C.; Benites-Alfaro, O.E.; Perez, I.; Laporte, M.A.; Juarez, H. & Devare, M.; (2019). AgroFIMS v.1.0 - User manual. CGIAR, 33p </br></p>
 </li>
 </ul>
 
