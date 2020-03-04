@@ -118,6 +118,8 @@ loginModal <- function(message = ""){
     fluidRow(
       column(
         12, align = "right", br(),
+        a( " Privacy Notice & Terms of Use", href="#shiny-tab-term2","data-toggle"="tab"),
+        " | ",
         a( "Forgot your password?", href="#shiny-tab-forgotPass","data-toggle"="tab"),
         " | ",
         a( "Sign up", href="#shiny-tab-register","data-toggle"="tab")
@@ -170,6 +172,8 @@ loginModalMenu <- function(message = ""){
     fluidRow(
       column(
         12, align = "right", br(),
+        a( " Privacy Notice & Terms of Use", href="#shiny-tab-term2","data-toggle"="tab"),
+        " | ",
         a( "Forgot your password?", href="#shiny-tab-forgotPass","data-toggle"="tab"),
         " | ",
         a( "Sign up", href="#shiny-tab-register","data-toggle"="tab")
@@ -385,6 +389,7 @@ observe({
         
 
         menuItem("Documentation", tabName = "documentation",  icon = icon("copy")),
+        #menuItem("Terminos", tabName = "term",  icon = icon("copy")),
 
         # menuItem("Help",  icon = icon("question-circle")
         # ),
@@ -470,8 +475,8 @@ observe({
                      #menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
                      #menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
             ),
-            menuItem("Documentation", tabName = "documentation", icon = icon("copy")
-            ),
+            menuItem("Documentation", tabName = "documentation", icon = icon("copy")),
+            #menuItem("Terminos", tabName = "term",  icon = icon("copy")),
             # menuItem("Help",  icon = icon("question-circle")
             # ),
             menuItem("About", tabName = "dashboard", icon = icon("dashboard"), selected = TRUE)

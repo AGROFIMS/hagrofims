@@ -1,5 +1,6 @@
 output$uiUserProfile <- renderUI({
   if (USER$Logged == TRUE) {
+    removeModal()
     fluidRow(
       box(
         title = tagList(shiny::icon("user"), "My profile"),
@@ -19,6 +20,7 @@ output$uiUserProfile <- renderUI({
 
 output$uiChangePass <- renderUI({
   if (USER$Logged == TRUE) {
+    removeModal()
     fluidRow(
       box(
         title = tagList(shiny::icon("lock"), "Change password"),
@@ -103,6 +105,13 @@ output$uiForgotPass <- renderUI({
       )#end box
     )#end fluidrow
   }
+})
+
+output$uiTerm2 <- renderUI({
+  #if (USER$Logged == FALSE) {
+    removeModal()
+    shiny::includeHTML("www/term_hidap.txt")
+  #}
 })
 
 # each login link must have its own reactive function

@@ -94,7 +94,7 @@ library(sp, warn.conflicts=FALSE)
 library(shinyStore) # install_github("trestletech/shinyStore")
 library(PKI) # CRAN
 library(shinyWidgets)
-#library(agsession)
+#library(agsession) 
 library(qrencoder)
 library(fbglobal)
 ####
@@ -211,6 +211,7 @@ ui <- dashboardPage(
       tabItem(tabName = "userProfile",div(uiOutput("uiUserProfile"))),
       tabItem(tabName = "register", div(uiOutput("registerMsg"), uiOutput("uiRegister") )),
       tabItem(tabName = "forgotPass", div(uiOutput("uiForgotPass"),uiOutput("pass") )),
+      tabItem(tabName = "term2", div(uiOutput("uiTerm2"),uiOutput("termm") )),
       tabItem(tabName = "driveNet", uiOutput("driveScreen")),
       tabItem(tabName = "trialSite",  h1("Site information"), div(uiOutput("trialScreen"))),
       
@@ -227,6 +228,12 @@ ui <- dashboardPage(
               br()
       
       ),
+      
+      # tabItem(tabName = "term",
+      #         shiny::includeHTML("www/term_hidap.txt"),
+      #         br(),
+      #         br()
+      # ),
       
       tabItem(tabName = "dashboard",
               img(src="images/banner_agrofims_v3.jpg", width = "100%", height="100%"),
@@ -269,15 +276,16 @@ ui <- dashboardPage(
 
     tags$div(
       fluidRow(
-        tags$footer(
-          a(
-            list(
-              #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
-              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy | agrofims@cgiar.org")#,
-              #tags$div(id = "test2", "agrofims@cgiar.org ")
-            ),
-            href="#"
-          ),
+        tags$footer(tags$div(id = "test", HTML('Powered by HIDAP | '), a(href = "#shiny-tab-term2", "Privacy Notice & Terms of Use", "data-toggle"="tab"), (' | agrofims@cgiar.org')),
+          # a(onclick = "openTab('userProfile')",
+          #   list(
+          #     #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
+          #     #tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy | agrofims@cgiar.org", tags$a(href="www.rstudio.com", "Click here!"))#,
+          #     tags$div(id = "test", HTML('Powered by HIDAP | <a href="www.rstudio.com">Terms of Use & Privacy Policy</a> | agrofims@cgiar.org'))#,
+          #     #tags$div(id = "test2", "agrofims@cgiar.org ")
+          #   )#,
+          #   #href="#"
+          # ),
           #tags$style("footer {background-color: #222d32;height: 40px;position: absolute;bottom: 0;width: 84%;}"),
           tags$style("footer {background-color: #222d32;height: 40px;bottom: 0;width: 100%;position: absolute;}"),
           tags$style("#test {color: #fff;padding-top: 9px;float:left}"),
