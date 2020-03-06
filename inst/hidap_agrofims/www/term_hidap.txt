@@ -1,4 +1,4 @@
-<h1>PRIVACY NOTICE AND TERMS OF USE FOR AGROFIMS</h1>
+<h1>PRIVACY POLICY AND TERMS OF USE FOR AGROFIMS</h1>
 
 <p><b>Effective date: January 01, 2020</b></p>
 
@@ -14,7 +14,7 @@
 
 <p>If you have any questions or concerns about these Terms, or if you have questions about your privacy rights, want to review any Personal Data, correct, withdraw your consent, delete your Personal Data, lodge a complaint, or raise a concern, please contact us at agrofims@cgiar.org.</p>
 
-<h2>PRIVACY NOTICE</h2>
+<h2>PRIVACY POLICY</h2>
 
 <h3>1.	WHAT TYPE OF PERSONAL DATA DO WE COLLECT FROM USERS AND HOW DO WE MANAGE IT?</h3>
 
@@ -24,7 +24,7 @@
 
 <p>We use cookies to collect anonymous information and aggregate it to help us better understand how users interact with AgroFIMS. Our use of cookies or other automated tracking tools or services does not involve the collection of any personally identifiable information. As an example, we use Google Analytics software to temporarily store and analyze minimal information about your visit (country, time of navigation on AgroFIMS, number of visits per day and per month), however, this information cannot be used by us to identify you as an individual.</p>
 
-<p>If you do not wish to have session or persistent cookies placed on your computer, you can disable them at any time from your web browser. If you opt out of cookies, you will still have access to all AgroFIMS information and resources, but you may not be able to use cookie-dependent features.</p>
+<p><i>If you do not wish to have session or persistent cookies placed on your computer, you can disable them at any time from your web browser. If you opt out of cookies, you will still have access to all AgroFIMS information and resources, but you may not be able to use cookie-dependent features.</i></p>
 
 <h3>3.	THIRD-PARTY SITES OR SERVICES</h3>
 
@@ -36,7 +36,7 @@
 
 <h3>1.	YOUR PRIVACY</h3>
 
-<p>We respect user privacy and manage any personally identifiable information collected by us from you through AgroFIMS in accordance with our PRIVACY NOTICE.</p>
+<p>We respect user privacy and manage any personally identifiable information collected by us from you through AgroFIMS in accordance with our PRIVACY POLICY.</p>
 
 <h3>2.	COPYRIGHT</h3>
 
@@ -50,7 +50,7 @@
 
 <p>AgroFIMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 
-<p>AgroFIMS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p>AgroFIMS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. <a href="https://www.gnu.org/licenses/quick-guide-gplv3.html">See the GNU General Public License for more details</a></p>
 
 <h3>4.	DISCLAIMER</h3>
 
