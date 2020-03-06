@@ -276,7 +276,7 @@ ui <- dashboardPage(
 
     tags$div(
       fluidRow(
-        tags$footer(tags$div(id = "test", HTML('Powered by HIDAP | '), a(href = "#shiny-tab-term2", "Privacy Notice & Terms of Use", "data-toggle"="tab"), (' | agrofims@cgiar.org')),
+        tags$footer(tags$div(id = "test", HTML('Powered by HIDAP | '), a(href = "#shiny-tab-term2", "Privacy Policy & Terms of Use", "data-toggle"="tab"), (' | agrofims@cgiar.org')),
           # a(onclick = "openTab('userProfile')",
           #   list(
           #     #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")

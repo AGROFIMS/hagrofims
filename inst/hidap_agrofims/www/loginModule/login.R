@@ -172,7 +172,7 @@ loginModalMenu <- function(message = ""){
     fluidRow(
       column(
         12, align = "right", br(),
-        a( " Privacy Notice & Terms of Use", href="#shiny-tab-term2","data-toggle"="tab"),
+        a( " Privacy Policy & Terms of Use", href="#shiny-tab-term2","data-toggle"="tab"),
         " | ",
         a( "Forgot your password?", href="#shiny-tab-forgotPass","data-toggle"="tab"),
         " | ",
@@ -195,7 +195,7 @@ loginModalMenu <- function(message = ""){
     tags$div(id = "error", align = "center", message),
     easyClose = FALSE,
     footer = (
-      div("© 2018 RIU Team. | All Rights Reserved | Terms Of Use")
+      div("© 2019 International Potato Center Team. | All Rights Reserved")
     )
     #footer = NULL
     # footer = tagList(
