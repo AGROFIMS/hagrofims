@@ -252,10 +252,11 @@ ui <- dashboardPage(
                 column(
                   12, align="center",
                   div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/BIG_DATA.png", height=90, width=190)),
-                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/CIAT.jpg", height=90, width=190)),
+                  #div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/CIAT.jpg", height=90, width=190)),
+                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/alliancef_banner.png", height=90, width=190)),
                   div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="CIPlogo_RGB.png", height=90, width=190)),
-                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/IFPRI.jpg", height=90, width=190)),
-                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/Bioversity.jpg", height=100, width=130))
+                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/IFPRI.jpg", height=90, width=190))
+                  #div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/Bioversity.jpg", height=100, width=130))
                 )
               ),
               br(),
