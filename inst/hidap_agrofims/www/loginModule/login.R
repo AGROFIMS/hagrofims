@@ -118,6 +118,8 @@ loginModal <- function(message = ""){
     fluidRow(
       column(
         12, align = "right", br(),
+        a( " Privacy Policy & Terms of Use", href="#shiny-tab-term2","data-toggle"="tab"),
+        " | ",
         a( "Forgot your password?", href="#shiny-tab-forgotPass","data-toggle"="tab"),
         " | ",
         a( "Sign up", href="#shiny-tab-register","data-toggle"="tab")
@@ -138,7 +140,7 @@ loginModal <- function(message = ""){
 
     easyClose = FALSE,
     footer = (
-      div("© 2018 RIU Team. | All Rights Reserved | Terms Of Use")
+      div("© 2019 International Potato Center. | All Rights Reserved")
     )
     #footer = NULL
     # footer = tagList(
@@ -170,6 +172,8 @@ loginModalMenu <- function(message = ""){
     fluidRow(
       column(
         12, align = "right", br(),
+        a( " Privacy Policy & Terms of Use", href="#shiny-tab-term2","data-toggle"="tab"),
+        " | ",
         a( "Forgot your password?", href="#shiny-tab-forgotPass","data-toggle"="tab"),
         " | ",
         a( "Sign up", href="#shiny-tab-register","data-toggle"="tab")
@@ -191,7 +195,7 @@ loginModalMenu <- function(message = ""){
     tags$div(id = "error", align = "center", message),
     easyClose = FALSE,
     footer = (
-      div("© 2018 RIU Team. | All Rights Reserved | Terms Of Use")
+      div("© 2019 International Potato Center Team. | All Rights Reserved")
     )
     #footer = NULL
     # footer = tagList(
@@ -375,17 +379,17 @@ observe({
         
         menuItem("Statistical analysis", icon = icon("bar-chart"),
                  #menuSubItem("Single trial graph",tabName = "SingleChart", icon = icon("calculator")),
-                 menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
-                 menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
-                 menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                 menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")) #,
+                 #menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
+                 #menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
                  #menuSubItem("Genetic report", tabName = "geneticAnalysisReport", icon = icon("file-text-o"))
                  
                  #menuSubItem("Data Transformation", tabName = "singleAnalysisTrans", icon = icon("file-text-o"))
         ),
         
 
-        menuItem("Documentation",  icon = icon("copy")
-        ),
+        menuItem("Documentation", tabName = "documentation",  icon = icon("copy")),
+        #menuItem("Terminos", tabName = "term",  icon = icon("copy")),
 
         # menuItem("Help",  icon = icon("question-circle")
         # ),
@@ -467,12 +471,12 @@ observe({
             ),
             menuItem("Statistical analysis", icon = icon("bar-chart"),
                      #menuSubItem("Single report", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))
-                     menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right")),
-                     menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
-                     menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                     menuSubItem("Single fieldbook analysis", tabName = "singleAnalysisReportAgrofims", icon = icon("angle-right"))#,
+                     #menuSubItem("Trend analysis", tabName = "trendAnalysisReportAgrofims", icon = icon("angle-right")),
+                     #menuSubItem("Multiple fieldbook analysis", tabName = "multipleAnalysisReportAgrofims", icon = icon("angle-right"))#,
             ),
-            menuItem("Documentation",  icon = icon("copy")
-            ),
+            menuItem("Documentation", tabName = "documentation", icon = icon("copy")),
+            #menuItem("Terminos", tabName = "term",  icon = icon("copy")),
             # menuItem("Help",  icon = icon("question-circle")
             # ),
             menuItem("About", tabName = "dashboard", icon = icon("dashboard"), selected = TRUE)

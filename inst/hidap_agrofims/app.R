@@ -94,7 +94,7 @@ library(sp, warn.conflicts=FALSE)
 library(shinyStore) # install_github("trestletech/shinyStore")
 library(PKI) # CRAN
 library(shinyWidgets)
-#library(agsession)
+#library(agsession) 
 library(qrencoder)
 library(fbglobal)
 ####
@@ -211,8 +211,30 @@ ui <- dashboardPage(
       tabItem(tabName = "userProfile",div(uiOutput("uiUserProfile"))),
       tabItem(tabName = "register", div(uiOutput("registerMsg"), uiOutput("uiRegister") )),
       tabItem(tabName = "forgotPass", div(uiOutput("uiForgotPass"),uiOutput("pass") )),
+      tabItem(tabName = "term2", div(uiOutput("uiTerm2"),uiOutput("termm") )),
       tabItem(tabName = "driveNet", uiOutput("driveScreen")),
       tabItem(tabName = "trialSite",  h1("Site information"), div(uiOutput("trialScreen"))),
+      
+      tabItem(tabName = "documentation",
+              br(),
+              br(),
+              #h2("HIDAP AgroFIMS v0.2.1"),
+              h2("Documentation"),
+              p(class = "text-muted", style="text-align:justify",
+                #paste("HIDAP is a Highly Interactive Data Analysis Platform originally meant to support clonal crop breeders at the <a href='http://www.cipotato.org' target='_new'>International Potato Center</a>. It is part of a continuous institutional effort to improve data collection, data quality, data analysis and open access publication. The recent iteration simultaneously also represents efforts to unify best practices from experiences in breeding data management of over 10 years, specifically with DataCollector and CloneSelector for potato and sweetpotato breeding, to address new demands for open access publishing and continue to improve integration with both corporate and community databases (such as biomart and sweetpotatobase) and platforms such as the <a href='https://research.cip.cgiar.org/gtdms/' target='_new'> Global Trial Data Management System (GTDMS)</a> at CIP. </br> One of the main new characteristics of the current software development platform established over the last two years is the web-based interface which provides also a highly interactive environment. It could be used both online and offline and on desktop as well as tablets and laptops. Key features include support for data capture, creation of field books, upload field books from and to accudatalogger, data access from breeding databases (e.g., <a href = 'http://germplasmdb.cip.cgiar.org/' target='_new'>CIP BioMart</a>, <a href='http://www.sweetpotatobase.org' target='_new'>sweetpotatobase</a> via <a href='http://docs.brapi.apiary.io/' target='_new'>breeding API</a>), data quality checks, single and multi-environmental data analysis, selection indices, and report generations. For users of DataCollector or CloneSelector many of the features are known but have been improved upon. Novel features include list management of breeding families, connection with the institutional pedigree database, interactive and linked graphs as well as reproducible reports. With the first full release by end of November 2016 we will include all characteristics from both DataCollector and CloneSelector. HIDAP, with additional support from <a href='https://sweetpotatogenomics.cals.ncsu.edu/' target='_new'>GT4SP</a>, <a href='http://www.rtb.cgiar.org/' target='_new'>RTB</a>, USAID, and <a href='http://cipotato.org/research/partnerships-and-special-projects/sasha-program/' target='_new'>SASHA</a>, is aimed to support the broader research community working on all aspects with primary focus on breeding, genetics, biotechnology, physiology and agronomy.")
+                shiny::includeHTML("www/agrofims_documentation.txt")
+              ),
+              br(),
+              br()
+      
+      ),
+      
+      # tabItem(tabName = "term",
+      #         shiny::includeHTML("www/term_hidap.txt"),
+      #         br(),
+      #         br()
+      # ),
+      
       tabItem(tabName = "dashboard",
               img(src="images/banner_agrofims_v3.jpg", width = "100%", height="100%"),
               br(),
@@ -230,10 +252,11 @@ ui <- dashboardPage(
                 column(
                   12, align="center",
                   div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/BIG_DATA.png", height=90, width=190)),
-                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/CIAT.jpg", height=90, width=190)),
+                  #div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/CIAT.jpg", height=90, width=190)),
+                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/alliancef_banner.png", height=90, width=190)),
                   div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="CIPlogo_RGB.png", height=90, width=190)),
-                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/IFPRI.jpg", height=90, width=190)),
-                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/Bioversity.jpg", height=100, width=130))
+                  div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/IFPRI.jpg", height=90, width=190))
+                  #div(style="display: inline-block; padding-left: 30px; padding-right: 30px; padding-top: 15px; padding-bottom: 15px;",img(src="images/Bioversity.jpg", height=100, width=130))
                 )
               ),
               br(),
@@ -247,23 +270,25 @@ ui <- dashboardPage(
       agdesign::ui_mobile_agrofims(name  = "uimobileagrofims"),
       #fbanalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
       aganalysis::single_hdagrofims_ui(name="singleAnalysisReportAgrofims"),
-      aganalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
+      #aganalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
       #fbanalysis::trend_hdagrofims_ui(name= "trendAnalysisReportAgrofims"),
       agdesign::ui_session_agrofims(name = "uisessionagrofims")
     ),
 
     tags$div(
       fluidRow(
-        tags$footer(
-          a(
-            list(
-              #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
-              tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy"),
-              tags$div(id = "test2", "agrofims@cgiar.org ")
-            ),
-            href="#"
-          ),
-          tags$style("footer {background-color: #222d32;height: 40px;position: absolute;bottom: 0;width: 84%;}"),
+        tags$footer(tags$div(id = "test", HTML('Powered by HIDAP| '), a(href = "#shiny-tab-term2", "Privacy Policy & Terms of Use", "data-toggle"="tab"), (' | agrofims@cgiar.org')),
+          # a(onclick = "openTab('userProfile')",
+          #   list(
+          #     #tags$div(id = "test", img(src="cc_by.png"), "2018 International Potato Center. Av La Molina 1895, La Molina - Peru.")
+          #     #tags$div(id = "test", "Powered by HIDAP | Terms of Use & Privacy Policy | agrofims@cgiar.org", tags$a(href="www.rstudio.com", "Click here!"))#,
+          #     tags$div(id = "test", HTML('Powered by HIDAP | <a href="www.rstudio.com">Terms of Use & Privacy Policy</a> | agrofims@cgiar.org'))#,
+          #     #tags$div(id = "test2", "agrofims@cgiar.org ")
+          #   )#,
+          #   #href="#"
+          # ),
+          #tags$style("footer {background-color: #222d32;height: 40px;position: absolute;bottom: 0;width: 84%;}"),
+          tags$style("footer {background-color: #222d32;height: 40px;bottom: 0;width: 100%;position: absolute;}"),
           tags$style("#test {color: #fff;padding-top: 9px;float:left}"),
           tags$style("#test2 {color: #fff;padding-top: 9px;text-align:right}")
         )
@@ -343,7 +368,7 @@ sv <- function(input, output,  session) ({
   # fbopenbooks::fbopenbooks_server(input, output, session, values)
   #fbanalysis::single_hdagrofims_server(input, output, session, values)
   aganalysis::single_hdagrofims_server(input, output, session, values)
-  aganalysis::trend_hdagrofims_server(input, output, session, values = values)
+  #aganalysis::trend_hdagrofims_server(input, output, session, values = values)
   #fbanalysis::trend_hdagrofims_server(input, output, session, values = values)
   # fbanalysis::dtr_server(input, output, session, values)
   #
